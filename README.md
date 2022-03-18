@@ -9,7 +9,6 @@ The goal is to address high-value problems, unique scenarios, and provide direct
 | Solution Name | Azure Cloud | Azure Government |
 | --------- | :---: | :----: |
 | [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
-|
 
 ## Whitepapers
 

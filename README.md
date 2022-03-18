@@ -1,14 +1,19 @@
-# Project
+# Federal Application Innovation Solutions Repository
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This repository was created to demonstrate patterns, solutions, and demos that teams can use as starting points to successfully implement cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
 
-As the maintainer of this project, please make a few updates:
+The goal is to address high-value problems, unique scenarios, and provide direction. You should refer to these solutions as starting points that you can then customize, fork, etc. for your own use cases and requirements.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+## Solutions & Patterns
+
+| Solution Name | Azure Cloud | Azure Government |
+| --------- | :---: | :----: |
+| [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+|
+
+## Whitepapers
+
+## Training Resources
 
 ## Contributing
 

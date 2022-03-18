@@ -9,10 +9,14 @@ The goal is to address high-value problems, unique scenarios, and provide direct
 | Solution Name | Azure Cloud | Azure Government |
 | --------- | :---: | :----: |
 | [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+| [Azure API Management DevOps Patterns with Bicep](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | Not Yet Tested |
+| [Azure Red Hat OpenShift Private Hub & Spoke](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
 
 ## Whitepapers
 
 ## Training Resources
+
+- [Azure Red Hat OpenShift Concepts](./trainings/aro-concepts/README.md)
 
 ## Contributing
 
@@ -27,6 +31,38 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+### Guidelines
+
+To contribute, you should fork this repository and then submit contributions as a Pull Request. Someone on the contributors team will review your pull request and we can work together to get it merged and address any updates that should occur.
+
+[Creating a Pull Request from a Fork](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+
+### Folder Naming Conventions
+
+Follow the folder convention below to add your contribution. Generally we will look for automated solutions using Bicep, but within your particular solution feel free to leverage a different approach for automation like Terraform or even scripts with the `az cli`. We will be flexible with the folder structure within your solution as long as a `README.md` is provided for guidance on how it works.
+
+```
+solutions/
+├─ your-new-solution-folder/
+│  ├─ bicep/
+│  │  ├─ main.bicep
+|  |  ├─ modules/
+|  ├─ img/
+|  |  ├─ architecture.png
+│  ├─ README.md
+whitepapers/
+├─ your-new-whitepaper-folder/
+│  ├─ files/
+│  │  ├─ image1.PNG
+│  ├─ README.md
+trainings/
+├─ your-new-training-folder/
+│  ├─ files/
+│  │  ├─ image1.PNG
+│  ├─ README.md
+README.md
+```
 
 ## Trademarks
 

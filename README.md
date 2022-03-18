@@ -40,6 +40,14 @@ To contribute, you should fork this repository and then submit contributions as 
 
 [Creating a Pull Request from a Fork](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 
+### Automation & Testing
+
+The contribution should have a clear approach for how to work through your solution & training resource. Ideally for solutions, we are looking for automated approaches usuing Infrastructure-as-Code (ideally Bicep or Terraform). However, we will welcome any form of automation including scripts since we want solutions to be added sooner rather than later and we can iterate from there.
+
+Additionally, we have a focus on testing solutions both in [Azure Cloud and Azure Government](https://docs.microsoft.com/en-us/azure/azure-government/compare-azure-government-global-azure).
+
+As part of the peer review process, we will attempt the test your solution so that we can validate the automation and also try to validate that the solution deploys across both clouds and addresses unique needs in either one (for example, [endpoints](https://docs.microsoft.com/en-us/azure/azure-government/compare-azure-government-global-azure#guidance-for-developers) may differ across the two clouds which should be addressed in your solution).
+
 ### Folder Naming Conventions
 
 Follow the folder convention below to add your contribution. Generally we will look for automated solutions using Bicep, but within your particular solution feel free to leverage a different approach for automation like Terraform or even scripts with the `az cli`. We will be flexible with the folder structure within your solution as long as a `README.md` is provided for guidance on how it works.

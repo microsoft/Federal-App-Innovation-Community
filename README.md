@@ -9,10 +9,12 @@ The goal is to address high-value problems, unique scenarios, and provide direct
 | Solution Name | Azure Cloud | Azure Government |
 | --------- | :---: | :----: |
 | [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
-| [Azure API Management DevOps Patterns with Bicep](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | Not Yet Tested |
-| [Azure Red Hat OpenShift Private Hub & Spoke](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+| [Azure API Management DevOps Patterns with Bicep](solutions/apim-bicep-devops/README.md) | :heavy_check_mark: | Not Yet Tested |
+| [Azure Red Hat OpenShift Private Hub & Spoke](solutions/aro-hub-spoke/README.md) | :heavy_check_mark: | :heavy_check_mark: |
 
 ## Whitepapers
+
+No whitepapers available yet
 
 ## Training Resources
 

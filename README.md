@@ -1,14 +1,24 @@
-# Project
+# Federal Application Innovation Solutions Repository
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This repository was created to demonstrate patterns, solutions, and demos that teams can use as starting points to successfully implement cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
 
-As the maintainer of this project, please make a few updates:
+The goal is to address high-value problems, unique scenarios, and provide direction. You should refer to these solutions as starting points that you can then customize, fork, etc. for your own use cases and requirements.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+## Solutions & Patterns
+
+| Solution Name | Azure Cloud | Azure Government |
+| --------- | :---: | :----: |
+| [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+| [Azure API Management DevOps Patterns with Bicep](solutions/apim-bicep-devops/README.md) | :heavy_check_mark: | Not Yet Tested |
+| [Azure Red Hat OpenShift Private Hub & Spoke](solutions/aro-hub-spoke/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+
+## Whitepapers
+
+No whitepapers available yet
+
+## Training Resources
+
+- [Azure Red Hat OpenShift Concepts](./trainings/aro-concepts/README.md)
 
 ## Contributing
 
@@ -23,6 +33,46 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+### Guidelines
+
+To contribute, you should fork this repository and then submit contributions as a Pull Request. Someone on the contributors team will review your pull request and we can work together to get it merged and address any updates that should occur.
+
+[Creating a Pull Request from a Fork](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+
+### Automation & Testing
+
+The contribution should have a clear approach for how to work through your solution & training resource. Ideally for solutions, we are looking for automated approaches usuing Infrastructure-as-Code (ideally Bicep or Terraform). However, we will welcome any form of automation including scripts since we want solutions to be added sooner rather than later and we can iterate from there.
+
+Additionally, we have a focus on testing solutions both in [Azure Cloud and Azure Government](https://docs.microsoft.com/en-us/azure/azure-government/compare-azure-government-global-azure).
+
+As part of the peer review process, we will attempt the test your solution so that we can validate the automation and also try to validate that the solution deploys across both clouds and addresses unique needs in either one (for example, [endpoints](https://docs.microsoft.com/en-us/azure/azure-government/compare-azure-government-global-azure#guidance-for-developers) may differ across the two clouds which should be addressed in your solution).
+
+### Folder Naming Conventions
+
+Follow the folder convention below to add your contribution. Generally we will look for automated solutions using Bicep, but within your particular solution feel free to leverage a different approach for automation like Terraform or even scripts with the `az cli`. We will be flexible with the folder structure within your solution as long as a `README.md` is provided for guidance on how it works.
+
+```
+solutions/
+├─ your-new-solution-folder/
+│  ├─ bicep/
+│  │  ├─ main.bicep
+|  |  ├─ modules/
+|  ├─ img/
+|  |  ├─ architecture.png
+│  ├─ README.md
+whitepapers/
+├─ your-new-whitepaper-folder/
+│  ├─ files/
+│  │  ├─ image1.PNG
+│  ├─ README.md
+trainings/
+├─ your-new-training-folder/
+│  ├─ files/
+│  │  ├─ image1.PNG
+│  ├─ README.md
+README.md
+```
 
 ## Trademarks
 

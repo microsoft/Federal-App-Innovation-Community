@@ -19,6 +19,7 @@ No whitepapers available yet
 ## Training Resources
 
 - [Azure Red Hat OpenShift Concepts](./trainings/aro-concepts/README.md)
+- [Azure Red Hat OpenShift Concepts](./trainings/azure-functions-serverless-cloud-native-workshop/README.md)
 
 ## Contributing
 

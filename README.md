@@ -6,19 +6,22 @@ The goal is to address high-value problems, unique scenarios, and provide direct
 
 ## Solutions & Patterns
 
-| Solution Name | Azure Cloud | Azure Government |
-| --------- | :---: | :----: |
-| [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
-| [Azure API Management DevOps Patterns with Bicep](solutions/apim-bicep-devops/README.md) | :heavy_check_mark: | Not Yet Tested |
-| [Azure Red Hat OpenShift Private Hub & Spoke](solutions/aro-hub-spoke/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+| Topic | Solution | Azure Global | Azure Government |
+| :--------- | :--- | :----: | :----: |
+| ***Containers / K8s*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/private-acr-tasks/README.md) | ✔️ | ✔️ |
+| ***Containers / K8s*** | Deploy ARO in a Private Hub & Spoke Network [▶️](solutions/aro-hub-spoke/README.md) | ✔️ | ✔️ |
+| ***Enterprise Integration*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/apim-bicep-devops/README.md) | ✔️ | 🧪(#10) |
 
 ## Whitepapers
 
-No whitepapers available yet
+| Topic | Whitepaper | Azure Global | Azure Government |
+| :---------: | :---: | :----: | :----: |
 
 ## Training Resources
 
-- [Azure Red Hat OpenShift Concepts](./trainings/aro-concepts/README.md)
+| Topic | Training | Azure Global | Azure Government |
+| :---------: | :---: | :----: | :----: |
+| ***Containers / K8s*** | Azure Red Hat OpenShift Concepts ▶️ | ✔️ | 🧪 (#11) |
 
 ## Contributing
 

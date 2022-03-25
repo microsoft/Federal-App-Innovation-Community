@@ -79,7 +79,7 @@ That's where we can leverage [Dedicated Agent Pools](https://docs.microsoft.com/
 
     > Reference: By default the storage account is private - if you 'allow' your client IP in the portal under the Networking Firewall settings you should now see the `test.txt` file under the `artifact` container
 
-4. Run the following AZ CLI Command to Start the Task
+4. ### Run the ACR Build Task
 
     This mocks the scenario of a self-hosted agent (github, devops, etc.) that would be running in the cluster and running as part of a CI/CD process to build an image. First these agents usually checkout code, and then they would submit the Dockerfile from the local context to the ACR Task so the image can be built.
 

@@ -36,7 +36,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
   }
 
   resource acrTask 'tasks@2019-06-01-preview' = {
-    name: 'acrTask'
+    name: 'acrBuildTask'
     location: location
     identity: {
       type: 'SystemAssigned'
@@ -48,13 +48,14 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
       }
       status: 'Enabled'
       step: {
-        type: 'FileTask'
-        taskFilePath: 'build-task.yaml'
-        contextPath: 'https://github.com/Azure-Samples/acr-build-helloworld-node.git'
+        type: 'EncodedTask'
+        encodedTaskContent: loadFileAsBase64('build-task.yaml')
       }
     }
   }
 }
+
+
 
 var acrDnsZoneName = 'privatelink${environment().suffixes.acrLoginServer}'
 resource acrDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {

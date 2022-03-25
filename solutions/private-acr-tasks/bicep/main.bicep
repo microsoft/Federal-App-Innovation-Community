@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 param rgName string
-param location string = 'eastus'
+param location string
 
 param vnetName string = 'vnet'
 param sshKeyValue string

@@ -69,3 +69,11 @@ containerd
 linux
 runtime
 Terraform
+DotNet
+msrc
+onboardsupport
+todo
+vnet
+kubernetes
+k8s
+AKS

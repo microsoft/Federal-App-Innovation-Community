@@ -1,9 +1,10 @@
 matrix:
 - name: Markdown
   sources:
-  - '**/README.md'
+  - '**/*.md'
   default_encoding: utf-8
   aspell:
+    ignore-case: true
     lang: en
     d: en_US
   dictionary:

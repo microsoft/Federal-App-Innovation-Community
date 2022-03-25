@@ -57,3 +57,15 @@ whitepaper
 Whitepapers
 whitepapers
 workspaces
+OpenShift
+ArcGIS
+ACR
+Repo
+repos
+APIM
+DevOps
+AKS
+containerd
+linux
+runtime
+Terraform

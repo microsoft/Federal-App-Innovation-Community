@@ -1,0 +1,24 @@
+matrix:
+- name: Markdown
+  sources:
+  - '**/README.md'
+  default_encoding: utf-8
+  aspell:
+    lang: en
+    d: en_US
+  dictionary:
+    wordlists:
+    - config/wordlist.txt
+    encoding: utf-8
+  pipeline:
+  - pyspelling.filters.markdown:
+      markdown_extensions:
+      - pymdownx.superfences:
+      - pymdownx.highlight:
+  - pyspelling.filters.html:
+      comments: false
+      attributes:
+      - title
+      ignores:
+      - :is(code, pre)
+  - pyspelling.filters.url:

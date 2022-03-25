@@ -77,3 +77,6 @@ vnet
 kubernetes
 k8s
 AKS
+AspNet
+Dockerfile
+CLI

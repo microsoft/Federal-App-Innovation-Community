@@ -42,7 +42,7 @@ To contribute, you should fork this repository and then submit contributions as 
 
 ### Automation & Testing
 
-The contribution should have a clear approach for how to work through your solution & training resource. Ideally for solutions, we are looking for automated approaches usuing Infrastructure-as-Code (ideally Bicep or Terraform). However, we will welcome any form of automation including scripts since we want solutions to be added sooner rather than later and we can iterate from there.
+The contribution should have a clear approach for how to work through your solution & training resource. Ideally for solutions, we are looking for automated approaches using Infrastructure-as-Code (ideally Bicep or Terraform). However, we will welcome any form of automation including scripts since we want solutions to be added sooner rather than later and we can iterate from there.
 
 Additionally, we have a focus on testing solutions both in [Azure Cloud and Azure Government](https://docs.microsoft.com/en-us/azure/azure-government/compare-azure-government-global-azure).
 

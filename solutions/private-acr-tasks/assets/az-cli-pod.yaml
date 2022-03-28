@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: azcli
+  labels:
+    app: azcli
+spec:
+  containers:
+  - name: azcli
+    image: mcr.microsoft.com/azure-cli
+    command: ["/bin/sh"]
+    args: ["-c", "echo 'this is a test file' > test.txt; sleep 3600"]

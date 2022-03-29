@@ -1,7 +1,12 @@
 param location string
 param containerName string = 'artifact'
-param vnetId string
-param storageSubnetId string
+
+
+param vnetName string
+param storageSubnetName string
+
+var vnetId = resourceId('Microsoft.Network/virtualNetworks',vnetName)
+var storageSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets',vnetName,storageSubnetName)
 
 var storageAccountName  = 'stg${uniqueString(resourceGroup().id)}'
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
@@ -75,3 +80,5 @@ resource stgPrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
     }
   }
 }
+
+output stgAcctName string = storageAccountName

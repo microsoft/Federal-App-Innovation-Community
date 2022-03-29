@@ -3,8 +3,12 @@ targetScope = 'subscription'
 param rgName string
 param location string
 
-param vnetName string = 'vnet'
+param vnetName string = 'vnet-example'
 param sshKeyValue string
+
+// var vnetId = resourceId('Microsoft.Network/virtualNetworks',vnetName)
+// var acrSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets',vnetName,'acr-subnet')
+// var storageSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets',vnetName,'storage-subnet')
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: rgName
@@ -26,18 +30,25 @@ module aksModule 'modules/aks.bicep' = {
   params: {
     location: location
     sshKeyValue: sshKeyValue
-    vnetSubnetId: vnet.outputs.aksSubnetId
+    vnetName: vnetName
+    aksSubnetName: 'aks-subnet'
   }
+  dependsOn: [
+    vnet
+  ]
 }
 
 module acrModule 'modules/acr.bicep' = {
   scope: resourceGroup
   name: 'acrModuleDeployment'
   params: {
-    vnetId: vnet.outputs.vnetId
+    vnetName: vnetName
+    acrSubnetName: 'acr-subnet'
     location: location
-    acrSubnetId: vnet.outputs.acrSubnetId
   }
+  dependsOn: [
+    vnet
+  ]
 }
 
 module storageModule 'modules/storage.bicep' = {
@@ -45,7 +56,23 @@ module storageModule 'modules/storage.bicep' = {
   name: 'stgModuleDeployment'
   params: {
     location: location
-    storageSubnetId: vnet.outputs.storageSubnetId
-    vnetId: vnet.outputs.vnetId
+    storageSubnetName: 'storage-subnet'
+    vnetName: vnetName
   }
+  dependsOn: [
+    vnet
+  ]
+}
+
+module roleAssignment 'modules/role-assignment.bicep' = {
+  scope: resourceGroup
+  name: 'roleAssignmentModule'
+  params: {
+    principalId: acrModule.outputs.acrTaskManagedIdentityPrincipalId
+    stgAccountName: storageModule.outputs.stgAcctName
+  }
+  dependsOn: [
+    acrModule
+    storageModule
+  ]
 }

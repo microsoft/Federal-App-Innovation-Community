@@ -91,7 +91,11 @@ That's where we can leverage [Dedicated Agent Pools](https://docs.microsoft.com/
     ACR_NAME=<ACR Name from Portal>
     RG_NAME=acr-demo
 
-    
+    mkdir docker
+    touch Dockerfile
+    vi Dockerfile
+
+    ###copy and paste from assets/Dockerfile to the Dockerfile in the container
 
     az acr task run \
         --name acrBuildTask \

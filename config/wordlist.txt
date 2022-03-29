@@ -81,3 +81,5 @@ AspNet
 Dockerfile
 CLI
 ARO
+azcli
+az-cli

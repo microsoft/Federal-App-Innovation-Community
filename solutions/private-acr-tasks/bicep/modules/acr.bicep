@@ -1,6 +1,10 @@
 param location string
-param vnetId string
-param acrSubnetId string
+
+param vnetName string
+param acrSubnetName string
+
+var vnetId = resourceId('Microsoft.Network/virtualNetworks',vnetName)
+var acrSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets',vnetName,acrSubnetName)
 
 @allowed([
   'Premium'
@@ -55,7 +59,16 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
   }
 }
 
-
+// var roleName = guid(containerRegistry::acrTask.name, 'acrTask')
+// resource acrTaskPushRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
+//   name: roleName
+//   scope: containerRegistry
+//   properties: {
+//     principalId: containerRegistry::acrTask.identity.principalId
+//     roleDefinitionId: '${subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')}'
+//     principalType: 'ServicePrincipal'
+//   }
+// }
 
 var acrDnsZoneName = 'privatelink${environment().suffixes.acrLoginServer}'
 resource acrDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
@@ -110,3 +123,4 @@ resource acrPrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
 }
 
 
+output acrTaskManagedIdentityPrincipalId string = containerRegistry::acrTask.identity.principalId

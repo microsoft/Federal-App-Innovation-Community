@@ -8,7 +8,7 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 
 | Topic | Solution | Azure Global | Azure Government |
 | :--------- | :--- | :----: | :----: |
-| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies. [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
 | ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
 | ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
 

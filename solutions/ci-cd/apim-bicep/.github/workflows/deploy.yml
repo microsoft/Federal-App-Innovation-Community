@@ -1,0 +1,58 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+
+      environment:
+        required: true
+        type: string
+
+      mainBicepFile:
+        required: false
+        type: string
+        default: ./main.bicep
+
+      deploymentRegion:
+        required: false
+        type: string
+        default: eastus
+
+      deploymentScope:
+        required: false
+        type: string
+        default: subscription
+
+    secrets:
+
+      AZURE_CREDENTIALS:
+        required: true
+
+      PUBLISHER_NAME:
+        required: true
+
+      PUBLISHER_EMAIL:
+        required: true    
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - uses: azure/arm-deploy@v1
+      with:
+        deploymentName: ${{ inputs.environment }}-${{ github.run_number}}-deployment
+        scope: ${{ inputs.deploymentScope }}
+        failOnStdErr: false
+        region: ${{ inputs.deploymentRegion }}
+        template: ${{ inputs.mainBicepFile }}
+        parameters: >
+          ${{ inputs.environment }}.parameters.json
+          publisherName=${{ secrets.PUBLISHER_NAME }}
+          publisherEmail=${{ secrets.PUBLISHER_EMAIL }}

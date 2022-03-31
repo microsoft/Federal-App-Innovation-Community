@@ -10,7 +10,7 @@ The goal is to address high-value problems, unique scenarios, and provide direct
 | :--------- | :--- | :----: | :----: |
 | ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ |
 | ***[ARO-Kubernetes](solutions/aro-kubernetes/)*** | Deploy ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ |
-| ***Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) |
+| ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) |
 
 ## Whitepapers
 

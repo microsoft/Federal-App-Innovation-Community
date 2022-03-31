@@ -5,9 +5,10 @@ In this work shop we will build a serverless cloud native application. This tuto
 
 ![Image](https://github.com/usri/ServerlessCloudNativeWorkshop/blob/master/Docs/arch.png?raw=true)
 
+<!---
 # Overview Video
 [![Watch the video](https://img.youtube.com/vi/GR660JdkQZ4/maxresdefault.jpg)](https://www.youtube.com/watch?v=GR660JdkQZ4)
-
+--->
 
 # What we are building
 We will be building a simple Single Page App (SPA) that can manage a bicycle shop. We will be able to edit quantities and add new bikes.

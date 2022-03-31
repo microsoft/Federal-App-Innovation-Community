@@ -1,1 +1,0 @@
-Review the following [repo](https://github.com/haithamshahin333/api-management-developer-portal/tree/2fc95b5b4ee285364cb514268316e46511417136) and view the custom script to generate and publish the APIM Portal.

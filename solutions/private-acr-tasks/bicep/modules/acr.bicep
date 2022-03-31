@@ -1,6 +1,10 @@
 param location string
-param vnetId string
-param acrSubnetId string
+
+param vnetName string
+param acrSubnetName string
+
+var vnetId = resourceId('Microsoft.Network/virtualNetworks',vnetName)
+var acrSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets',vnetName,acrSubnetName)
 
 @allowed([
   'Premium'
@@ -55,8 +59,6 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
   }
 }
 
-
-
 var acrDnsZoneName = 'privatelink${environment().suffixes.acrLoginServer}'
 resource acrDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: acrDnsZoneName
@@ -110,3 +112,4 @@ resource acrPrivateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
 }
 
 
+output acrTaskManagedIdentityPrincipalId string = containerRegistry::acrTask.identity.principalId

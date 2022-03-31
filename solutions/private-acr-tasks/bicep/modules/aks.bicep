@@ -4,7 +4,11 @@ param aksName string = 'aks-cluster'
 param nodeCount int = 1
 param adminUsername string = 'adminUser'
 param sshKeyValue string
-param vnetSubnetId string
+
+param vnetName string
+param aksSubnetName string
+
+var aksSubnetId = resourceId('Microsoft.Network/virtualNetworks/subnets',vnetName,aksSubnetName)
 
 @description('Specifies the CIDR notation IP range from which to assign pod IPs when kubenet is used.')
 param aksClusterPodCidr string = '10.244.0.0/16'
@@ -40,7 +44,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-01-01' = {
         vmSize: 'Standard_DS2_v2'
         osType: 'Linux'
         mode: 'System'
-        vnetSubnetID: vnetSubnetId
+        vnetSubnetID: aksSubnetId
       }
     ]
     linuxProfile: {

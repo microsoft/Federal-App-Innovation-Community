@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/azure-cli
-RUN az cloud set --name AzureUSGovernment
+RUN az cloud set --name <AzureCloud | AzureUSGovernment>
 RUN az login --identity
 RUN az storage blob download \
-    --account-name stgl5366k57ssoak \
+    --account-name <SPECIFY_STORAGE_ACCOUNT> \
     --container-name artifact \
     --file /tmp/test.txt \
     --auth-mode login \

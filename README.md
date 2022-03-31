@@ -1,16 +1,16 @@
-# Federal Application Innovation Solutions Repository
+# Federal Application Innovation Community Repository
 
-This repository was created to demonstrate patterns, solutions, and demos that teams can use as starting points to successfully implement cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
+This repository demonstrates patterns and solutions that address high-value scenarios to support successful cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
 
-The goal is to address high-value problems, unique scenarios, and provide direction. You should refer to these solutions as starting points that you can then customize, fork, etc. for your own use cases and requirements.
+Refer to these patterns as starting points / example scenarios that you can then customize, fork, and leverage for your own use cases and requirements.
 
 ## Solutions & Patterns
 
-| Topic | Solution | Azure Global | Azure Government |
-| :--------- | :--- | :----: | :----: |
-| ***Containers / K8s*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/private-acr-tasks/README.md) | ✔️ | ✔️ |
-| ***Containers / K8s*** | Deploy ARO in a Private Hub & Spoke Network [▶️](solutions/aro-hub-spoke/README.md) | ✔️ | ✔️ |
-| ***Enterprise Integration*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/apim-bicep-devops/README.md) | ✔️ | 🧪(#10) |
+| Topic | Solution | Azure Global | Azure Government | Last Tested |
+| :--------- | :--- | :----: | :----: | :---: |
+| ***Containers / K8s*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***Containers / K8s*** | Automation to Deploy ARO [▶️](solutions/aro-solutions/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***Enterprise Integration*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/apim-bicep-devops/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
 
 ## Whitepapers
 
@@ -21,7 +21,6 @@ The goal is to address high-value problems, unique scenarios, and provide direct
 
 | Topic | Training | Azure Global | Azure Government |
 | :---------: | :---: | :----: | :----: |
-| ***Containers / K8s*** | Azure Red Hat OpenShift Concepts ▶️ | ✔️ | 🧪 (#11) |
 
 ## Contributing
 

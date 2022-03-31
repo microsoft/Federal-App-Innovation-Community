@@ -1,16 +1,16 @@
 # Federal Application Innovation Community Repository
 
-This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners.  This guidiance is built by an active inner-source community of account executives, cloud solution architects, solution specialist and others who have an authentic federal perspective.  Teams can use this repo as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
+This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners.  This guidiance is built by an active open-source community with an authentic federal perspective.  Teams can use this repo as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
 
-The goal is to address high-value problems, unique scenarios, whiling providing actionable gudiance and implementation. You should refer to these solutions as starting point to accerlerate you cloud adoption journey. Feel free to fork a copy of this repo for your own use cases, requirements, experimentation, learning and cloud adoption journey.
+The goal is to address high-value problems, unique scenarios, whiling providing actionable gudiance and direction. You should refer to these solutions as starting point to accerlerate you cloud adoption journey. Feel free to fork a copy of this repo for your own use cases, requirements, experimentation, learning and cloud adoption journey.
 
 ## Solutions & Patterns
 
 | Topic | Solution | Azure Global | Azure Government |
 | :--------- | :--- | :----: | :----: |
-| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ |
-| ***[ARO-Kubernetes](solutions/aro-kubernetes/)*** | Deploy ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ |
-| ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) |
+| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
 
 ## Whitepapers
 

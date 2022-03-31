@@ -59,17 +59,6 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
   }
 }
 
-// var roleName = guid(containerRegistry::acrTask.name, 'acrTask')
-// resource acrTaskPushRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-//   name: roleName
-//   scope: containerRegistry
-//   properties: {
-//     principalId: containerRegistry::acrTask.identity.principalId
-//     roleDefinitionId: '${subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')}'
-//     principalType: 'ServicePrincipal'
-//   }
-// }
-
 var acrDnsZoneName = 'privatelink${environment().suffixes.acrLoginServer}'
 resource acrDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: acrDnsZoneName

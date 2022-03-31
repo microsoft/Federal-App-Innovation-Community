@@ -1,0 +1,25 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+# Lint the Bicep file.
+- stage: Lint
+  jobs: 
+  - template: pipeline-templates/lint.yml
+
+- stage: PreflightValidationDev
+  jobs:
+  - template: pipeline-templates/preflight-validation.yml
+    parameters:
+      environment: dev
+      serviceConnectionName: bicep-apim-service-connection
+
+- stage: DevDeploy
+  jobs:
+  - template: pipeline-templates/deploy.yml
+    parameters:
+      environment: dev
+      serviceConnectionName: bicep-apim-service-connection

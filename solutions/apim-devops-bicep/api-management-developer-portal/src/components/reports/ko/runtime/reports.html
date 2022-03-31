@@ -1,0 +1,612 @@
+<div class="btn-group" role="group" aria-label="Time range">
+    <button class="button button-default"
+        data-bind="click: setTimeRange1Hour, disable: selectedPeriod() == '1hour'">Last hour</button>
+    <button class="button button-default"
+        data-bind="click: setTimeRange1Day, disable: selectedPeriod() == '1day'">Today</button>
+    <button class="button button-default"
+        data-bind="click: setTimeRange7Days, disable: selectedPeriod() == '7days'">Last 7 days</button>
+    <button class="button button-default"
+        data-bind="click: setTimeRange30Days, disable: selectedPeriod() == '30days'">Last 30 days</button>
+    <button class="button button-default"
+        data-bind="click: setTimeRange90Days, disable: selectedPeriod() == '90days'">Last 90 days</button>
+</div>
+
+
+<h2>API calls</h2>
+<div class="row">
+    <div class="col-md-7">
+        <div
+            data-bind="barChart: reportByCalls, chart-title: 'API calls bar chart by time', chart-desc: 'API calls bar chart by time'">
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div data-bind="mapChart: reportByCallsGeo, chart-title: 'API calls map', chart-desc: 'API calls map by geo'">
+        </div>
+    </div>
+</div>
+
+<h2>Data transfer</h2>
+<div class="row">
+    <div class="col-md-7">
+        <div
+            data-bind="barChart: reportByBandwidth, chart-title: 'Data transfer bar chart by time', chart-desc: 'Data transfer bar chart by time'">
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div
+            data-bind="mapChart: reportByBandwidthGeo, chart-title: 'Data transfer map', chart-desc: 'Data transfer map by geo'">
+        </div>
+    </div>
+</div>
+
+<h2>API response times</h2>
+<div class="row">
+    <div class="col-md-7">
+        <div
+            data-bind="minMaxAvgChart: reportByLatency, chart-title: 'API response time bar chart by time', chart-desc: 'API response time bar chart by time'">
+        </div>
+    </div>
+    <div class="col-md-5">
+        - <div
+            data-bind="mapChart: reportByLatencyGeo, chart-title: 'API response time map', chart-desc: 'API response time map by geo'">
+        </div>
+    </div>
+</div>
+
+<section>
+    <h2>Products</h2>
+
+    <!-- ko if: reportByProductHasData -->
+    <div role="table" class="table-preset table-preset-reports">
+        <div class="d-contents" role="rowgroup">
+            <div class="d-contents" role="row">
+                <div class="table-preset-head" role="columnheader">
+                    Product
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'callCountSuccess')">
+                        Successful calls
+                        <span class="btn-addon" data-bind="if: reportByProductOrder() == 'callCountSuccess'">
+                            <!-- ko if: reportByProductOrder() == 'callCountSuccess' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'callCountSuccess' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'callCountBlocked' )">
+                        Blocked calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByProductOrder() == 'callCountBlocked' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'callCountBlocked' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'callCountFailed')">
+                        Failed calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByProductOrder() == 'callCountFailed' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'callCountFailed' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'callCountOther')">
+                        Other calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByProductOrder() == 'callCountOther' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'callCountOther' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'callCountTotal')">
+                        Total calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByProductOrder() == 'callCountTotal' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'callCountTotal' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'apiTimeAvg')">
+                        Response time
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByProductOrder() == 'apiTimeAvg' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'apiTimeAvg' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByProductOrderBy.bind(this, 'bandwidth')">
+                        Bandwidth
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByProductOrder() == 'bandwidth' && !reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByProductOrder() == 'bandwidth' && reportByProductOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="d-contents" role="rowgroup">
+            <!-- ko foreach: { data: $component.reportByProduct, as: 'record' } -->
+            <div class="d-contents" role="row">
+                <div role="cell">
+                    <a class="ap-action" data-bind="attr: { href: record.productlink }, text: record.productName"></a>
+                </div>
+                <div role="cell" data-bind="text: record.callCountSuccess"></div>
+                <div role="cell" data-bind="text: record.callCountBlocked"></div>
+                <div role="cell" data-bind="text: record.callCountFailed"></div>
+                <div role="cell" data-bind="text: record.callCountOther"></div>
+                <div role="cell" data-bind="text: record.callCountTotal"></div>
+                <div role="cell" data-bind="text: record.apiTimeAvg"></div>
+                <div role="cell" data-bind="text: record.bandwidth"></div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <!-- ko if: $component.reportByProductTotalPages() > 1 -->
+    <pagination
+        params="{ pageNumber: $component.reportByProductPageNumber, totalPages: $component.reportByProductTotalPages }">
+    </pagination>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko ifnot: reportByProductHasData -->
+    <p>No data to display</p>
+    <!-- /ko -->
+
+    <!-- ko if: reportByProductWorking -->
+    <spinner class="fit"></spinner>
+    <!-- /ko -->
+</section>
+
+<section>
+    <h2>Subscriptions</h2>
+
+    <!-- ko if: reportBySubscriptionHasData -->
+    <div role="table" class="table-preset table-preset-reports">
+        <div class="d-contents" role="rowgroup">
+            <div class="d-contents" role="row">
+                <div class="table-preset-head" role="columnheader">
+                    Subscription
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportBySubscriptionOrderBy.bind(this, 'callCountSuccess')">
+                        Successful calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountSuccess' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountSuccess' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportBySubscriptionOrderBy.bind(this, 'callCountBlocked')">
+                        Blocked calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountBlocked' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountBlocked' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportBySubscriptionOrderBy.bind(this, 'callCountFailed')">
+                        Failed calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountFailed' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountFailed' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportBySubscriptionOrderBy.bind(this, 'callCountOther')">
+                        Other calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountOther' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountOther' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportBySubscriptionOrderBy.bind(this, 'callCountTotal')">
+                        Total calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountTotal' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'callCountTotal' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportBySubscriptionOrderBy.bind(this, 'apiTimeAvg')">
+                        Response time
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'apiTimeAvg' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'apiTimeAvg' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportBySubscriptionOrderBy.bind(this, 'bandwidth')">
+                        Bandwidth
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportBySubscriptionOrder() == 'bandwidth' && !reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportBySubscriptionOrder() == 'bandwidth' && reportBySubscriptionOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="d-contents" role="rowgroup">
+            <!-- ko foreach: { data: $component.reportBySubscription, as: 'record' } -->
+            <div class="d-contents" role="row">
+                <div role="cell" class="text-truncate">
+                    <span data-bind="text: record.subscriptionName"></span>
+                </div>
+                <div role="cell" data-bind="text: record.callCountSuccess"></div>
+                <div role="cell" data-bind="text: record.callCountBlocked"></div>
+                <div role="cell" data-bind="text: record.callCountFailed"></div>
+                <div role="cell" data-bind="text: record.callCountOther"></div>
+                <div role="cell" data-bind="text: record.callCountTotal"></div>
+                <div role="cell" data-bind="text: record.apiTimeAvg"></div>
+                <div role="cell" data-bind="text: record.bandwidth"></div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <!-- ko if: $component.reportBySubscriptionTotalPages() > 1 -->
+    <pagination
+        params="{ pageNumber: $component.reportBySubscriptionPageNumber, totalPages: $component.reportBySubscriptionTotalPages }">
+    </pagination>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko ifnot: reportBySubscriptionHasData -->
+    <p>No data to display</p>
+    <!-- /ko -->
+
+    <!-- ko if: reportBySubscriptionWorking -->
+    <spinner class="fit"></spinner>
+    <!-- /ko -->
+</section>
+
+<section>
+    <h2>APIs</h2>
+
+    <!-- ko if: reportByApiHasData -->
+    <div role="table" class="table-preset table-preset-reports">
+        <div class="d-contents" role="rowgroup">
+            <div class="d-contents" role="row">
+                <div class="table-preset-head" role="columnheader">
+                    API
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'callCountSuccess')">
+                        Successful calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'callCountSuccess' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'callCountSuccess' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'callCountBlocked')">
+                        Blocked calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'callCountBlocked' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'callCountBlocked' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'callCountFailed')">
+                        Failed calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'callCountFailed' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'callCountFailed' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'callCountOther')">
+                        Other calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'callCountOther' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'callCountOther' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'callCountTotal')">
+                        Total calls
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'callCountTotal' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'callCountTotal' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'apiTimeAvg')">
+                        Response time
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'apiTimeAvg' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'apiTimeAvg' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByApiOrderBy.bind(this, 'bandwidth')">
+                        Bandwidth
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByApiOrder() == 'bandwidth' && !reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByApiOrder() == 'bandwidth' && reportByApiOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="d-contents" role="rowgroup">
+            <!--ko foreach: { data: $component.reportByApi, as: 'record' }-->
+            <div class="d-contents" role="row">
+                <div role="cell" class="text-truncate">
+                    <span data-bind="text: record.apiName"></span>
+                </div>
+                <div role="cell" data-bind="text: record.callCountSuccess"></div>
+                <div role="cell" data-bind="text: record.callCountBlocked"></div>
+                <div role="cell" data-bind="text: record.callCountFailed"></div>
+                <div role="cell" data-bind="text: record.callCountOther"></div>
+                <div role="cell" data-bind="text: record.callCountTotal"></div>
+                <div role="cell" data-bind="text: record.apiTimeAvg"></div>
+                <div role="cell" data-bind="text: record.bandwidth"></div>
+            </div>
+            <!--/ko-->
+        </div>
+    </div>
+
+    <!-- ko if: $component.reportByApiTotalPages() > 1 -->
+    <pagination params="{ pageNumber: $component.reportByApiPageNumber, totalPages: $component.reportByApiTotalPages }">
+    </pagination>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko ifnot: reportByApiHasData -->
+    <p>No data to display</p>
+    <!-- /ko -->
+
+    <!-- ko if: reportByApiWorking -->
+    <spinner class="fit"></spinner>
+    <!-- /ko -->
+</section>
+
+<section>
+    <h2>Operations</h2>
+
+    <!-- ko if: reportByOperationHasData -->
+    <div role="table" class="table-preset table-preset-reports">
+        <div class="d-contents" role="rowgroup">
+            <div class="d-contents" role="row">
+                <div class="table-preset-head" role="columnheader">
+                    Operation
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportByOperationOrderBy.bind(this, 'callCountSuccess')">
+                        Successful calls
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'callCountSuccess' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'callCountSuccess' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border"
+                        data-bind="click: reportByOperationOrderBy.bind(this, 'callCountBlocked')">
+                        Blocked calls
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'callCountBlocked' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'callCountBlocked' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByOperationOrderBy.bind(this, 'callCountFailed')">
+                        Failed calls
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'callCountFailed' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'callCountFailed' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByOperationOrderBy.bind(this, 'callCountOther')">
+                        Other calls
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'callCountOther' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'callCountOther' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByOperationOrderBy.bind(this, 'callCountTotal')">
+                        Total calls
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'callCountTotal' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'callCountTotal' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByOperationOrderBy.bind(this, 'apiTimeAvg')">
+                        Response time
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'apiTimeAvg' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'apiTimeAvg' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+                <div class="table-preset-head" role="columnheader">
+                    <button class="no-border" data-bind="click: reportByOperationOrderBy.bind(this, 'bandwidth')">
+                        Bandwidth
+                        </a>
+                        <span class="btn-addon" role="presentation">
+                            <!-- ko if: reportByOperationOrder() == 'bandwidth' && !reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-down"></i>
+                            <!-- /ko -->
+                            <!-- ko if: reportByOperationOrder() == 'bandwidth' && reportByOperationOrderAscending() -->
+                            <i class="icon-emb icon-emb-chevron-up"></i>
+                            <!-- /ko -->
+                        </span>
+                </div>
+            </div>
+        </div>
+        <div class="d-contents" role="rowgroup">
+            <!-- ko foreach: { data: $component.reportByOperation, as: 'record' } -->
+            <div class="d-contents" role="row">
+                <div role="cell" class="text-truncate">
+                    <span data-bind="text: record.operationName"></span>
+                </div>
+                <div role="cell" data-bind="text: record.callCountSuccess"></div>
+                <div role="cell" data-bind="text: record.callCountBlocked"></div>
+                <div role="cell" data-bind="text: record.callCountFailed"></div>
+                <div role="cell" data-bind="text: record.callCountOther"></div>
+                <div role="cell" data-bind="text: record.callCountTotal"></div>
+                <div role="cell" data-bind="text: record.apiTimeAvg"></div>
+                <div role="cell" data-bind="text: record.bandwidth"></div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <!-- ko if: $component.reportByOperationTotalPages() > 1 -->
+    <pagination
+        params="{ pageNumber: $component.reportByOperationPageNumber, totalPages: $component.reportByOperationTotalPages }">
+    </pagination>
+    <!-- /ko -->
+
+    <!-- /ko -->
+
+    <!-- ko ifnot: reportByOperationHasData -->
+    <p>No data to display</p>
+    <!-- /ko -->
+
+    <!-- ko if: reportByOperationWorking -->
+    <spinner class="fit"></spinner>
+    <!-- /ko -->
+</section>

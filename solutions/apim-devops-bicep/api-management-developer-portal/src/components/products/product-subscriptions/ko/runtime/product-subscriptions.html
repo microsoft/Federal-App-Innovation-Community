@@ -1,0 +1,48 @@
+<div class="table">
+
+    <!-- ko if: !isUserSignedIn() -->
+    <p>
+        You need to sign in to see your subscriptions.
+    </p>
+    <!-- /ko -->
+
+    <!-- ko if: subscriptions().length === 0 && isUserSignedIn()-->
+    <p>
+        You don't have subscriptions yet.
+    </p>
+    <!-- /ko -->
+    <!-- ko if: subscriptions().length > 0 && isUserSignedIn()-->
+    <div class="table-head">
+        <div class="table-row">
+            <div class="col-md-5">Name</div>
+            <div class="col-md-7">Status</div>
+        </div>
+    </div>
+
+    <!-- ko if: working -->
+    <div class="table-body">
+        <spinner></spinner>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko ifnot: working -->
+    <div class="table-body">
+        <!-- ko foreach: { data: subscriptions, as: 'subscription' } -->
+        <div class="table-row">
+            <div class="col-md-5" data-bind="text: subscription.name"></div>
+            <div class="col-md-7" data-bind="text: subscription.state"></div>
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <!-- /ko -->
+
+    <!-- ko ifnot: working -->
+    <!-- ko if: $component.totalPages() > 1 -->
+    <div class="table-footer">
+        <pagination params="{ pageNumber: $component.pageNumber, totalPages: $component.totalPages }"></pagination>
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- /ko -->
+</div>

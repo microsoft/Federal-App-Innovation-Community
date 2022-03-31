@@ -1,0 +1,171 @@
+@import "mixins.scss";
+@font-face {
+    font-family: "Icons Embedded";
+    src: url("/styles/fonts/icons.eot?a6lw2r");
+    src: url("/styles/fonts/icons.eot?a6lw2r#iefix") format("embedded-opentype"), url("/styles/fonts/icons.ttf?a6lw2r") format("truetype"), url("/styles/fonts/icons.woff?a6lw2r") format("woff"), url("/styles/fonts/icons.svg?a6lw2r#icons") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class*=" icon-emb-"],
+[class^="icon-emb-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: "Icons Embedded" !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-emb-simple-remove:before {
+    content: "\e90f";
+}
+
+.icon-emb-duplicate:before {
+    content: "\e90c";
+}
+
+.icon-emb-download:before {
+    content: "\e90d";
+}
+
+.icon-emb-upload:before {
+    content: "\e906";
+}
+
+.icon-emb-openapi:before {
+    content: "\e907";
+}
+
+.icon-emb-grouped-list:before {
+    content: "\e900";
+}
+
+.icon-emb-list:before {
+    content: "\e901";
+}
+
+.icon-emb-filtrofier:before {
+    content: "\e902";
+}
+
+.icon-emb-play:before {
+    content: "\e908";
+}
+
+.icon-emb-api-management:before {
+    content: "\e903";
+}
+
+.icon-emb-chevron-down:before {
+    content: "\e90a";
+}
+
+.icon-emb-chevron-up:before {
+    content: "\e90b";
+}
+
+.icon-emb-chevron-right:before {
+    content: "\e904";
+}
+
+.icon-emb-chevron-left:before {
+    content: "\e909";
+}
+
+.icon-emb-code:before {
+    content: "\e905";
+}
+
+.icon-emb-drag-handle:before {
+    content: "\e91e";
+}
+
+.icon-emb-eye:before {
+    content: "\e91f";
+}
+
+.icon-emb-eye-fill:before {
+    content: "\e920";
+}
+
+.icon-emb-magnifier:before {
+    content: "\e91b";
+}
+
+.icon-emb-info:before {
+    content: "\ea0c";
+}
+
+.icon-emb-option-horizontal:before {
+    content: "\e91d";
+}
+
+.icon-emb-plus:before {
+    content: "\e91c";
+}
+
+.icon-emb-search-filter:before {
+    content: "\e923";
+}
+
+.icon-emb-tag:before {
+    content: "\e921";
+}
+
+.icon-emb-trash:before {
+    content: "\e922";
+}
+
+.icon-emb-add-filter:before {
+    content: "\e910";
+}
+
+.icon-emb-menu-8:before {
+    content: "\e90e";
+}
+
+.icon-emb-brackets:before {
+    content: "\e911";
+}
+
+.icon-emb-spinner:before {
+    content: "\e984";
+}
+
+.icon-svg-wadl {
+    @include icon-18px();
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-image: url("./icons/icon-wadl.svg");
+}
+
+.icon-svg-wsdl {
+    @include icon-18px();
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-image: url("./icons/icon-wsdl.svg");
+}
+
+.icon-svg-aad {
+    @include icon-18px();
+    display: inline-block;
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-image: url("./icons/icon-aad.svg");
+    vertical-align: middle;
+}
+
+.icon-svg-magnifier {
+    background-image: url("./icons/icon-magnifier.svg");
+}
+
+.info-icon-size {
+    font-size: 13px;
+}

@@ -1,0 +1,78 @@
+<div class="flex flex-row">
+    <!-- ko if: apiWorking-->
+    <spinner class="fit"></spinner>
+    <!-- /ko -->
+
+    <!-- ko ifnot: apiWorking -->
+    <div class="flex-item flex-grow animation-fade-in">
+        <!-- ko if: api -->
+        <a href="#" class="nav-link text-truncate" data-bind="attr: { href: $component.getReferenceUrl() }">&lt&lt Go back to the
+            API reference page.</a>
+        <h2 data-bind="text: api().displayName"></h2>
+        <div style="background-color:white">
+            <div class="table">
+                <div class="table-head">
+                    <div class="table-row">
+                        <div class="col-3">
+                            Release date
+                        </div>
+                        <div class="col-9">
+                            Notes
+                        </div>
+                    </div>
+                </div>
+                <!-- ko ifnot: changeLogWorking -->
+                <!-- ko if: currentPageLog().length > 0 -->
+                <div data-bind="foreach: { data: currentPageLog, as: 'hist' }">
+                    <div class="table-row">
+                        <div class="col-3" data-bind="text: hist.properties.updatedDateTime"></div>
+                        <div class="col-9" data-bind="markdown: hist.properties.notes"></div>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <!-- ko if: currentPageLog().length === 0 -->
+                <div class="table-row">
+                    <div class="col-12">
+                        No records to show.
+                    </div>
+                </div>
+                <!-- /ko -->
+                <!-- /ko -->
+            </div>
+
+            <!-- ko if: changeLogWorking -->
+            <spinner></spinner>
+            <!-- /ko -->
+
+            <!-- ko if: changeLogHasPager -->
+            <ul class="pagination justify-content-center" role="navigation" aria-label="Pagination">
+                <!-- ko if: changeLogHasPrevPage -->
+                <li class="page-item">
+                    <a href="#" class="page-link" role="button" aria-label="Previous page"
+                        data-bind="click: changeLogPrevPage, enable: changeLogHasPrevPage">
+                        <i class="icon-emb icon-emb-chevron-left"></i>
+                    </a>
+                </li>
+                <!-- /ko -->
+                <li class="page-item">
+                    <span class="page-link" data-bind="text: changeLogPage"></span>
+                </li>
+                <!-- ko if: changeLogHasNextPage -->
+                <li class="page-item">
+                    <a href="#" class="page-link" role="button" aria-label="Next page"
+                        data-bind="click: changeLogNextPage, enable: changeLogHasNextPage">
+                        <i class="icon-emb icon-emb-chevron-right"></i>
+                    </a>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+
+        <!-- ko ifnot: api -->
+        <p>No API selected</p>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+</div>

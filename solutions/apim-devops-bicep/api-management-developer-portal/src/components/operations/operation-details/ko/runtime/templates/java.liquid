@@ -1,0 +1,71 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.io.FileInputStream;
+
+public class HelloWorld {
+
+  public static void main(String[] args) {
+    try {
+        String urlString = "{{requestUrl}}";
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        //Request headers
+{%- for header in request.meaningfulHeaders %}
+        connection.setRequestProperty("{{header.name}}", "{{header.displayedValue}}");
+{% endfor %}
+        connection.setRequestMethod("{{method}}");
+{% if method == "POST" or method == "PUT" -%}
+    {%- if request.body != blank %}
+        // Request body
+        connection.setDoOutput(true);
+    {%- if request.bodyFormat == "raw"  -%}
+    {%- assign formattedBody = request.body | replace: '"','\\"' 
+        formattedBody = formattedBody | replace: '\r\n', ' ' 
+        formattedBody = formattedBody | replace: '\n', ' ' 
+        formattedBody = formattedBody | replace: '     ', ' ' %}
+        connection
+            .getOutputStream()
+            .write(
+             "{{formattedBody}}".getBytes()
+             );
+    {%- elsif request.bodyFormat == "binary" %}
+        String fileName = "< path/to/{{request.binary.name}} >";
+        InputStream is = new FileInputStream(fileName);
+        byte[] bytes = new byte[(int) is.available()];
+        DataInputStream dataInputStream = new DataInputStream(is);
+        dataInputStream.readFully(bytes);
+        dataInputStream.close();
+        connection.getOutputStream().write(bytes);
+    {%- endif %}
+    {% endif -%}
+
+{% endif %}
+        int status = connection.getResponseCode();
+        System.out.println(status);
+
+        BufferedReader in = new BufferedReader(
+            new InputStreamReader(connection.getInputStream())
+        );
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
+        in.close();
+        System.out.println(content);
+
+        connection.disconnect();
+    } catch (Exception ex) {
+      System.out.print("exception:" + ex.getMessage());
+    }
+  }
+}

@@ -1,0 +1,25 @@
+
+{%- if request.body != blank and request.bodyFormat == "raw" -%}
+// Request body
+const body = {{request.body}};
+{%- endif %}
+
+fetch('{{requestUrl}}', {
+        method: '{{method | upcase}}',
+        {%- if request.body != blank %}
+        body: JSON.stringify(body),
+        {%- endif -%}
+        {% if request.meaningfulHeaders.size > 0 %}
+        // Request headers
+        headers: {
+        {%- for header in request.meaningfulHeaders %}
+            '{{header.name}}': '{{header.displayedValue}}',
+        {%- endfor -%}
+        {%- endif -%}
+        }
+    })
+    .then(response => {
+        console.log(response.status);
+        console.log(response.text());
+    })
+    .catch(err => console.error(err));

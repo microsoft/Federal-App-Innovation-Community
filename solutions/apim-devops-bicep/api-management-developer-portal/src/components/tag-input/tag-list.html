@@ -1,0 +1,20 @@
+<div class="flex flex-column">
+    <div class="form-inline">
+        <input type="search" class="form-control form-control-light" aria-label="Search tags" placeholder="Search tags"
+            data-bind="textInput: pattern" />
+    </div>
+
+    <!-- ko ifnot: empty -->
+    <div role="listbox" class="list" data-bind="foreach: { data: availableTags, as: 'tag' }, listbox: {}">
+        <div role="presentation" data-bind="activate: $parent.addTag">
+            <div role="option" class="tag-item" data-bind="text: name"></div>
+        </div>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: empty -->
+    <div role="list" class="list">
+        <div class="list-item-empty">No tags found</div>
+    </div>
+    <!-- /ko -->
+</div>

@@ -1,8 +1,8 @@
 # Federal Application Innovation Community Repository
 
-This repository was created to demonstrate patterns, solutions, and demos that teams can use as starting points to successfully implement cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
+This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners.  This guidiance is built by an active inner-source community of account executives, cloud solution architects, solution specialist and others who have an authentic federal perspective.  Teams can use this repo as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
 
-The goal is to address high-value problems, unique scenarios, and provide direction. You should refer to these solutions as starting points that you can then customize, fork, etc. for your own use cases and requirements.
+The goal is to address high-value problems, unique scenarios, whiling providing actionable gudiance and implementation. You should refer to these solutions as starting point to accerlerate you cloud adoption journey. Feel free to fork a copy of this repo for your own use cases, requirements, experimentation, learning and cloud adoption.
 
 ## Solutions & Patterns
 

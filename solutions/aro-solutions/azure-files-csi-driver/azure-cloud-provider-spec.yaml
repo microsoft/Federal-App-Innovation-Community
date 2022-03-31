@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  cloud-config: ${AZURE_CLOUD_SECRET}
+kind: Secret
+metadata:
+  name: azure-cloud-provider
+  namespace: kube-system
+type: Opaque

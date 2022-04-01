@@ -1,16 +1,16 @@
 # Federal Application Innovation Community Repository
 
-This repository demonstrates patterns and solutions that address high-value scenarios to support successful cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
+This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners. This guidiance is built by an active open-source community with an authentic federal perspective. Teams can use this repo as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
 
-Refer to these patterns as starting points / example scenarios that you can then customize, fork, and leverage for your own use cases and requirements.
+The goal is to address high-value problems, unique scenarios, whiling providing actionable gudiance and direction. You should refer to these solutions as starting point to accerlerate you cloud adoption journey. Feel free to fork a copy of this repo for your own use cases, requirements, experimentation, learning and cloud adoption journey.
 
 ## Solutions & Patterns
 
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
-| ***Containers / K8s*** | Build Containers on ACR and Resolve Private Dependencies [▶️](solutions/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
-| ***Containers / K8s*** | Automation to Deploy ARO [▶️](solutions/aro-solutions/README.md) | ✔️ | ✔️ | 03/31/2022 |
-| ***Enterprise Integration*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/apim-bicep-devops/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
+| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies. [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
 
 ## Whitepapers
 
@@ -21,6 +21,7 @@ Refer to these patterns as starting points / example scenarios that you can then
 
 | Topic | Training | Azure Global | Azure Government |
 | :---------: | :---: | :----: | :----: |
+| ***Containers / K8s*** | Azure Red Hat OpenShift Concepts. ▶️ | ✔️ | 🧪 (#11) |
 
 ## Contributing
 

@@ -1,0 +1,38 @@
+parameters:
+- name: environment
+  type: string
+- name: mainBicepFile
+  type: string
+  default: ./main.bicep
+- name: serviceConnectionName
+  type: string
+- name: location
+  type: string
+  default: eastus
+
+jobs:
+- deployment: Deploy_${{parameters.environment}}
+  displayName: Deploy
+  environment: ${{parameters.environment}}
+  variables:
+  - group: PUBLISHER_DETAILS
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - checkout: self
+          - task: AzureCLI@2
+            name: RunDeploy
+            displayName: RunDeploy
+            inputs:
+              azureSubscription: ${{parameters.serviceConnectionName}}
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az deployment sub create \
+                --template-file ${{parameters.mainBicepFile}} \
+                --name ${{parameters.environment}}-$(Build.BuildNumber)-validation \
+                --location ${{parameters.location}} \
+                --parameters ${{parameters.environment}}.parameters.json \
+                              publisherName=$(publisherName) \
+                              publisherEmail=$(publisherEmail)

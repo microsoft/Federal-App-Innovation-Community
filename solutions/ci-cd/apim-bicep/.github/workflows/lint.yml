@@ -1,0 +1,21 @@
+name: lint
+
+on:
+  workflow_call:
+
+    inputs:
+      mainBicepFile:
+        required: false
+        type: string
+        default: ./main.bicep
+
+jobs:
+  lint:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Lint code
+      run: |
+        az bicep build --file ${{ inputs.mainBicepFile }}

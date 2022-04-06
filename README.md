@@ -1,25 +1,23 @@
-# Federal Application Innovation Solutions Repository
+# Federal Application Innovation Community Repository
 
-This repository was created to demonstrate patterns, solutions, and demos that teams can use as starting points to successfully implement cloud-native architectures and services in Azure Cloud and Azure Government Cloud.
+This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners. This guidiance is built by an active open-source community with an authentic federal perspective. Teams can use this repo as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
 
-The goal is to address high-value problems, unique scenarios, and provide direction. You should refer to these solutions as starting points that you can then customize, fork, etc. for your own use cases and requirements.
+The goal is to address high-value problems, unique scenarios, whiling providing actionable gudiance and direction. You should refer to these solutions as starting point to accerlerate you cloud adoption journey. Feel free to fork a copy of this repo for your own use cases, requirements, experimentation, learning and cloud adoption journey.
 
 ## Solutions & Patterns
 
-| Solution Name | Azure Cloud | Azure Government |
-| --------- | :---: | :----: |
-| [Build Containers with ACR Dedicated Agents from AKS Runners](solutions/private-acr-tasks/README.md) | :heavy_check_mark: | :heavy_check_mark: |
-| [Azure API Management DevOps Patterns with Bicep](solutions/apim-bicep-devops/README.md) | :heavy_check_mark: | Not Yet Tested |
-| [Azure Red Hat OpenShift Private Hub & Spoke](solutions/aro-hub-spoke/README.md) | :heavy_check_mark: | :heavy_check_mark: |
+| Topic | Solution | Azure Global | Azure Government | Last Tested |
+| :--------- | :--- | :----: | :----: | :---: |
+| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies. [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
 
 ## Whitepapers
 
-No whitepapers available yet
+| Topic | Whitepaper | Azure Global | Azure Government |
+| :---------: | :---: | :----: | :----: |
 
 ## Training Resources
-
-- [Azure Red Hat OpenShift Concepts](./trainings/aro-concepts/README.md)
-- [Azure Functions Cloud Native Workshop](./trainings/azure-functions-serverless-cloud-native-workshop/README.md)
 
 ## Contributing
 
@@ -43,7 +41,7 @@ To contribute, you should fork this repository and then submit contributions as 
 
 ### Automation & Testing
 
-The contribution should have a clear approach for how to work through your solution & training resource. Ideally for solutions, we are looking for automated approaches usuing Infrastructure-as-Code (ideally Bicep or Terraform). However, we will welcome any form of automation including scripts since we want solutions to be added sooner rather than later and we can iterate from there.
+The contribution should have a clear approach for how to work through your solution & training resource. Ideally for solutions, we are looking for automated approaches using Infrastructure-as-Code (ideally Bicep or Terraform). However, we will welcome any form of automation including scripts since we want solutions to be added sooner rather than later and we can iterate from there.
 
 Additionally, we have a focus on testing solutions both in [Azure Cloud and Azure Government](https://docs.microsoft.com/en-us/azure/azure-government/compare-azure-government-global-azure).
 

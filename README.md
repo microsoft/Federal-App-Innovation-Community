@@ -8,10 +8,10 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
-| ***[Containers](solutions/containers/)*** | ACR Tasks with Private Agents [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
-| ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
-| ***[CI/CD](solutions/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | N/A | 02/28/2022 |
-| ***[Infra](solutions/infrastructure)*** | TIC 3.0 Architectures [▶️](solutions/infrastructure/tic3.0) | ✔️ | N/A | 02/28/2022 |
+| ***[Containers](./topics/containers)*** | ACR Tasks with Private Agents [▶️](./topics/containers/solutions/private-acr-tasks) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
+| ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | N/A | 02/28/2022 |
 
 ## Whitepapers
 
@@ -22,7 +22,7 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 
 | Topic | Training | Azure Global | Azure Government |
 | :---------: | :---: | :----: | :----: |
-| ***[Serverless](trainings/azure-functions-serverless-cloud-native-workshop)*** | Cloud-Native Workshop with Functions + Cosmos [▶️](trainings/azure-functions-serverless-cloud-native-workshop) | N/A | N/A |
+| ***[Serverless](./topics/serverless)*** | Cloud-Native Workshop with Functions + Cosmos [▶️](./topics/serverless/trainings/azure-functions-serverless-cloud-native-workshop) | N/A | N/A |
 
 ## Contributing
 
@@ -56,26 +56,29 @@ As part of the peer review process, we will attempt the test your solution so th
 
 Follow the folder convention below to add your contribution. Generally we will look for automated solutions using Bicep, but within your particular solution feel free to leverage a different approach for automation like Terraform or even scripts with the `az cli`. We will be flexible with the folder structure within your solution as long as a `README.md` is provided for guidance on how it works.
 
+Apply your opinion on what topic area your content should be included under (and if maybe a new topic is required, feel free to suggest that), we can then review on the PR should there be any other thoughts.
+
 ```
-solutions/
-├─ your-new-solution-folder/
-│  ├─ bicep/
-│  │  ├─ main.bicep
-|  |  ├─ modules/
-|  ├─ img/
-|  |  ├─ architecture.png
-│  ├─ README.md
-whitepapers/
-├─ your-new-whitepaper-folder/
-│  ├─ files/
-│  │  ├─ image1.PNG
-│  ├─ README.md
-trainings/
-├─ your-new-training-folder/
-│  ├─ files/
-│  │  ├─ image1.PNG
-│  ├─ README.md
-README.md
+TOPIC AREA/
+    solutions/
+    ├─ your-new-solution-folder/
+    │  ├─ bicep/
+    │  │  ├─ main.bicep
+    |  |  ├─ modules/
+    |  ├─ img/
+    |  |  ├─ architecture.png
+    │  ├─ README.md
+    whitepapers/
+    ├─ your-new-whitepaper-folder/
+    │  ├─ files/
+    │  │  ├─ image1.PNG
+    │  ├─ README.md
+    trainings/
+    ├─ your-new-training-folder/
+    │  ├─ files/
+    │  │  ├─ image1.PNG
+    │  ├─ README.md
+    README.md
 ```
 
 ## Trademarks

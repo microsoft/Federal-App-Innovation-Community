@@ -19,10 +19,6 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 
 ## Training Resources
 
-| Topic | Training | Azure Global | Azure Government |
-| :---------: | :---: | :----: | :----: |
-| ***Containers / K8s*** | Azure Red Hat OpenShift Concepts. ▶️ | ✔️ | 🧪 (#11) |
-
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a

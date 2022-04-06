@@ -8,9 +8,10 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
-| ***[Containers](solutions/containers/)*** | Build Containers on ACR and Resolve Private Dependencies. [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
-| ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit ARO in a Private Hub & Spoke Network [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
-| ***[CI/CD](solutions/ci-cd) Continuous Integration/Continuous Deployment*** | Deploy & Manage APIM with Bicep & GitHub Actions/Azure DevOps [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | 🧪(#10) | 02/28/2022 |
+| ***[Containers](solutions/containers/)*** | ACR Tasks with Private Agents [▶️](solutions/containers/private-acr-tasks/README.md) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Kubernetes](solutions/kubernetes/)*** | Deploy Azure RedHat OpenShfit [▶️](solutions/aro-kubernetes/hub-spoke-deployment/README.md) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[CI/CD](solutions/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](solutions/ci-cd/apim-bicep/README.md) | ✔️ | N/A | 02/28/2022 |
+| ***[Infra](solutions/infrastructure)*** | TIC 3.0 Architectures [▶️](solutions/infrastructure/tic3.0) | ✔️ | N/A | 02/28/2022 |
 
 ## Whitepapers
 
@@ -18,6 +19,10 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 | :---------: | :---: | :----: | :----: |
 
 ## Training Resources
+
+| Topic | Training | Azure Global | Azure Government |
+| :---------: | :---: | :----: | :----: |
+| ***[Serverless](trainings/azure-functions-serverless-cloud-native-workshop)*** | Cloud-Native Workshop with Functions + Cosmos [▶️](trainings/azure-functions-serverless-cloud-native-workshop) | N/A | N/A |
 
 ## Contributing
 

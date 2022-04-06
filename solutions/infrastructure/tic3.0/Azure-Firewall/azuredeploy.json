@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "templateVersion": {
-            "defaultValue": "20220404.1421",
+            "defaultValue": "20220406.0829",
             "type": "String",
             "allowedValues": [
-                "20220404.1421"
+                "20220406.0829"
             ],
             "metadata": {
                 "description": "This is the version of the template you are running."
@@ -472,7 +472,7 @@
             ],
             "properties": {
                 "description": "Every hour initiate the UploadToCLAW-S3 runbook.",
-                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 30) ,'M'))]",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
                 "interval": 1,
                 "frequency": "Hour",
                 "timeZone": "America/New_York"
@@ -517,9 +517,45 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
                 "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
-                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('scheduleName'), '-1'))]",
-                "[resourceId('Microsoft.Network/azureFirewalls', variables('azureFirewallName'))]",
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]"
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('scheduleName'), '-1'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "properties": {
+                "parameters": {},
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('scheduleName'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('scheduleName'), '-2'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "properties": {
+                "parameters": {},
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('scheduleName'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('scheduleName'), '-3'))]"
             ]
         },
         {

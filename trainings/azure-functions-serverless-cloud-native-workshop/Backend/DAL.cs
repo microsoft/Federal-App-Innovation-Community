@@ -7,7 +7,7 @@ public class DAL
     public const string COSMOS_CONTAINER = "bike";
     public const string COSMOS_BIKE_TABLE = "bike";
 
-    private const string COSMOS_CONNECTION_STRING = "AccountEndpoint=https://mycosmosdb521.documents.azure.com:443/;AccountKey=OjrNCTsIfF807q80dmZmxqnDHSfJKFfcu9teSVo2czGxDauprYUEJPnUEd3Rvqqt9PjGz8JY08KvqeErm4nVPg==;";
+    private const string COSMOS_CONNECTION_STRING = "<YOUR CONNECTION STRING>";
     private static Lazy<CosmosClient> m_lcdb = new Lazy<CosmosClient>(InitializeCosmosClient);
     private static CosmosClient m_cdb => m_lcdb.Value;
     private static CosmosClient InitializeCosmosClient()

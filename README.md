@@ -26,6 +26,9 @@ The goal is to address high-value problems, unique scenarios, whiling providing 
 
 ## Contributing
 
+
+
+
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
@@ -43,6 +46,8 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 To contribute, you should fork this repository and then submit contributions as a Pull Request. Someone on the contributors team will review your pull request and we can work together to get it merged and address any updates that should occur.
 
 [Creating a Pull Request from a Fork](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+
+[![Fork and PR](https://img.youtube.com/vi/rrlXYiB1-Bc/sddefault.jpg)](https://youtu.be/rrlXYiB1-Bc)
 
 ### Automation & Testing
 

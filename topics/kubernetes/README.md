@@ -5,7 +5,7 @@ This directory is dedicated to all things AKS!
 
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
-| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](../topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](/topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
 | ***[BigBang On Azure Stack Edge](/tree/main/topics/kubernetes/solutions/bigbang-stack-edge)*** | Deploy BigBang on an ASE [▶️](/tree/main/topics/kubernetes/solutions/bigbang-stack-edge) | ✔️ | N/A | 02/28/2022 |
 
 

@@ -3,7 +3,7 @@
 In this video series we will deploy Big Bang to an Azure Stack Edge Device using the ***[Repo1](https://repo1.dso.mil/platform-one/big-bang/customers/template/)*** template. 
 
 ## Presentation
-***[Link](/BigBang%20on%20ASE.pptx)*** to Power Point overview
+***[Link](BigBang%20on%20ASE.pptx)*** to Power Point overview
 
 
 ## Steps

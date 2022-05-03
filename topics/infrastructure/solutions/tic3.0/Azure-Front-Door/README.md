@@ -11,7 +11,7 @@ The following solution is a one-click, out-of-the-box deployment. All services n
 
 ###### TIC 3.0 Compliant App Service Architecture using Azure Front Door
 
-![Architecture8](https://user-images.githubusercontent.com/34814295/161760182-1c588b2e-49f2-491e-b39b-f634fc25b1bb.png)
+![Architecture](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/Arch-AzureFrontDoor.png)
 
 ### Requirements
 The following must be performed before using this deployment scenario:
@@ -39,7 +39,7 @@ This deployment scenario will deploy and update the following:
 ### Azure Portal
 Use the following button to deploy using the Azure Portal.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Ftrusted-internet-connection%2Fmain%2FArchitecture%2FAzure%2520Front%2520Door%2FComplete%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Fsolutions%2Finfrastructure%2Ftic3.0%2FAzure-Front-Door%2Fazuredeploy.json)
 
 ### Azure PowerShell
 The following PowerShell code can be executed from the Azure Cloud Shell or locally if you have [installed Az Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.3.2). 
@@ -47,7 +47,7 @@ The following PowerShell code can be executed from the Azure Cloud Shell or loca
 You must update the **SubscriptionName** with your Azure Subscription that you want to deploy the solution
 
 ```powershell
-$jsonUrl = "https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Architecture/Azure%20Front%20Door/Complete/azuredeploy.json"
+$jsonUrl = "https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/Azure-Front-Door/azuredeploy.json"
 $location = "East US"
 $resourceGroupName = "RG-Example-Tic3_0-FrontDoor"
 $suffix = Get-Random -Maximum 1000
@@ -72,9 +72,9 @@ The variables are encrypted. This means that you or anyone cannot view them from
 
 This example walks through updating the **AWSAccessKey**, repeat the steps for each Variable. 
 
-![Edit Variable](https://user-images.githubusercontent.com/34814295/161762173-558b15b7-6d61-4c81-94d9-c422e8d46dab.png)
+![Edit Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/UpdateAutoAcctVar-Edit.png)
 
-![Save Variable](https://user-images.githubusercontent.com/34814295/161761588-64282816-5782-40a9-8db6-d949e76c4813.png)
+![Save Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/UpdateAutoAcctVar-Save.png)
 
 1. Go to the Automation account created during deployment
 2. Select **Variables** from the left hand menu, you will have to scroll down to view it
@@ -87,7 +87,7 @@ This example walks through updating the **AWSAccessKey**, repeat the steps for e
 Repeat for **AWSSecretKey** and **S3BucketName**
 
 ## Ready for uploading logs to CLAW
-Logs from your deployed scenario will be uploaded to the CLAW started 1 hour after the deployed scenario and then every 15 minutes.
+Logs from your deployed scenario will be uploaded to the CLAW starting 1 hour after the deployed scenario and then every 15 minutes.
 
 ## References
 

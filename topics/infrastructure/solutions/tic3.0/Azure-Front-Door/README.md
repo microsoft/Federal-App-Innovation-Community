@@ -11,7 +11,7 @@ The following solution is a one-click, out-of-the-box deployment. All services n
 
 ###### TIC 3.0 Compliant App Service Architecture using Azure Front Door
 
-![Architecture](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/Arch-AzureFrontDoor.png)
+![Architecture](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/topics/infrastructure/solutions/tic3.0/images/Arch-AzureFrontDoor.png)
 
 ### Requirements
 The following must be performed before using this deployment scenario:
@@ -72,9 +72,9 @@ The variables are encrypted. This means that you or anyone cannot view them from
 
 This example walks through updating the **AWSAccessKey**, repeat the steps for each Variable. 
 
-![Edit Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/UpdateAutoAcctVar-Edit.png)
+![Edit Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/topics/infrastructure/solutions/tic3.0/images/UpdateAutoAcctVar-Edit.png)
 
-![Save Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/UpdateAutoAcctVar-Save.png)
+![Save Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/topics/infrastructure/solutions/tic3.0/images/UpdateAutoAcctVar-Save.png)
 
 1. Go to the Automation account created during deployment
 2. Select **Variables** from the left hand menu, you will have to scroll down to view it

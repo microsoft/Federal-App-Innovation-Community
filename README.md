@@ -13,16 +13,18 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
 | ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
 
-## Whitepapers
-
-| Topic | Whitepaper | Azure Global | Azure Government |
-| :---------: | :---: | :----: | :----: |
-
 ## Training Resources
 
 | Topic | Training | Azure Global | Azure Government |
 | :---------: | :---: | :----: | :----: |
 | ***[Serverless](./topics/serverless)*** | Cloud-Native Workshop with Functions + Cosmos [▶️](./topics/serverless/trainings/azure-functions-serverless-cloud-native-workshop) | N/A | N/A |
+
+
+## Whitepapers
+
+| Topic | Whitepaper |
+| :---------: | :---: |
+| ***[Kubernetes](./topics/kubernetes)*** | Container Adoption Journey [▶️](./topics/kubernetes/whitepapers/container-adoption-journey) |
 
 ## Contributing
 

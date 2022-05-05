@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "templateVersion": {
-            "defaultValue": "220422.1636",
+            "defaultValue": "220504.2100",
             "type": "String",
             "allowedValues": [
-                "220422.1636"
+                "220504.2100"
             ],
             "metadata": {
                 "description": "This is the version of the template you are running."
@@ -58,8 +58,9 @@
         }
     },
     "variables": {
-        "webAppDnsName": ".azurewebsites.net",
+        "webAppDnsName": ".azurewebsites",
         "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
         "skuTier": "WAF_v2",
         "webAppUniqueName": "[format('{0}-{1}', parameters('deploymentPurpose'), uniqueString(resourceGroup().id))]",
         "virtualNetworkName": "[concat('VNet-', variables('webAppUniqueName'))]",
@@ -220,7 +221,7 @@
                         "properties": {
                             "backendAddresses": [
                                 {
-                                    "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'))]"
+                                    "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'), variables('webAppDnsExtension'))]"
                                 }
                             ]
                         }
@@ -394,18 +395,6 @@
                     }
                 ]
             }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2019-08-01",
-            "name": "[format('{0}/{1}', variables('webAppInternalName'), format('{0}{1}', variables('webAppInternalName'), variables('webAppDnsName')))]",
-            "properties": {
-                "siteName": "[variables('webAppInternalName')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
-            ]
         },
         {
             "type": "Microsoft.Automation/automationAccounts",

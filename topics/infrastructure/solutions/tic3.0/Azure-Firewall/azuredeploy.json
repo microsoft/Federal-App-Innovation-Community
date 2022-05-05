@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "templateVersion": {
-            "defaultValue": "20220406.0829",
+            "defaultValue": "220504.2100",
             "type": "String",
             "allowedValues": [
-                "20220406.0829"
+                "220504.2100"
             ],
             "metadata": {
                 "description": "This is the version of the template you are running."
@@ -37,7 +37,7 @@
         },
         "webAppName": {
             "type": "string",
-            "defaultValue": "webApp",
+            "defaultValue": "webAppExample",
             "metadata": {
                 "description": "Name of the Web App Service farm"
             }
@@ -58,11 +58,12 @@
         }
     },
     "variables": {
-        "webAppDnsName": ".azurewebsites.net",
+        "webAppDnsName": ".azurewebsites",
         "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
         "skuTier": "PremiumV2",
         "webAppUniqueName": "[format('{0}-{1}', parameters('webAppName'), uniqueString(resourceGroup().id))]",
-        "privateDnsZoneName": "[concat(variables('webAppUniqueName'),'.privatelink.azurewebsites.net')]",
+        "privateDnsZoneName": "[concat(variables('webAppUniqueName'),'.privatelink.azurewebsites', variables('webAppDnsExtension'))]",
         "virtualNetworkName": "[concat('VNET-', variables('webAppUniqueName'))]",
         "IPBase": "[split(parameters('virtualNetworkIPRange'),'.')]",
         "subnetFirewallName": "AzureFirewallSubnet",
@@ -83,6 +84,10 @@
         "privateLinkConnectionName": "[concat('PrivLink-', variables('webAppUniqueName'))]",
         "automationAccountName": "[concat('AutoAcct-', variables('webAppUniqueName'), '-ToCLAW')]",
         "scheduleName": "UploadAzureFirewallLogs",
+        "jobName00": "00",
+        "jobName01": "01",
+        "jobName02": "02",
+        "jobName03": "03",
         "scheduleCount": 5,
         "startTime": "[dateTimeAdd(parameters('baseTime'), 'PT1H')]",
         "runbookName": "[concat('Runbook-', variables('webAppUniqueName'), '-ToCLAW')]",
@@ -402,18 +407,6 @@
             ]
         },
         {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2019-08-01",
-            "name": "[format('{0}/{1}', variables('webAppInternalName'), format('{0}{1}', variables('webAppInternalName'), variables('webAppDnsName')))]",
-            "properties": {
-                "siteName": "[variables('webAppInternalName')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
-            ]
-        },
-        {
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2021-06-22",
             "name": "[variables('automationAccountName')]",
@@ -485,7 +478,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName00')))]",
             "properties": {
                 "parameters": {},
                 "runbook": {
@@ -504,7 +497,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName01')))]",
             "properties": {
                 "parameters": {},
                 "runbook": {
@@ -523,7 +516,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName02')))]",
             "properties": {
                 "parameters": {},
                 "runbook": {
@@ -542,7 +535,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName03')))]",
             "properties": {
                 "parameters": {},
                 "runbook": {

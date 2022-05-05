@@ -19,8 +19,8 @@ We will be building a simple Single Page App (SPA) that can manage a bicycle sho
 [PowerPoint](https://github.com/usri/ServerlessCloudNativeWorkshop/blob/master/Creating%20a%20serverless%20cloud%20native%20app%20on%20Azure.pptx?raw=true)
 
 # Start with 00 Backend
-#[Backend](https://github.com/usri/ServerlessCloudNativeWorkshop/blob/master/00-Setup%20Backend.md?raw=true)
-[Backend](00-Setup%20Backend.md?raw=true)
+# [Backend](https://github.com/usri/ServerlessCloudNativeWorkshop/blob/master/00-Setup%20Backend.md?raw=true)
+[Backend](00-Setup%20Backend.md)
 
 # Continue to 01 Frontend
 [Frontend](https://github.com/usri/ServerlessCloudNativeWorkshop/blob/master/01-Setup%20Frontend.docx?raw=true)

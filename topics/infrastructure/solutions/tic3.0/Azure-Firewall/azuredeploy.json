@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "templateVersion": {
-            "defaultValue": "20220406.0829",
+            "defaultValue": "220504.2100",
             "type": "String",
             "allowedValues": [
-                "20220406.0829"
+                "220504.2100"
             ],
             "metadata": {
                 "description": "This is the version of the template you are running."
@@ -37,7 +37,7 @@
         },
         "webAppName": {
             "type": "string",
-            "defaultValue": "webApp",
+            "defaultValue": "webAppExample",
             "metadata": {
                 "description": "Name of the Web App Service farm"
             }
@@ -58,11 +58,12 @@
         }
     },
     "variables": {
-        "webAppDnsName": ".azurewebsites.net",
+        "webAppDnsName": ".azurewebsites",
         "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
         "skuTier": "PremiumV2",
         "webAppUniqueName": "[format('{0}-{1}', parameters('webAppName'), uniqueString(resourceGroup().id))]",
-        "privateDnsZoneName": "[concat(variables('webAppUniqueName'),'.privatelink.azurewebsites.net')]",
+        "privateDnsZoneName": "[concat(variables('webAppUniqueName'),'.privatelink.azurewebsites', variables('webAppDnsExtension'))]",
         "virtualNetworkName": "[concat('VNET-', variables('webAppUniqueName'))]",
         "IPBase": "[split(parameters('virtualNetworkIPRange'),'.')]",
         "subnetFirewallName": "AzureFirewallSubnet",
@@ -403,18 +404,6 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('webAppServiceName'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2019-08-01",
-            "name": "[format('{0}/{1}', variables('webAppInternalName'), format('{0}{1}', variables('webAppInternalName'), variables('webAppDnsName')))]",
-            "properties": {
-                "siteName": "[variables('webAppInternalName')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
             ]
         },
         {

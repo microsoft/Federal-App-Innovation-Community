@@ -11,7 +11,7 @@ The following solution is a one-click, out-of-the-box deployment. All services n
 
 ###### TIC 3.0 Compliant App Service Architecture using Azure Front Door
 
-![Architecture](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/Arch-AzureFrontDoor.png)
+![Architecture](../images/Arch-AzureFrontDoor.png)
 
 ### Requirements
 The following must be performed before using this deployment scenario:
@@ -37,11 +37,13 @@ This deployment scenario will deploy and update the following:
 
 ## Deployment Methods
 ### Azure Portal
-Use the following button to deploy using the Azure Portal.
+Use the following button to deploy to Azure Commercial or Azure Government using the Azure Portal.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Fsolutions%2Finfrastructure%2Ftic3.0%2FAzure-Front-Door%2Fazuredeploy.json)
+| [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Ftopics%2Finfrastructure%2Fsolutions%2Ftic3.0%2FAzure-Front-Door%2Fazuredeploy.json) | [![Deploy to Azure Government](https://raw.githubusercontent.com/paullizer/Federal-App-Innovation-Community-1/main/topics/infrastructure/solutions/tic3.0/images/deploytoazuregov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Ftopics%2Finfrastructure%2Fsolutions%2Ftic3.0%2FAzure-Front-Door%2Fazuredeploy.json) |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
 
 ### Azure PowerShell
+
 The following PowerShell code can be executed from the Azure Cloud Shell or locally if you have [installed Az Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.3.2). 
 
 You must update the **SubscriptionName** with your Azure Subscription that you want to deploy the solution
@@ -72,9 +74,9 @@ The variables are encrypted. This means that you or anyone cannot view them from
 
 This example walks through updating the **AWSAccessKey**, repeat the steps for each Variable. 
 
-![Edit Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/UpdateAutoAcctVar-Edit.png)
+![Edit Variable](../images/UpdateAutoAcctVar-Edit.png)
 
-![Save Variable](https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/images/UpdateAutoAcctVar-Save.png)
+![Save Variable](../images/UpdateAutoAcctVar-Save.png)
 
 1. Go to the Automation account created during deployment
 2. Select **Variables** from the left hand menu, you will have to scroll down to view it

@@ -43,6 +43,8 @@ Use the following button to deploy using the Azure Portal.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Fsolutions%2Finfrastructure%2Ftic3.0%2FAzure-Application-Gateway%2Fazuredeploy.json)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Fsolutions%2Finfrastructure%2Ftic3.0%2FAzure-Application-Gateway%2Fazuredeploy.json)
+
 ### Azure PowerShell
 The following PowerShell code can be executed from the Azure Cloud Shell or locally if you have [installed Az Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.3.2). 
 

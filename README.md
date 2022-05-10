@@ -11,7 +11,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[Containers](./topics/containers)*** | ACR Tasks with Private Agents [▶️](./topics/containers/solutions/private-acr-tasks) | ✔️ | ✔️ | 03/31/2022 |
 | ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
-| ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | N/A | 02/28/2022 |
+| ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
 
 ## Training Resources
 

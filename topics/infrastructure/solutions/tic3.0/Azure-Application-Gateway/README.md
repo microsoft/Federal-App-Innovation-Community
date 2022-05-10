@@ -11,7 +11,7 @@ The following solution is a one-click, out-of-the-box deployment. All services n
 
 ###### TIC 3.0 Compliant App Service Architecture using Azure Application Gateway
 
-![architecture](https://user-images.githubusercontent.com/34814295/161757962-b873077e-e1c3-4dc8-829a-61908a3ed15f.png)
+![Architecture](../images/Arch-AzureAppGateway.png)
 
 ### Requirements
 The following must be performed before using this deployment scenario:
@@ -39,9 +39,10 @@ This deployment scenario will deploy and update the following:
 
 ## Deployment Methods
 ### Azure Portal
-Use the following button to deploy using the Azure Portal.
+Use the following button to deploy to Azure Commercial or Azure Government using the Azure Portal.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Ftrusted-internet-connection%2Fmain%2FArchitecture%2FAzure%2520Application%2520Gateway%2FComplete%2Fazuredeploy.json)
+| [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Ftopics%2Finfrastructure%2Fsolutions%2Ftic3.0%2FAzure-Application-Gateway%2Fazuredeploy.json) | [![Deploy to Azure Government](https://raw.githubusercontent.com/paullizer/Federal-App-Innovation-Community-1/main/topics/infrastructure/solutions/tic3.0/images/deploytoazuregov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Ftopics%2Finfrastructure%2Fsolutions%2Ftic3.0%2FAzure-Application-Gateway%2Fazuredeploy.json) |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
 
 ### Azure PowerShell
 The following PowerShell code can be executed from the Azure Cloud Shell or locally if you have [installed Az Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.3.2). 
@@ -49,7 +50,7 @@ The following PowerShell code can be executed from the Azure Cloud Shell or loca
 You must update the *SubscriptionName* with your Azure Subscription that you want to deploy the solution
 
 ```powershell
-$jsonUrl = "https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Architecture/Azure%20Application%20Gateway/Complete/azuredeploy.json"`
+$jsonUrl = "https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/Azure-Application-Gateway/azuredeploy.json"`
 $location = "East US"`
 $resourceGroupName = "RG-Example-Tic3_0-AppGateway"`
 $suffix = Get-Random -Maximum 1000`
@@ -74,9 +75,9 @@ The variables are encrypted. This means that you or anyone cannot view them from
 
 This example walks through updating the **AWSAccessKey**, repeat the steps for each Variable. 
 
-![Edit Variable](https://user-images.githubusercontent.com/34814295/161762173-558b15b7-6d61-4c81-94d9-c422e8d46dab.png)
+![Edit Variable](../images/UpdateAutoAcctVar-Edit.png)
 
-![Save Variable](https://user-images.githubusercontent.com/34814295/161761588-64282816-5782-40a9-8db6-d949e76c4813.png)
+![Save Variable](../images/UpdateAutoAcctVar-Save.png)
 
 1. Go to the Automation account created during deployment
 2. Select **Variables** from the left hand menu, you will have to scroll down to view it
@@ -89,7 +90,7 @@ This example walks through updating the **AWSAccessKey**, repeat the steps for e
 Repeat for **AWSSecretKey** and **S3BucketName**
 
 ## Ready for uploading logs to CLAW
-Logs from your deployed scenario will be uploaded to the CLAW started 1 hour after the deployed scenario and then every 15 minutes.
+Logs from your deployed scenario will be uploaded to the CLAW starting 1 hour after the deployed scenario and then every 15 minutes.
 
 ## References
 

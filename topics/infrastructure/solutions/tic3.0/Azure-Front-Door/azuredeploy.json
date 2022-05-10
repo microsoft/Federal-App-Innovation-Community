@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "templateVersion": {
-            "defaultValue": "20220406.0829",
+            "defaultValue": "220504.2100",
             "type": "String",
             "allowedValues": [
-                "20220406.0829"
+                "220504.2100"
             ],
             "metadata": {
                 "description": "This is the version of the template you are running."
@@ -45,11 +45,14 @@
         }
     },
     "variables": {
-        "webAppDnsName": ".azurewebsites.net",
+        "webAppDnsName": ".azurewebsites",
         "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
         "skuTier": "WAF_v2",
         "webAppUniqueName": "[format('{0}-{1}', parameters('deploymentPurpose'), uniqueString(resourceGroup().id))]",
         "frontDoorName": "[concat('frontDr', parameters('deploymentPurpose'), uniqueString(resourceGroup().id))]",
+        "frontDoorDomain": ".azurefd",
+        "frontDoorDomainExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
         "frontDoorBackEndPoolName": "internalWebApp",
         "frontDoorLoadBalanaceSettingsName": "loadBalancingSettings",
         "frontDoorHealthProbeSettingsName": "healthProbeSettings",
@@ -61,6 +64,10 @@
         "webAppSkuName": "P1v2",
         "automationAccountName": "[concat('AutoAcct-', variables('webAppUniqueName'), '-ToCLAW')]",
         "scheduleName": "UploadAzureFrontDoorLogs",
+        "jobName00": "00",
+        "jobName01": "01",
+        "jobName02": "02",
+        "jobName03": "03",
         "scheduleCount": 5,
         "startTime": "[dateTimeAdd(parameters('baseTime'), 'PT1H')]",
         "runbookName": "[concat('Runbook-', variables('webAppUniqueName'), '-ToCLAW')]",
@@ -105,11 +112,11 @@
                 "friendlyName": "[variables('frontDoorName')]",
                 "frontendEndpoints": [
                     {
-                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', variables('frontDoorName')), concat('/FrontendEndpoints/', variables('frontDoorName'), '-azurefd-net'))]",
-                        "name": "[concat(variables('frontDoorName'), '-azurefd-net')]",
+                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', variables('frontDoorName')), concat('/FrontendEndpoints/', variables('frontDoorName'), '-azurefd'))]",
+                        "name": "[concat(variables('frontDoorName'), '-azurefd')]",
                         "properties": {
                             "resourceState": "Enabled",
-                            "hostName": "[concat(variables('frontDoorName'), '.azurefd.net')]",
+                            "hostName": "[concat(variables('frontDoorName'), variables('frontDoorDomain'), variables('frontDoorDomainExtension'))]",
                             "sessionAffinityEnabledState": "Disabled",
                             "sessionAffinityTtlSeconds": 0,
                             "webApplicationFirewallPolicyLink": {
@@ -126,12 +133,12 @@
                             "resourceState": "Enabled",
                             "backends": [
                                 {
-                                    "address": "[concat(variables('webAppInternalName'), '.azurewebsites.net')]",
+                                    "address": "[concat(variables('webAppInternalName'), variables('webAppDnsName'),variables('webAppDnsExtension'))]",
                                     "httpPort": 80,
                                     "httpsPort": 443,
                                     "priority": 1,
                                     "weight": 50,
-                                    "backendHostHeader": "[concat(variables('webAppInternalName'), '.azurewebsites.net')]",
+                                    "backendHostHeader": "[concat(variables('webAppInternalName'), variables('webAppDnsName'),variables('webAppDnsExtension'))]",
                                     "enabledState": "Enabled"
                                 }
                             ],
@@ -187,7 +194,7 @@
                             "resourceState": "Enabled",
                             "frontendEndpoints": [
                                 {
-                                    "id": "[concat(resourceId('Microsoft.Network/frontdoors', variables('frontDoorName')), concat('/FrontendEndpoints/', variables('frontDoorName'), '-azurefd-net'))]"
+                                    "id": "[concat(resourceId('Microsoft.Network/frontdoors', variables('frontDoorName')), concat('/FrontendEndpoints/', variables('frontDoorName'), '-azurefd'))]"
                                 }
                             ],
                             "acceptedProtocols": [
@@ -213,7 +220,7 @@
                             "resourceState": "Enabled",
                             "frontendEndpoints": [
                                 {
-                                    "id": "[concat(resourceId('Microsoft.Network/frontdoors', variables('frontDoorName')), concat('/FrontendEndpoints/', variables('frontDoorName'), '-azurefd-net'))]"
+                                    "id": "[concat(resourceId('Microsoft.Network/frontdoors', variables('frontDoorName')), concat('/FrontendEndpoints/', variables('frontDoorName'), '-azurefd'))]"
                                 }
                             ],
                             "acceptedProtocols": [
@@ -306,12 +313,12 @@
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(variables('webAppServiceName'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('webAppServiceName'), variables('webAppDnsName'), variables('webAppDnsExtension'))]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(variables('webAppServiceName'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('webAppServiceName'), '.scm', variables('webAppDnsName'), variables('webAppDnsExtension'))]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
@@ -363,18 +370,6 @@
                     }
                 ]
             }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2019-08-01",
-            "name": "[format('{0}/{1}', variables('webAppInternalName'), format('{0}{1}', variables('webAppInternalName'), variables('webAppDnsName')))]",
-            "properties": {
-                "siteName": "[variables('webAppInternalName')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
-            ]
         },
         {
             "type": "Microsoft.Automation/automationAccounts",
@@ -448,7 +443,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -469,7 +464,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -490,7 +485,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -511,7 +506,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"

@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "templateVersion": {
-            "defaultValue": "220406.0829",
+            "defaultValue": "220504.2100",
             "type": "String",
             "allowedValues": [
-                "220406.0829"
+                "220504.2100"
             ],
             "metadata": {
                 "description": "This is the version of the template you are running."
@@ -58,8 +58,9 @@
         }
     },
     "variables": {
-        "webAppDnsName": ".azurewebsites.net",
+        "webAppDnsName": ".azurewebsites",
         "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
         "skuTier": "WAF_v2",
         "webAppUniqueName": "[format('{0}-{1}', parameters('deploymentPurpose'), uniqueString(resourceGroup().id))]",
         "virtualNetworkName": "[concat('VNet-', variables('webAppUniqueName'))]",
@@ -83,6 +84,10 @@
         "webAppSkuName": "P1v2",
         "automationAccountName": "[concat('AutoAcct-', variables('webAppUniqueName'), '-ToCLAW')]",
         "scheduleName": "UploadAzureAppGatewayLogs",
+        "jobName00": "00",
+        "jobName01": "01",
+        "jobName02": "02",
+        "jobName03": "03",
         "scheduleCount": 5,
         "startTime": "[dateTimeAdd(parameters('baseTime'), 'PT1H')]",
         "runbookName": "[concat('Runbook-', variables('webAppUniqueName'), '-ToCLAW')]",
@@ -216,7 +221,7 @@
                         "properties": {
                             "backendAddresses": [
                                 {
-                                    "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'))]"
+                                    "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'), variables('webAppDnsExtension'))]"
                                 }
                             ]
                         }
@@ -392,18 +397,6 @@
             }
         },
         {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2019-08-01",
-            "name": "[format('{0}/{1}', variables('webAppInternalName'), format('{0}{1}', variables('webAppInternalName'), variables('webAppDnsName')))]",
-            "properties": {
-                "siteName": "[variables('webAppInternalName')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
-            ]
-        },
-        {
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2021-06-22",
             "name": "[variables('automationAccountName')]",
@@ -475,7 +468,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -496,7 +489,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -517,7 +510,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -538,7 +531,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('scheduleName')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"

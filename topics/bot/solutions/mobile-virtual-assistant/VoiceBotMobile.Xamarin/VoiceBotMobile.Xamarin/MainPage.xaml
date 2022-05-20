@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="VoiceBotMobile.Xamarin.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <StackLayout
+        x:Name="layout"
+        Padding="0,40,0,0"
+        Spacing="10">
+        <Label
+            x:Name="RecognitionText"
+            FontSize="Small"
+            HeightRequest="100"
+            HorizontalOptions="FillAndExpand" />
+
+        <Button
+            x:Name="EnableMicrophoneButton"
+            Clicked="OnEnableMicrophoneButtonClicked"
+            HorizontalOptions="FillAndExpand"
+            Text="Enable microphone" />
+
+        <Button
+            x:Name="RecognitionButton"
+            Clicked="OnRecognitionButtonWithKeywordClicked"
+            HorizontalOptions="FillAndExpand"
+            Text="Start speech recognition " />
+    </StackLayout>
+</ContentPage>

@@ -1,8 +1,8 @@
 # Federal Application Innovation Community Repository
 
-This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners. This guidiance is built by an active open-source community with an authentic federal perspective. Teams can use this repo as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
+This repository was created to demonstrate patterns, solutions, and demos for federal customers and partners. This guidance is built by an active open-source community with an authentic federal perspective. Teams can use this repository as a starting point to successfully implement cloud-native architectures and services in Azure Cloud & Azure Government Cloud.
 
-The goal is to address high-value problems, unique scenarios, while providing actionable gudiance and direction. You should refer to these solutions as a starting point to accerlerate you cloud adoption journey. Feel free to fork a copy of this repo for your own use cases, requirements, experimentation, learning and cloud adoption journey.
+The goal is to address high-value problems, unique scenarios, while providing actionable guidance and direction. You should refer to these solutions as a starting point to accelerate you cloud adoption journey. Feel free to fork a copy of this repository for your own use cases, requirements, experimentation, learning and cloud adoption journey.
 
 ## Solutions & Patterns
 
@@ -12,7 +12,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
 | ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
-
+| ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |
 ## Training Resources
 
 | Topic | Training | Azure Global | Azure Government |
@@ -37,7 +37,7 @@ the rights to use your contribution. For details, visit https://cla.opensource.m
 
 When you submit a pull request, a CLA bot will automatically determine whether you need to provide
 a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+provided by the bot. You will only need to do this once across all repositories using our CLA.
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or

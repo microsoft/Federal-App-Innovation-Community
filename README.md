@@ -13,6 +13,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
 | ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
 | ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |
+| ***[Cognitive Search](./topics/cognitive-search)*** | Document and Audio Parsing and Classification  [▶️](./topics/cognitive-search/solutions/document-parser) | ✔️ |  ✔️ | 06/08/2022 |
 ## Training Resources
 
 | Topic | Training | Azure Global | Azure Government |

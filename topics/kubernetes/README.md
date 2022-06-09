@@ -1,5 +1,7 @@
-# Azure Kubernetes Service
-This directory is dedicated to all things AKS!
+# Kubernetes on Azure
+
+This directory is dedicated to all things Kubernetes on Azure!
+We will be including solutions that use (but not limited to) Azure Kubernetes Service, Azure RedHat OpenShift, and Rancher RKE2.
 
 ## Solutions & Patterns
 

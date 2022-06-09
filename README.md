@@ -10,6 +10,9 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | :--------- | :--- | :----: | :----: | :---: |
 | ***[Containers](./topics/containers)*** | ACR Tasks with Private Agents [▶️](./topics/containers/solutions/private-acr-tasks) | ✔️ | ✔️ | 03/31/2022 |
 | ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[DevSecOps](/topics/devsecops/solutions/bigbang-on-azure/)*** | Deploy BigBang On Azure [▶️](//topics/devsecops/solutions/bigbang-on-azure/) | ✔️ | ✔️ | 06/08/2022 |
+| ***[DevSecOps](/topics/devsecops/solutions/bigbang-on-azure-automated/)*** | Deploy BigBang On Azure Automated [▶️](//topics/devsecops/solutions/bigbang-on-azure-automated/) | ✔️ | ✔️ | 06/08/2022 |
+| ***[DevSecOps](/topics/kubernetes/solutions/bigbang-stack-edge)*** | Deploy BigBang on an Azure Stack Edge [▶️](//topics/kubernetes/solutions/bigbang-stack-edge) | ✔️ | ✔️ | 05/03/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
 | ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
 | ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |

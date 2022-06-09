@@ -7,7 +7,7 @@ We will be including solutions that use (but not limited to) Azure Kubernetes Se
 
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
-| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](/topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShift [▶️](/topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
 
 ## Whitepapers
 

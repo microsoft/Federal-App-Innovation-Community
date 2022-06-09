@@ -12,7 +12,7 @@ The intent of this content is to explore DevSecOps platforms and patterns levera
 ## Solutions & Patterns
 
 | Topic      | Solution | Azure Global | Azure Government | Last Tested |
-| :--------- | :---     | :----:       | :----:           | :---: |
+| :--------- | :---     | :----:       | :----:           | :---:       |
 | ***[BigBang On Azure (step-by-step)](/topics/devsecops/solutions/bigbang-on-azure/)*** | Deploy BigBang On Azure [▶️](//topics/devsecops/solutions/bigbang-on-azure/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[BigBang On Azure (automated)](/topics/devsecops/solutions/bigbang-on-azure-automated/)*** | Deploy BigBang On Azure Automated [▶️](//topics/devsecops/solutions/bigbang-on-azure-automated/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[BigBang On Azure Stack Edge](/topics/kubernetes/solutions/bigbang-stack-edge)*** | Deploy BigBang on an ASE [▶️](//topics/kubernetes/solutions/bigbang-stack-edge) | ✔️ | ✔️ | 05/03/2022 |
@@ -27,4 +27,3 @@ The intent of this content is to explore DevSecOps platforms and patterns levera
 | Topic | Training | Azure Global | Azure Government |
 | :---------: | :---: | :----: | :----: |
 | | | | |
-

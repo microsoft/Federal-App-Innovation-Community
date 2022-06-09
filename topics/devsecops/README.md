@@ -1,6 +1,7 @@
 # DevSecOps
 This directory is dedicated to solutions, whitepapers, and trainings related to running DevSecOps solutions on Azure.
-A particular focus will be on the [US Department of Defense's DevSecOps Reference Architectures](https://dodcio.defense.gov/Library/) due to their wide-applicability and adoption anywhere code needs to be securely developed, delivered, and operated.
+There will be a particular focus will be on the [US Department of Defense's DevSecOps Reference Architectures](https://dodcio.defense.gov/Library/), due to their wide-applicability and adoption anywhere code needs to be securely developed, delivered, and operated.
+However, this section will not be limited to DOD DSOP, if other solutions or patterns emerge.
 
 ## Containers & Kubernetes
 

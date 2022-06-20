@@ -153,13 +153,13 @@ For this next command, pace your *docker-username* and *docker-password* with yo
 ![enter image description here](https://i.imgur.com/lbU0NBN.png)
 
 ```
-kubectl create secret docker-registry private-registry --docker-server=registry1.dso.mil --docker-username=rcleetus --docker-password=FpNncaeCATywvNWRjlb4s2aAuHQsdU9U -n flux-system
+kubectl create secret docker-registry private-registry --docker-server=registry1.dso.mil --docker-username=rcleetus --docker-password=############ -n flux-system
 ```
 
 - Create Git credentials for Flux (so that it can access your Git repo):
 For this command, replace *username* with your **GitHub Username**, and *password* with your **GitHub Personal Access Token**.
 ```
-kubectl create secret generic private-git --from-literal=username=shuffereu --from-literal=password=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 -n bigbang
+kubectl create secret generic private-git --from-literal=username=shuffereu --from-literal=password=########### -n bigbang
 ```
 - **Deploy Flux**. Once we give it the bigbang yaml, it'll reconcile everything:
 Instead of calling Kustomize directly, I've used Kustomize via Kubectl

@@ -38,8 +38,10 @@
         }
     },
     "variables": {
-        "webAppDnsName": ".azurewebsites.net",
+        "webAppDnsName": ".azurewebsites",
         "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
+        "uniqueValue": "[substring(uniqueString(resourceGroup().id),0,4)]",
         "skuTier": "WAF_v2",
         "webAppUniqueName": "[format('{0}-{1}', parameters('deploymentPurpose'), uniqueString(resourceGroup().id))]",
         "virtualNetworkName": "[concat('VNet-', variables('webAppUniqueName'))]",
@@ -61,7 +63,7 @@
         "webAppServiceName": "[concat('AppService-', variables('webAppUniqueName'))]",
         "webAppInternalName": "[concat(variables('webAppUniqueName'),'-Internal')]",
         "webAppSkuName": "P1v2",
-        "automationAccountName": "[concat('AA-', 'CLAW-Aggregator')]",
+        "automationAccountName": "[concat('AA-', 'CLAW-Aggregator-', variables('uniqueValue'))]",
         "UploadAzADLogs": "UploadAzADLogs",
         "UploadAzAppGatewayLogs": "UploadAzAppGatewayLogs",
         "UploadAzFirewallLogs": "UploadAzFirewallLogs",
@@ -74,7 +76,7 @@
         "jobName02": "02",
         "jobName03": "03",
         "startTime": "[dateTimeAdd(parameters('baseTime'), 'PT1H')]",
-        "runbookName": "[concat('Runbook-', 'CLAW-Aggregator')]",
+        "runbookName": "[concat('Runbook-', 'CLAW-Aggregator', variables('uniqueValue'))]",
         "runbookUri": "https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Runbook/CLAW-Aggregator.ps1",
         "diagSettingsName": "[concat('SendtoWorkspace-', variables('webAppUniqueName'))]",
         "actionGroupName": "FailureEmail",
@@ -84,6 +86,7 @@
         },
         "tenantId": "[variables('tenantIdObject').value]",
         "logAnalyticsReaderRoleId": "73c42c96-874c-492b-b04d-ab87d138a893"
+        
     },
     "resources": [
         {
@@ -205,7 +208,7 @@
                         "properties": {
                             "backendAddresses": [
                                 {
-                                    "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'))]"
+                                    "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'), variables('webAppDnsExtension'))]"
                                 }
                             ]
                         }
@@ -381,18 +384,6 @@
             }
         },
         {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2019-08-01",
-            "name": "[format('{0}/{1}', variables('webAppInternalName'), format('{0}{1}', variables('webAppInternalName'), variables('webAppDnsName')))]",
-            "properties": {
-                "siteName": "[variables('webAppInternalName')]",
-                "hostNameType": "Verified"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
-            ]
-        },
-        {
             "type": "Microsoft.Automation/automationAccounts",
             "apiVersion": "2021-06-22",
             "name": "[variables('automationAccountName')]",
@@ -564,7 +555,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('jobName00')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logAzureADAuth": "true"
@@ -585,7 +576,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('jobName01')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logAzureADAuth": "true"
@@ -606,7 +597,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('jobName02')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logAzureADAuth": "true"
@@ -627,7 +618,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('jobName03')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logAzureADAuth": "true"
@@ -648,7 +639,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('jobName00')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logAzureFirewall": "true"
@@ -669,7 +660,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('jobName01')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logAzureFirewall": "true"
@@ -690,7 +681,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('jobName02')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logAzureFirewall": "true"
@@ -711,7 +702,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('jobName03')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logAzureFirewall": "true"
@@ -732,7 +723,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('jobName00')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -753,7 +744,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('jobName01')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -774,7 +765,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('jobName02')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -795,7 +786,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('jobName03')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logAzureFrontDoor": "true"
@@ -816,7 +807,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('jobName00')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logNetflow": "true"
@@ -837,7 +828,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('jobName01')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logNetflow": "true"
@@ -858,7 +849,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('jobName02')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logNetflow": "true"
@@ -879,7 +870,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('jobName03')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logNetflow": "true"
@@ -900,7 +891,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('jobName00')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -921,7 +912,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('jobName01')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -942,7 +933,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('jobName02')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -963,7 +954,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('jobName03')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logAzureAppGateway": "true"
@@ -984,7 +975,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('jobName00')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName00')))]",
             "properties": {
                 "parameters": {
                     "logThirdpartyFirewall": "true"
@@ -1005,7 +996,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('jobName01')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName01')))]",
             "properties": {
                 "parameters": {
                     "logThirdpartyFirewall": "true"
@@ -1026,7 +1017,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('jobName02')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName02')))]",
             "properties": {
                 "parameters": {
                     "logThirdpartyFirewall": "true"
@@ -1047,7 +1038,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/jobSchedules",
             "apiVersion": "2020-01-13-preview",
-            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('jobName03')))]",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName03')))]",
             "properties": {
                 "parameters": {
                     "logThirdpartyFirewall": "true"

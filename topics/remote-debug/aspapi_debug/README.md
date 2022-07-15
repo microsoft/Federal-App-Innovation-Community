@@ -26,7 +26,7 @@ This example demonstrates how to debug a ASP.NET Core API deployed to an App Ser
 * ./infrastructure/ - The bicep code for the App Service
 * ./Source/DebugAPI/ - The Visual Studio Project
 * ./Source/DeployFolder/ - The target folder for deployment
-* ./
+* ./Source/DeployThis.zip - Default deployment build for debugging
 
 ## Setup 
 1. Create a resource group for deployment. This name will be reused in the next several steps.

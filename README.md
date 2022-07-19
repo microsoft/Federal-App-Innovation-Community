@@ -23,6 +23,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | Topic | Training | Azure Global | Azure Government |
 | :---------: | :---: | :----: | :----: |
 | ***[Serverless](./topics/serverless)*** | Cloud-Native Workshop with Functions + Cosmos [▶️](./topics/serverless/trainings/azure-functions-serverless-cloud-native-workshop) | N/A | N/A |
+| ***[Remote Debugging](./topics/remote-debug/)*** | Remote Debugging on App Services | N/A | N/A |
 
 
 ## Whitepapers

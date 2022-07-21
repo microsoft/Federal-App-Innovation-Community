@@ -13,6 +13,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang On Azure [▶️](./topics/devsecops/solutions/bigbang-on-azure/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang On Azure Automated [▶️](./topics/devsecops/solutions/bigbang-on-azure-automated/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang on an Azure Stack Edge [▶️](./topics/devsecops/solutions/bigbang-stack-edge) | ✔️ | ✔️ | 05/03/2022 |
+| ***[Configure BigBang to use a Custom Registry](/topics/devsecops/)*** | Custom Registry on BB [▶️](//topics/kubernetes/solutions/bigbang-custom-registry) |  | ✔️ | 06/20/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Scaling Containerized Azure DevOps Agents with AKS + KEDA [▶️](./topics/ci-cd/solutions/containerized-agents-keda/) | ✔️ | N/A | 07/11/2022 |
 | ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |

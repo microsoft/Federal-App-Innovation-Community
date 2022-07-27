@@ -1,0 +1,10 @@
+version: v1.1.0
+steps:
+  - id: trivy-scan
+    cmd: aquasec/trivy image $Registry/{{.Values.image}} --format json --output results.json
+  - id: review
+    cmd: bash cat results.json
+  - id: login
+    cmd: az login --identity
+  - id: push-blob
+    cmd: az storage blob upload --account-name {{.Values.stgaccount}} --container-name {{.Values.container}} --name {{.Run.Date}}-{{.Run.ID}}-{{.Values.image}}.json --file results.json --auth-mode login

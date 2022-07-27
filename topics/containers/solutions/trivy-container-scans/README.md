@@ -16,7 +16,9 @@ This solution creates an ACR Task that runs the trivy scanner against a defined 
 
 This solution assumes that you have an image locally that you want to push to your ACR Registry. You can also run an ACR Import to import a test image.
 
-## Helpful Notes
+## Deployment
+
+### Helpful Notes
 
 If the Container Registry disables public access, then you will need to "Allow trusted Microsoft services to access this container registry" so that the ACR Task can run with the private ACR. To further allow the task to pull/push images to the registry, a System Assigned Managed Identity must be leveraged.
 

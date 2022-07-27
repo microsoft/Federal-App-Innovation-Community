@@ -9,6 +9,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
 | ***[Containers](./topics/containers)*** | ACR Tasks with Private Agents [▶️](./topics/containers/solutions/private-acr-tasks) | ✔️ | ✔️ | 03/31/2022 |
+| ***[Containers](./topics/containers)*** | Run Trivy Scans with ACR Tasks [▶️](./topics/containers/solutions/trivy-container-scans) | ✔️ | N/A | 07/28/2022 |
 | ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang On Azure [▶️](./topics/devsecops/solutions/bigbang-on-azure/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang On Azure Automated [▶️](./topics/devsecops/solutions/bigbang-on-azure-automated/) | ✔️ | ✔️ | 06/08/2022 |

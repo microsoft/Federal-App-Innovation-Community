@@ -25,3 +25,9 @@ There are two types of firewalls in Azure; native Azure Firewall, layer 4, and W
 -  All services needed to deploy, secure, and monitor a TIC 3.0 application with an Azure Front Door are included. The deploy application service is running the default template to showcase its external accessibility and security. You can replace the default app service solution with your own custom application for a quick, TIC 3.0 compliance web application to your users and agency.
 - Deploy App Service, Front Door, Log Analytics workspace, Automation Account, Assign Automation Account's Managed Identity with Log Analytics Reader role to Log Analytics workspace, and Alert. The deployed App Service will become the backend to the Front Door and restricted using service tag with ResourceID of the Front Door. This configures the app so it is only accessible using Front Door URL.
 - Meet TIC 3.0 telemetry compliance with the automated service to deliver application connection logs and layer 7 firewall logs to CISA CLAW. 
+
+
+
+**Additional Resources**
+
+- [Firewall, App Gateway for virtual networks - Azure Example Scenarios | Microsoft Docs](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway)

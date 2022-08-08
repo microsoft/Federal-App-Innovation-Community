@@ -1,0 +1,50 @@
+# Default values for linuxAgentChart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+### DEFAULTS ARE PROVIDED, BUT YOU CAN CHANGE THESE
+
+namespace: devops #namespace that you want to run the agents within
+
+linux:
+  image:
+    acrLoginServer: ACR-LOGIN-SERVER #should see this in the portal for your ACR instance
+    name: linux-agent #should be the name seen in ACR
+    tag: latest #should be the image's tag
+
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops#environment-variables
+  secret:
+    # THIS IS A CREDENTIAL - BE SURE NOT TO COMMIT TO REPO
+    azpToken: #Azure DevOps PAT - https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#authenticate-with-a-personal-access-token-pat
+    azpUrl: #Azure DevOps Organization URL
+
+  job:
+    poolName: linux-agent-pool #name of pool for Azure DevOps Agents
+    runOnce: "True" #make this true to run the agents as jobs instead of long-lived processes
+
+  trigger:
+    # https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
+    poolId: #agent pool ID - https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
+    targetPipelinesQueueLength: 1
+
+windows:
+  image:
+    acrLoginServer: ACR-LOGIN-SERVER #should see this in the portal for your ACR instance
+    name: windows-agent #should be the name seen in ACR
+    tag: latest #should be the image's tag
+
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops#environment-variables
+  secret:
+    # THIS IS A CREDENTIAL - BE SURE NOT TO COMMIT TO REPO
+    azpToken: #Azure DevOps PAT - https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#authenticate-with-a-personal-access-token-pat
+    azpUrl: #Azure DevOps Organization URL
+
+  job:
+    poolName: windows-agent-pool #name of pool for Azure DevOps Agents
+    runOnce: "True" #make this true to run the agents as jobs instead of long-lived processes
+
+  trigger:
+    # https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
+    # az pipelines pool list --pool-name {agentPoolName} --organization {organizationURL} --query [0].id
+    poolId: #agent pool ID - https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
+    targetPipelinesQueueLength: 1

@@ -42,7 +42,7 @@
         "template"
     ],
     "devDependencies": {
-        "@11ty/eleventy": "^1.0.0",
+        "@11ty/eleventy": "^2.0.0-beta.1",
         "@parcel/transformer-sass": "^2.8.2",
         "autoprefixer": "^10.4.2",
         "cross-env": "^7.0.3",

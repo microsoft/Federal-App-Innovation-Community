@@ -1,0 +1,35 @@
+---
+layout: base
+title: API Management
+permalink: "/{{ title | slugify }}/"
+---
+<div class="container">
+    <h2 class="title has-text-centered mt-3 mb-6">{{title}}</h2>
+
+    <div class="container overflow-hidden">
+      {% for posts in collections.apim | reverse | batch(3) %}
+      <div class="container">
+      <div class="row g-6">
+        {% for post in posts %}
+            <div class="col">
+                <div class="card p-3">
+                <div class="card-body">
+                    <h3 class="h4">{{post.data.title}}</h3>
+                    <p class="mt-4 mb-6">
+                    {{ post.data.description }}
+                    </p>
+                    <p class="mt-4 mb-6">
+                    {{ post.data.date | postDate }}
+                    </p>
+                    <a href="{{post.url}}" class="btn btn-sm btn-primary">
+                    Read
+                    </a>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+      </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>

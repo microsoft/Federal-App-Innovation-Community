@@ -13,7 +13,7 @@
       <!-- Nav -->
       <div class="navbar-nav mx-lg-auto">
         {% for category in categories %}
-        <a class="nav-item nav-link" href="{{category.link | url}}">{{category.header}}</a>
+        <a class="nav-item nav-link" href="/{{category.link | url}}">{{category.header}}</a>
         {% endfor %}
       </div>
       <!-- Right navigation -->

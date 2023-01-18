@@ -1,6 +1,7 @@
 const htmlmin = require('html-minifier');
 const { DateTime, Zone } = require("luxon");
 const markdownIt = require("markdown-it");
+const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
 
 function eleventyConfig(config) {
 	// Passthroughs
@@ -12,6 +13,7 @@ function eleventyConfig(config) {
 
 	// Layout aliases
 	config.addLayoutAlias("base", "layouts/base.njk");
+	config.addPlugin(EleventyHtmlBasePlugin);
 
 	// Minify HTML
 	const isProduction = process.env.ELEVENTY_ENV === "production";

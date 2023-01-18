@@ -30,6 +30,7 @@ function eleventyConfig(config) {
 	// html min only in production
 	if (isProduction) {
 		config.addTransform("htmlmin", htmlMinify);
+		
 	}
 
 	let options = {

@@ -1,7 +1,7 @@
 ---
 layout: base
 title: Kubernetes
-permalink: "/{{ title | slugify }}/"
+permalink: "{{ title | slugify }}/"
 ---
 <div class="container">
     <h2 class="title has-text-centered mt-3 mb-6">{{title}}</h2>
@@ -21,7 +21,7 @@ permalink: "/{{ title | slugify }}/"
                     <p class="mt-4 mb-6">
                     {{ post.data.date | postDate }}
                     </p>
-                    <a href="{{post.url}}" class="btn btn-sm btn-primary">
+                    <a href="{{post.url | url}}" class="btn btn-sm btn-primary">
                     Read
                     </a>
                 </div>

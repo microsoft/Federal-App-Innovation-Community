@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-0 py-3">
   <div class="container-xl">
     <!-- Logo -->
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="{{ '/' | url }}">
         Federal App Innovation Community
     </a>
     <!-- Navbar toggle -->
@@ -13,7 +13,7 @@
       <!-- Nav -->
       <div class="navbar-nav mx-lg-auto">
         {% for category in categories %}
-        <a class="nav-item nav-link" href="/{{category.link}}">{{category.header}}</a>
+        <a class="nav-item nav-link" href="{{category.link | url}}">{{category.header}}</a>
         {% endfor %}
       </div>
       <!-- Right navigation -->

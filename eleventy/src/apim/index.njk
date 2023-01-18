@@ -21,7 +21,7 @@ permalink: "/{{ title | slugify }}/"
                     <p class="mt-4 mb-6">
                     {{ post.data.date | postDate }}
                     </p>
-                    <a href="{{post.url}}" class="btn btn-sm btn-primary">
+                    <a href="{{post.url | url}}" class="btn btn-sm btn-primary">
                     Read
                     </a>
                 </div>

@@ -1,2 +1,4 @@
-_site
-node_modules
+node_modules/
+.parcel-cache/
+.cache
+dist

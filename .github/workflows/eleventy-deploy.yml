@@ -40,12 +40,12 @@ jobs:
       - name: Build Eleventy Site
         run: |
           npm install
-          npm run ci
+          npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: 'eleventy/_site'
+          path: 'eleventy/dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

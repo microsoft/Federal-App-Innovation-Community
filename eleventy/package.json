@@ -7,16 +7,14 @@
     "scripts": {
         "start": "run-p serve:eleventy watch:parcel",
         "serve:eleventy": "cross-env ELEVENTY_ENV=local eleventy --serve",
-        "watch:parcel": "run-p watch:css watch:js watch:images",
+        "watch:parcel": "run-p watch:css watch:js",
         "watch:css": "parcel watch ./src/scss/main.scss --dist-dir ./dist/css",
         "watch:js": "parcel watch ./src/js/main.js --dist-dir ./dist/js",
-        "watch:images": "parcel watch ./src/img/*",
         "build": "run-s clean build:parcel build:eleventy",
-        "build:eleventy": "cross-env ELEVENTY_ENV=production eleventy",
-        "build:parcel": "run-p build:css build:js build:images",
+        "build:eleventy": "cross-env ELEVENTY_ENV=production eleventy --pathprefix=Federal-App-Innovation-Community",
+        "build:parcel": "run-p build:css build:js",
         "build:css": "parcel build ./src/scss/main.scss --dist-dir ./dist/css",
         "build:js": "parcel build ./src/js/main.js --dist-dir ./dist/js",
-        "build:images": "parcel build src/assets/img/*",
         "clean": "rm -rf dist"
     },
     "repository": {
@@ -45,13 +43,13 @@
     ],
     "devDependencies": {
         "@11ty/eleventy": "^1.0.0",
-        "@parcel/transformer-sass": "^2.2.1",
+        "@parcel/transformer-sass": "^2.8.2",
         "autoprefixer": "^10.4.2",
         "cross-env": "^7.0.3",
         "html-minifier": "^4.0.0",
         "npm-run-all": "^4.1.5",
         "nunjucks": "^3.2.3",
-        "parcel": "^2.2.1",
+        "parcel": "^2.8.2",
         "postcss": "^8.4.5",
         "sass": "^1.49.0"
     },

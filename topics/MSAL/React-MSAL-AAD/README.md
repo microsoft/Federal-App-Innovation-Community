@@ -1,4 +1,4 @@
-# This is an example project using React and MASL to authenticate.
+# This is an example project using React and MSAL to authenticate.
 
 In this example we will create a React app with TypeScript and authenticate against AAD. The difference in this app is that the user will be authenticated right away and identity established immediately. Most migrated apps require immediate authentication and expect the user has been logged in right away. 
 

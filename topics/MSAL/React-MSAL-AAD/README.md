@@ -1,4 +1,4 @@
-# This is an example project using React and MSAL to authenticate.
+# This is an example project using React and MSAL to authenticate
 
 In this example we will create a React app with TypeScript and authenticate against AAD. The difference in this app is that the user will be authenticated right away and identity established immediately. Most migrated apps require immediate authentication and expect the user has been logged in right away. 
 
@@ -21,7 +21,7 @@ In this section we will create the App Registration in AAD. This example uses a 
 ## 4) Create a unique name for your app
 ![alt text](./Screen/4.png)
 <br><br>
-## 5) Select single-page application and set the React app default URL. In this demo it will redirect back to your local host. For production you will have to specify your main DNS.
+## 5) Select single-page application and set the React app default URL. In this demo it will redirect back to your local host. For production you will have to specify your main DNS
 ![alt text](./Screen/5.png)
 <br><br>
 ## 6) Copy the ClientID and the TenantID
@@ -86,5 +86,5 @@ e) Create a render function that will keep trying to extract the username from u
 f) On line 22 we check to see if m_strUser had been set (will be the email address). If it is, we render the screen with the EMail address (your app is ready render that). If user is empty, we call the Render function and show "Please Wait...". Once again the React engine might refresh a few times but this is required to assure we have a valid user right away. 
 ![alt text](./Screen/a4.png)
 
-# End result!
+# End Result!
 ![alt text](./Screen/a7.png)

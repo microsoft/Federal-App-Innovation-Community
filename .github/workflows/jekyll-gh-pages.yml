@@ -18,11 +18,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
-defaults:
-  run:
-    shell: bash
-    working-directory: docs
 
 # Allow one concurrent deployment
 concurrency:
@@ -33,6 +28,9 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
     steps:
       - name: Checkout
         uses: actions/checkout@v3

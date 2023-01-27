@@ -19,6 +19,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |
 | ***[Cognitive Search](./topics/cognitive-search)*** | Document and Audio Parsing and Classification  [▶️](./topics/cognitive-search/solutions/document-parser) | ✔️ |  ✔️ | 06/08/2022 |
 | ***[Modern Auth](./topics/modern-auth/React-MSAL-AAD)*** | React MSAL AAD Example  [▶️](./topics/modern-auth/React-MSAL-AAD) | ✔️ |  ✔️ | 01/24/2023 |
+| ***[OpenAI](./topics/openai/README.md)*** | OpenAI ChatGPT text generation in Python Example  [▶️](./topics/modern-auth/React-MSAL-AAD) | N/A |  N/A | 01/27/2023 |
 ## Training Resources
 
 | Topic | Training | Azure Global | Azure Government |

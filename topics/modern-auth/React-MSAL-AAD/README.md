@@ -6,6 +6,8 @@ If your application has addressed authentication before a cloud migration, it wi
 
 In this walkthrough we will break it down into two parts, setting up AAD and then creating the app. 
 <br><br>
+[![Fork and PR](https://img.youtube.com/vi/ex92xAHfqh4/sddefault.jpg)](https://youtu.be/ex92xAHfqh4)
+<br><br>
 # Part One Setting up AAD
 In this section we will create the App Registration in AAD. This example uses a redirect to authenticate. What that means is that when the app loads, it will redirect to AAD, do the auth then “redirect” back to your app. The MSAL libraries will pick up the JWT token and confirm login. 
 <br><br>

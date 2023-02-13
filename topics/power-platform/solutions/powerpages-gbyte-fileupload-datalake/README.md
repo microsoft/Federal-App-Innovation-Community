@@ -8,25 +8,25 @@
 * Where  are the files stored and how are they managed?
 
 ## Solution: Power Platform + Azure
-* Power Pages provide a portal for external users to register, login, and submit upload request forms
-* Dataverse provides a relational database to store and audit Datalake uploads and other metadata about users, approvals, upload requests, and file location
-* Power Automate provide automated workflow and backend services
-* Azure Functions provide an automated way to create SAS Tokens and SFTP credentials Azure Blob Storage
-* Azure Datalake provides  a hierarchical file system and secure petabyte storage at low cost
-* Azure Event Grid monitors new file upload events and triggers Power Automate file management workflows.
+* **Power Pages** provide a portal for external users to register, login, and submit upload request forms
+* **Dataverse** provides a relational database to store and audit Datalake uploads and other metadata about users, approvals, upload requests, and file location
+* **Power Automate** provide automated workflow and backend services
+* **Azure Powershell Functions** provide an automated way to create SAS Tokens and SFTP credentials Azure Blob Storage
+* **Azure Datalake** provides  a hierarchical file system and secure petabyte storage at low cost
+* **Azure Event Grid** monitors new file upload events and triggers Power Automate file management workflows.
 
-## Reference Archiecture
+## Reference Architecture
 ![Archiecture](Architecture.png)
 
 
-## Request Portal Access Workflow
+## Workflow 1 Request Portal Access 
 
 ![Request Portal Access Workflow](requestportalaccessworkflow.png)
-## Request File Upload Workflow
+## Workflow 2 Request File Upload 
 
 ![Request File Upload Workflow](requestfileuploadworkflow.png)
 
-## New File Upload Notification Workflow
+## Workflow 3  New File Upload Notification
 
 ![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
 

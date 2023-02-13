@@ -15,18 +15,18 @@
 * **Azure Datalake** provides  a hierarchical file system and secure petabyte storage at low cost
 * **Azure Event Grid** monitors new file upload events and triggers Power Automate file management workflows.
 
-## Reference Architecture
+## SOLUTION ARCHITECTURE
 ![Archiecture](Architecture.png)
 
 
-## Workflow 1 Request Portal Access 
+## Workflow 1 **Request Portal Access**
 
 ![Request Portal Access Workflow](requestportalaccessworkflow.png)
-## Workflow 2 Request File Upload 
+## Workflow 2 **Request File Upload**
 
 ![Request File Upload Workflow](requestfileuploadworkflow.png)
 
-## Workflow 3  New File Upload Notification
+## Workflow 3  **New File Upload Notification**
 
 ![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
 

@@ -16,14 +16,14 @@
 * Azure Event Grid monitors new file upload events and triggers Power Automate file management workflows.
 
 ## Reference Archiecture
-![Archiecture](/docs/architecture.png)
+![Archiecture](architecture.png)
 
 ## Workflows
-![Request Portal Access Workflow](/docs/requestportalaccessworkflow.png)
+![Request Portal Access Workflow](requestportalaccessworkflow.png)
 
-![Request File Upload Workflow](/docs/requestfileuploadworkflow.png)
+![Request File Upload Workflow](requestfileuploadworkflow.png)
 
-![New File Upload Notification Workflow](/docs/newfileuploadednotificationworkflow.png)
+![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
 
 
 ## Pre-Requisites

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>File Uploader</title>
+    <script src="js/jquery-1.7.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="css/modern.css"/>
+    <script>
+        var maxBlockSize = 512 * 1024;//Each file will be split in 256 KB.
+        var numberOfBlocks = 1;
+        var selectedFile = null;
+        var currentFilePointer = 0;
+        var totalBytesRemaining = 0;
+        var blockIds = new Array();
+        var blockIdPrefix = "block-";
+        var submitUri = null;
+        var bytesUploaded = 0;
+         
+
+        function resetVariables() {
+             maxBlockSize = 512 * 1024;//Each file will be split in 256 KB.
+             numberOfBlocks = 1;
+             selectedFile = null;
+             currentFilePointer = 0;
+             totalBytesRemaining = 0;
+             blockIds = new Array();
+             blockIdPrefix = "block-";
+             submitUri = null;
+             bytesUploaded = 0;
+             $("#fileUploadProgress").text("0.00 %");
+        }
+
+        $(document).ready(function () {
+            $("#output").hide();
+            $("#file").bind('change', handleFileSelect);
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                // Great success! All the File APIs are supported.
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+            }
+        });
+         
+        //Read the file and find out how many blocks we would need to split it.
+        function handleFileSelect(e) {
+            /*maxBlockSize = 512 * 1024;
+            currentFilePointer = 0;
+            totalBytesRemaining = 0;
+            */
+            resetVariables();
+
+
+            var files = e.target.files;
+            selectedFile = files[0];
+            $("#output").show();
+            $("#fileName").text(selectedFile.name);
+            $("#fileSize").text(selectedFile.size);
+            $("#fileType").text(selectedFile.type);
+            var fileSize = selectedFile.size;
+            if (fileSize < maxBlockSize) {
+                maxBlockSize = fileSize;
+                console.log("max block size = " + maxBlockSize);
+            }
+            totalBytesRemaining = fileSize;
+            if (fileSize % maxBlockSize == 0) {
+                numberOfBlocks = fileSize / maxBlockSize;
+            } else {
+                numberOfBlocks = parseInt(fileSize / maxBlockSize, 10) + 1;
+            }
+            console.log("total blocks = " + numberOfBlocks);
+            var baseUrl = $("#sasUrl").val();
+            var indexOfQueryStart = baseUrl.indexOf("?");
+            submitUri = baseUrl.substring(0, indexOfQueryStart) + '/' + selectedFile.name + baseUrl.substring(indexOfQueryStart);
+            console.log(submitUri);
+        }
+ 
+        var reader = new FileReader();
+ 
+        reader.onloadend = function (evt) {
+            if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                var uri = submitUri + '&comp=block&blockid=' + blockIds[blockIds.length - 1];
+                var requestData = new Uint8Array(evt.target.result);
+                $.ajax({
+                    url: uri,
+                    type: "PUT",
+                    data: requestData,
+                    processData: false,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+                       // xhr.setRequestHeader('Content-Length', requestData.length);
+                    },
+                    success: function (data, status) {
+                        console.log(data);
+                        console.log(status);
+                        bytesUploaded += requestData.length;
+                        var percentComplete = ((parseFloat(bytesUploaded) / parseFloat(selectedFile.size)) * 100).toFixed(2);
+                        $("#fileUploadProgress").text(percentComplete + " %");
+                        uploadFileInBlocks();
+                    },
+                    error: function(xhr, desc, err) {
+                        console.log(desc);
+                        console.log(err);
+                    }
+                });
+            }
+        };
+ 
+        function uploadFileInBlocks() {
+            if (totalBytesRemaining > 0) {                
+                console.log("current file pointer = " + currentFilePointer + " bytes read = " + maxBlockSize);
+                var fileContent = selectedFile.slice(currentFilePointer, currentFilePointer + maxBlockSize);
+                var blockId = blockIdPrefix + pad(blockIds.length, 6);
+                console.log("block id = " + blockId);
+                blockIds.push(btoa(blockId));
+                reader.readAsArrayBuffer(fileContent);
+                currentFilePointer += maxBlockSize;
+                totalBytesRemaining -= maxBlockSize;
+                if (totalBytesRemaining < maxBlockSize) {
+                    maxBlockSize = totalBytesRemaining;
+                }
+            } else {
+                commitBlockList();
+            }
+        }
+         
+        function commitBlockList() {
+            var uri = submitUri + '&comp=blocklist';
+            console.log(uri);
+            var requestBody = '<?xml version="1.0" encoding="utf-8"?><BlockList>';
+            for (var i = 0; i < blockIds.length; i++) {
+                requestBody += '<Latest>' + blockIds[i] + '</Latest>';
+            }
+            requestBody += '</BlockList>';
+            console.log(requestBody);
+            $.ajax({
+                url: uri,
+                type: "PUT",
+                data: requestBody,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('x-ms-blob-content-type', selectedFile.type);
+                   // xhr.setRequestHeader('Content-Length', requestBody.length);
+                },
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                   
+                },
+                error: function (xhr, desc, err) {
+                    console.log(desc);
+                    console.log(err);
+                     
+                }
+            });
+ 
+        }
+        function pad(number, length) {
+            var str = '' + number;
+            while (str.length < length) {
+                str = '0' + str;
+            }
+            return str;
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <div style="margin-left: 20px;">
+            <h1>File Uploader</h1>
+            <p>
+                <strong>SAS URI</strong>: 
+                <br/>
+                <span class="input-control text">
+                    <input type="text" id="sasUrl" style="width: 50%"
+                           value=""/>
+                </span>
+            </p>
+            <p>
+                <strong>File To Upload</strong>: 
+                <br/>
+                <span class="input-control text">
+                    <input type="file" id="file" name="file" style="width: 50%"/>
+                </span>
+            </p>
+            <div id="output">
+                 
+                <strong>File Properties:</strong>
+                <br/>
+                <p>
+                    Name: <span id="fileName"></span>
+                </p>
+                <p>
+                    File Size: <span id="fileSize"></span> bytes.
+                </p>
+                <p>
+                    File Type: <span id="fileType"></span>
+                </p>
+                <p>
+                    <input type="button" value="Upload File" onclick="uploadFileInBlocks()"/>
+                </p>
+                <p>
+                    <strong>Progress</strong>: <span id="fileUploadProgress">0.00 %</span>
+                </p>
+            </div>
+        </div>
+        <div>
+        </div>
+    </form>
+</body>
+</html>

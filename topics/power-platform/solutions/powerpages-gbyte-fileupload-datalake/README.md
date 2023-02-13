@@ -19,14 +19,14 @@
 ![Archiecture](Architecture.png)
 
 
-## Workflow 1 **Request Portal Access**
+## Workflow 1
 
 ![Request Portal Access Workflow](requestportalaccessworkflow.png)
-## Workflow 2 **Request File Upload**
+## Workflow 2 
 
 ![Request File Upload Workflow](requestfileuploadworkflow.png)
 
-## Workflow 3  **New File Upload Notification**
+## Workflow 3
 
 ![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
 

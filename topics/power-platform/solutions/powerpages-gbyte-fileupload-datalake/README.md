@@ -4,7 +4,7 @@
 
 ## WHAT PROBLEM DOES THE SOLUTION SOLVE?
 * Organizations need to receive large files from external customers for Data AI workloads.
-* But since the customers are external and don’t have an AAD Identity how do they get credentials to securely transfer files?
+* But since the customers are external and don’t have an AAD Identity they dont have organizal add credentials to securely transfer file
 * Where  are the files stored and how are they managed?
 
 ## SOLUTION: POWER PLATFORM + AZURE
@@ -32,9 +32,6 @@
 
 
 ## PRE-REQUISITES
-
+* Power Apps Enviornment with Dataverse. Power Apps System
+* Azure Subscription
 ## QUICKSTART
-
-
-
-

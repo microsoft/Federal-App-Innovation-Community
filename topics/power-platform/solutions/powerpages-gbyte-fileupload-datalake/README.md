@@ -28,7 +28,7 @@
 
 
 
-## WORKFLOW 1
+## WORKFLOW 1 EXTERNAL USER REQUESTS PORTAL ACCESS
 A new user goes to the public portal site for the first time and has not been granted access and  yet given portal credentials. The user is seen as "Anonymous" and can thus only see a limited home page and a form to request access.  The new user submits the  Portal Access Form and an internal automated approval workflow is submitted for review by the internal managment team who receives an email. The reviewer approves the portal acess request and the workflow automatically creates a private registration code and emails the new user.  Permissions, web roles,email validation, and multi-factor authentication is automatically configures for the user. The user is sent an email and is redirected to the registraion site to one time create their registration and complete the credential grant process.
 
 

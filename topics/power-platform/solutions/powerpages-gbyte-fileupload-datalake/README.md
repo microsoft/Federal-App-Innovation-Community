@@ -1,6 +1,6 @@
 # Power Pages Secure Large Gigabyte File transer to Azure Datalake by External User Identies
 
-## SUMMARY: The Solution provides a way for non AAD external user identies to securely upload large Gigabyte files to an Organizations AAD secured Azure Datalake
+## SUMMARY: The Solution provides a way for users external to an organizational AAD tenat boundry to securely upload large Gigabyte files to an Organizations AAD secured Azure Datalake
 
 ## WHAT PROBLEM DOES THE SOLUTION SOLVE?
 * Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system built into Power Pages solves this problem.

@@ -3,9 +3,8 @@
 ## SUMMARY: The Solution provides a way for non AAD external user identies to securely upload large Gigabyte files to an Organizations AAD secured Azure Datalake
 
 ## WHAT PROBLEM DOES THE SOLUTION SOLVE?
-* Organizations need to receive large files from external customers for Data AI workloads.
-* But since the customers are external and don’t have an AAD Identity they dont have organizal add credentials to securely transfer file
-* Where  are the files stored and how are they managed?
+* Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system built into Power Pages solves this problem.
+* Where  are the files stored and how are they managed?  Azure Datalake solves this problem.
 
 ## SOLUTION: POWER PLATFORM + AZURE
 * **Power Pages** provide a portal for external users to register, login, and submit upload request forms
@@ -14,6 +13,14 @@
 * **Azure Powershell Functions** provide an automated way to create SAS Tokens and SFTP credentials Azure Blob Storage
 * **Azure Datalake** provides  a hierarchical file system and secure petabyte storage at low cost
 * **Azure Event Grid** monitors new file upload events and triggers Power Automate file management workflows.
+
+## What the Solution Provides:
+* A Portal for external users to log on and fill out a form to request permissions to upload a file(s). The system handles up to 300Gbyte files.
+* An approval workflow so that new users logins and file upload requests are approved by internal organizational employees
+* An option for users to upload files via Java Script web app (hosted in Power Pages),SFTP (hosted in Azure Storage Account SFPT Service), or Azure Storeage Explorer (free and robust large file upload tool by Microsoft)
+* A new file notification system that notifies the correct internal employee that a new file has been uploaded
+* An audit and reporting system the records in Dataverse every portal access request, user login,file upload request, every file upload and every approval. The Files Table stores the metadata of every file uploaded and its properties, such as location, size, date uploaded, who uploaded, and who approved.
+  
 
 ## SOLUTION ARCHITECTURE
 ![Archiecture](Architecture.png)

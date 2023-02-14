@@ -1,6 +1,6 @@
 # Power Pages Secure Large Gigabyte File transer to Azure Datalake by External User Identies
 
-## SUMMARY: The Solution provides a way for users external to an organizational AAD tenat boundry to securely upload large Gigabyte files to an Organizations AAD secured Azure Datalake
+## SUMMARY: The Solution provides a way for users external to an organizational AAD tenant boundry to securely upload large Gigabyte files to that Organizations AAD secured Azure Datalake
 
 ## WHAT PROBLEM DOES THE SOLUTION SOLVE?
 * Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system built into Power Pages solves this problem.
@@ -26,7 +26,9 @@
 ## SOLUTION ARCHITECTURE
 ![Archiecture](Architecture.png)
 
-
+## SOLUTION COMPONENTS
+1. Datverse Tables:
+    * 
 
 ## WORKFLOW 1 EXTERNAL USER REQUESTS PORTAL ACCESS. APPROVAL SENT TO INTERNAL TEAM/DEPT
 A new user goes to the public portal site for the first time and has not been granted access and  yet given portal credentials. The user is seen as "Anonymous" and can thus only see a limited home page and a form to request access.  The new user submits the  Portal Access Form and an internal automated approval workflow is submitted for review by the internal managment team who receives an email. The approval is routed to a the correct team/department as configured by the combination of M365 Groups + Dataverse Business Unit. The request goes to only the correct team members in the corresponding M365 group. The reviewers are members of the M365 Group. The first one to respond completes the portal acess request approval and then workflow automatically creates a private registration code and emails the new user.  Permissions, web roles,email validation, and multi-factor authentication is automatically configures for the user. The user is sent an email and is redirected to the registraion site to one time create their registration and complete the credential grant process. The external user is now able to login to the portal.
@@ -38,10 +40,13 @@ The external user is logged on to the portal with the previoulsy granted login c
 
 ![Request File Upload Workflow](requestfileuploadworkflow.png)
 
-## WORKFLOW 3 NEW FILE UPLOADED USER NOTIFICATION AND RECORD FILE METADATA IN DATAVERSE FILES TABLE
-
+## WORKFLOW 3 NEW FILE UPLOADED USER NOTIFICATION. FILE METADATA RECORDED IN DATAVERSE FILES AUDIT TABLE
+When a file is uploaded, it triggers the 
 
 ![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
+
+![Dataverse Datamodel](datamodel.png)
+
 
 
 ## PRE-REQUISITES

@@ -6,7 +6,7 @@
 * Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system built into Power Pages solves this problem.
 * Where  are the files stored and how are they managed?  Azure Datalake solves this problem.
 
-## SOLUTION: ++POWER PLATFORM + AZURE++
+## SOLUTION: POWER PLATFORM + AZURE
 * **Power Pages** provide a portal for external users to register, login, and submit upload request forms
 * **Dataverse** provides a relational database to store and audit Datalake uploads and other metadata about users, approvals, upload requests, and file location
 * **Power Automate** provide automated workflow and backend services
@@ -28,9 +28,14 @@
 
 ## SOLUTION COMPONENTS
 1. Datverse Tables:
-*  **Portal Access Request**    ustom table that stores the portal acess requests. a new row triggers the Portal Access Request Power Automate Workflow
-*  **File Upload Requests**   custom table that stores the file upload requests. A new row triggers the File Access Request Power Automate workflow
-*   
+    **Portal Access Request**  custom  table that stores the portal acess requests. a new row triggers the Portal Access Request Power Automate Workflow
+    **File Upload Requests**   custom table that stores the file upload requests. A new row triggers the File Access Request Power Automate workflow
+    **Files**  custom table that stores metadata such as file name, size, upload date of blobs in the Data Lake
+    **Account** Built in standard table storing the Company Name.  
+    **Contact** Built in standard table storing the Contact Name (Portal User)
+    **Business Unit** Built in standard table storing the name of the Organizational Departments.  The email is mapped to the M365 Group email of the department.
+    **Invitation** Built in table storing the portal invitations
+    **Web Role** Built in table storing the Portal Web Roles.
 
 ## WORKFLOW 1 EXTERNAL USER REQUESTS PORTAL ACCESS. APPROVAL SENT TO INTERNAL TEAM/DEPT
 A new user goes to the public portal site for the first time and has not been granted access and  yet given portal credentials. The user is seen as "Anonymous" and can thus only see a limited home page and a form to request access.  The new user submits the  Portal Access Form and an internal automated approval workflow is submitted for review by the internal managment team who receives an email. The approval is routed to a the correct team/department as configured by the combination of M365 Groups + Dataverse Business Unit. The request goes to only the correct team members in the corresponding M365 group. The reviewers are members of the M365 Group. The first one to respond completes the portal acess request approval and then workflow automatically creates a private registration code and emails the new user.  Permissions, web roles,email validation, and multi-factor authentication is automatically configures for the user. The user is sent an email and is redirected to the registraion site to one time create their registration and complete the credential grant process. The external user is now able to login to the portal.

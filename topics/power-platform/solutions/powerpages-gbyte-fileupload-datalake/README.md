@@ -15,18 +15,22 @@
 * **Azure Event Grid** monitors new file upload events and triggers Power Automate file management workflows.
 
 ## What the Solution Provides:
-* A Portal for external users to log on and fill out a form to request permissions to upload a file(s). The system handles up to 300Gbyte files.
+* A portal for external users to log on and fill out a form to request permissions to upload a file(s). The system handles up to 300Gbyte files.
 * An approval workflow so that new users logins and file upload requests are approved by internal organizational employees
 * An option for users to upload files via Java Script web app (hosted in Power Pages),SFTP (hosted in Azure Storage Account SFPT Service), or Azure Storeage Explorer (free and robust large file upload tool by Microsoft)
 * A new file notification system that notifies the correct internal employee that a new file has been uploaded
 * An audit and reporting system the records in Dataverse every portal access request, user login,file upload request, every file upload and every approval. The Files Table stores the metadata of every file uploaded and its properties, such as location, size, date uploaded, who uploaded, and who approved.
+* The ability to federal external user identities with Power Pages Portal.  Such as the external user organizational AAD , Azure AAD B2C, Social Identities, etc.
   
 
 ## SOLUTION ARCHITECTURE
 ![Archiecture](Architecture.png)
 
 
+
 ## WORKFLOW 1
+A new user goes to the public portal site for the first time and has not been granted access and  yet given portal credentials. The user is seen as "Anonymous" and can thus only see a limited home page and a form to request access.  The new user submits the  Portal Access Form and an internal automated approval workflow is submitted for review by the internal managment team who receives an email. The reviewer approves the portal acess request and the workflow automatically creates a private registration code and emails the new user.  Permissions, web roles,email validation, and multi-factor authentication is automatically configures for the user. The user is sent an email and is redirected to the registraion site to one time create their registration and complete the credential grant process.
+
 
 ![Request Portal Access Workflow](requestportalaccessworkflow.png)
 ## WORKFLOW 2 

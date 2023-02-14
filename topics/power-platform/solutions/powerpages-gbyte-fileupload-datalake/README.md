@@ -6,7 +6,7 @@
 * Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system built into Power Pages solves this problem.
 * Where  are the files stored and how are they managed?  Azure Datalake solves this problem.
 
-## SOLUTION: _POWER PLATFORM + AZURE_
+## SOLUTION: ++POWER PLATFORM + AZURE++
 * **Power Pages** provide a portal for external users to register, login, and submit upload request forms
 * **Dataverse** provides a relational database to store and audit Datalake uploads and other metadata about users, approvals, upload requests, and file location
 * **Power Automate** provide automated workflow and backend services

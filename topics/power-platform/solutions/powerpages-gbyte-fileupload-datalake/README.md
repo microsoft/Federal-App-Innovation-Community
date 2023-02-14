@@ -45,6 +45,8 @@ When a file is uploaded, it triggers the
 
 ![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
 
+## DATAVERSE DATA MODEL
+
 ![Dataverse Datamodel](datamodel.png)
 
 

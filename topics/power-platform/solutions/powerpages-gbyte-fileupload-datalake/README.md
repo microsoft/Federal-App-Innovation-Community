@@ -130,11 +130,10 @@ The external user is logged on to the portal with the previoulsy granted login c
 
 2. Azure 
     - Create a Resource Group
-    - Create a Web App.
-      -  Give it a name such as PowerPortalFileManagement
-      -  
-    - upload Function app to the Web App
-    - Create a new storage account
+    - Create a Azure Function App of type Powershell core. Give it a name such as PowerPortalFileManagement
+      -  you can choose Consumption , Premium, or App Service Plan base on the use case
+      - deploy the Function app in the solution  to the Function app you just created. see https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
+    - Create and Azure Storage Account
       - in addition to the defaults, select the following options
         - Enaable hierarchical namespace
         - Enable SFTP

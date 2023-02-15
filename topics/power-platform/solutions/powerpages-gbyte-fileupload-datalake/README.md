@@ -3,7 +3,7 @@
 ## SUMMARY: The Solution provides a way for users external to an organizational AAD tenant boundry to securely upload large Gigabyte files to that Organizations AAD secured Azure Datalake
 
 ## What Problem does the solution solve?
-* Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system built into Power Pages solves this problem.
+* Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system Out-of-the-boxto Power Pages solves this problem.
 * Where  are the files stored and how are they managed?  Azure Datalake solves this problem.
 
 ## Solution: Power Platform + Azure 
@@ -31,11 +31,11 @@
 * **Portal Access Request**  custom  table that stores the portal acess requests. a new row triggers the Portal Access Request Power Automate Workflow
 * **File Upload Requests**   custom table that stores the file upload requests. A new row triggers the File Access Request Power Automate workflow
 * **Files**  custom table that stores metadata such as file name, size, upload date of blobs in the Data Lake
-* **Account** Built in standard table storing the Company Name.  
-* **Contact** Built in standard table storing the Contact Name (Portal User)
-* **Business Unit** Built in standard table storing the name of the Organizational Departments.  The email is mapped to the M365 Group email of the department.
-* **Invitation** Built in table storing the portal invitations
-* **Web Role** Built in table storing the Portal Web Roles.
+* **Account** Out-of-the-box standard table storing the Company Name.  
+* **Contact** Out-of-the-box standard table storing the Contact Name (Portal User)
+* **Business Unit** Out-of-the-box standard table storing the name of the Organizational Departments.  The email is mapped to the M365 Group email of the department.
+* **Invitation** Out-of-the-box table storing the portal invitations
+* **Web Role** Out-of-the-box table storing the Portal Web Roles.
 2. Power Automate Flows:
 * **Portal Access Request** is triggered on new row in the Portal Access Request Table.  Takes the external user submitted form data and sends an Approval to the corresponding Dept that the user selected
 * **File Upload Request** is triggered on a new row in the File Upload Request Tables. Takes the form subitted and sends an Approval to the corresponding department. If approved, the flow calls the Azure Powershell function which creates the datalake file hierarchy and either SAS Token or SFTP credentials, based on user selection

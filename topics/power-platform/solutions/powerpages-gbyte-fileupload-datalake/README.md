@@ -49,10 +49,10 @@
 5. M365 Email enabled Security Groups
 * one M365 groups for each Department.  Add/remove members to this group
 6. Power Apps Solution.  
-* will be imported into the provisioned environment
-7. Azure Datalake
-8. Azure Powershell Function
-9. SPA  Single Page Application 
+Solution will be imported into the provisioned environment
+1. Azure Datalake
+2. Azure Powershell Function
+3. SPA  Single Page Application 
 * used for smaller file uploads up to 5 Gbyte.  hosted in Power Pages portal
 * 
    
@@ -80,6 +80,69 @@ The external user is logged on to the portal with the previoulsy granted login c
 
 
 ## Pre-Requisites
-* Power Apps Enviornment with Dataverse. Power Apps System
-* Azure Subscription
+1. Power Apps Enviornment with Dataverse. 
+   - Power Apps System Adamin role
+2. Azure Subscription
+   - permissions to create and configure azure datalake
+   - permissions to create and deploy Azure Funtion App in App service
 ## Deployment
+1. Power Platform 
+    - Create a New Dataverse Environment
+      - Open Power Platform admin center with System Administrator role
+      - Select Environments/ New to  Create Dataverse Environment with Dataverse. Choose Sandbox. 
+      - Select the Create a database for this environment switch
+      - no need to enable Dynamics 365 or sample apps
+      - Select Save to provision the new environment
+      - Configure email for Dataverse in power platform admin setting
+      - Configure Business Units for Datavese in power platform admin settings
+      - Configure Search in power platform admin settings
+    - Power Platform Identity
+      - create an AAD user Identity call Power Platform Admin . this will be used by the connections
+      - assign power platform and power automate licence
+      - assign Power Platform Administer role in AAD and System Admin role in Dataverse
+    - M365 Groups
+      - Create a email enables M365 group for each Organizational Department that will be receiving and managing their own portal access and file upload requests
+      - go in AAD Admin.  Create an new M365 group. select and copy the email address of the group.  Add users to the respective group
+      - the email will be used later when you configure Dataverse Business Units
+    - Teams Groups
+      - create a new Team for each for the M365 Groups previusly created
+    - Create Connections in the new environment for the following. These will be used when the solution is imported
+      - Microsoft Teams
+      - Approvals
+      - Microsoft Dataverse
+      - MS Graph Groups and Users
+      - Office 365 OUtlook
+      - Office 365 Groups
+      - Azure Event Grid
+    - Create Portal
+      - From Power Apps Studio Select New App/website
+      - Pick a name.  Do **not** chose the "Use data from existing website record".  Select Create The portal could take 30 or more minutes to provision.
+      - Import Portal Config 
+    - Import Solution
+      - download the solution.zip file to your local hard drive.
+      - In the Power Apps Studio select your newly created environment
+      - Select Soluions/Import Solution to import the downloaded solution
+      - 
+  
+
+    
+    
+
+2. Azure 
+    - Create a Resource Group
+    - Create a Web App.
+      -  Give it a name such as PowerPortalFileManagement
+      -  
+    - upload Function app to the Web App
+    - Create a new storage account
+      - in addition to the defaults, select the following options
+        - Enaable hierarchical namespace
+        - Enable SFTP
+      - keep the remaining defaults and select create
+      - once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
+    - Event Grid and Subscription for new blob events in the newly created Storage Account for Datalake
+    - Create M365 Groups that map to the Departments. Copy the email address
+    - Create Static app
+    - Enable SFTP
+
+

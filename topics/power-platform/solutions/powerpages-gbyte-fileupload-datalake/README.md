@@ -3,11 +3,13 @@
 ## SUMMARY: The Solution provides a way for users external to an organizational AAD tenant boundry to securely upload large Gigabyte files to that Organizations AAD secured Azure Datalake
 
 ## What Problem does the solution solve?
-* Organizations need to receive large files from external customers for Data AI workloads. But since the customers are external don’t have an organizational AAD Identity and thus dont have credentials. The Identity system Out-of-the-boxto Power Pages solves this problem.
-* Where  are the files stored and how are they managed?  Azure Datalake solves this problem.
+* Helps Organizations that maintain an AAD secured Azure infrastrue to receive large files from external customers that dont have an identity in the AAD tenant. For example for Data AI workloads.
+* Provides a secure and managed Azure Datalake hierarchicial file system for extremely large scale and file sizes 300Gbytes or more
+* Provides an automate the process of creating,managing, and securing external customer identties providing said external customer a mechanism to security upload large files to the organizational datalake. Power Pages provides an Identity managment system that can be federated with external identity providers such as AAD, B2C, and Login.gov
+* Provides a Dataverse based records and audit system, logging every portal access request, every file upload, and every approval.
 
 ## Solution: Power Platform + Azure 
-* **Power Pages** provide a portal for external users to register, login, and submit upload request forms
+* **Power Pages** provide a portal for external users to register, login, and submit upload request forms. A
 * **Dataverse** provides a relational database to store and audit Datalake uploads and other metadata about users, approvals, upload requests, and file location
 * **Power Automate** provide automated workflow and backend services
 * **Azure Powershell Functions** provide an automated way to create SAS Tokens and SFTP credentials Azure Blob Storage
@@ -131,15 +133,23 @@ The external user is logged on to the portal with the previoulsy granted login c
 2. Azure 
     - Create a Resource Group
     - Create a Azure Function App of type Powershell core. Give it a name such as PowerPortalFileManagement
-      -  you can choose Consumption , Premium, or App Service Plan base on the use case
-      - deploy the Function app in the solution  to the Function app you just created. see https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
+      - you can choose Consumption , Premium, or App Service Plan based on the use case
+      - deploy the Function app in the solution  to the Function app you just created.
+      - TODO: write powershell creation and deployment script to upload function and app settings
+        - first login in to the cloud from az command line
+        - az cloud set --name AzureUSGovernment
+        - az login
+          - https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest
+          - https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
     - Create and Azure Storage Account
-      - in addition to the defaults, select the following options
-        - Enaable hierarchical namespace
-        - Enable SFTP
-      - keep the remaining defaults and select create
-      - once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
+      - TODO: Write a powershell script to create and deploy Azure Storeage Account
+          - in addition to the defaults, select the following options
+            - Enaable hierarchical namespace
+            - Enable SFTP
+          - keep the remaining defaults and select create
+          - once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
     - Event Grid and Subscription for new blob events in the newly created Storage Account for Datalake
+      - TODO: Create PowerShell Script to create and deploy Event Grid and Subscription
     - Create M365 Groups that map to the Departments. Copy the email address
     - Create Static app
     - Enable SFTP

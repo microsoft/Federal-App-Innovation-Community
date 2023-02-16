@@ -1,0 +1,29 @@
+{
+    "body": {
+        "topic": "/subscriptions/6865a616-af4b-4372-95d1-2a17b93cc92f/resourceGroups/FTP/providers/Microsoft.Storage/storageAccounts/fileuploadsgreg",
+        "subject": "/blobServices/default/containers/oig/blobs/dogsrus/user1lastname/0000000000000010/AI Builder/AI Builder Labs/Lab Images/BusinessCard/business-card.jpg",
+        "eventType": "Microsoft.Storage.BlobCreated",
+        "id": "b559a6d8-b01e-001f-2145-3e4382067b46",
+        "data": {
+            "api": "PutBlob",
+            "clientRequestId": "f0cb92d6-4169-4c11-420b-498a7bb5d7c7",
+            "requestId": "b559a6d8-b01e-001f-2145-3e4382000000",
+            "eTag": "0x8DB0C5C4AC56752",
+            "contentType": "image/jpeg",
+            "contentLength": 2158578,
+            "blobType": "BlockBlob",
+            "blobUrl": "https://fileuploadsgreg.blob.core.windows.net/oig/dogsrus/user1lastname/0000000000000010/AI Builder/AI Builder Labs/Lab Images/BusinessCard/business-card.jpg",
+            "url": "https://fileuploadsgreg.blob.core.windows.net/oig/dogsrus/user1lastname/0000000000000010/AI Builder/AI Builder Labs/Lab Images/BusinessCard/business-card.jpg",
+            "sequencer": "0000000000000000000000000002565000000000000a5672",
+            "identity": "$superuser",
+            "storageDiagnostics": {
+                "batchId": "86d37177-b006-0042-0045-3e4906000000"
+            }
+        },
+        "dataVersion": "",
+        "metadataVersion": "1",
+        "eventTime": "2023-02-11T18:17:44.0131129Z"
+    }
+}
+
+/blobServices/default/containers/oig/blobs/dogsrus/user1lastname/0000000000000010/AI Builder/AI Builder Labs/Lab Images/BusinessCard/business-card.jpg

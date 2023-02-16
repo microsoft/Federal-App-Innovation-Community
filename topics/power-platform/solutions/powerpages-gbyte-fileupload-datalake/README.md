@@ -121,7 +121,7 @@ The external user is logged on to the portal with the previoulsy granted login c
       - Pick a name.  Do **not** chose the "Use data from existing website record".  Select Create The portal could take 30 or more minutes to provision.
       - Import Portal Config 
     - Import Solution
-      - download the solution.zip file to your local hard drive.
+      - download the solution.zip file to your local hard drive.[label](README.md)
       - In the Power Apps Studio select your newly created environment
       - Select Soluions/Import Solution to import the downloaded solution
       - 
@@ -135,17 +135,30 @@ The external user is logged on to the portal with the previoulsy granted login c
     - Create a Azure Function App of type Powershell core. Give it a name such as PowerPortalFileManagement
       - you can choose Consumption , Premium, or App Service Plan based on the use case
       - deploy the Function app in the solution  to the Function app you just created.
+      - create system assigned managed identity and add role assignment  scope=storage resource= your storage account Role = contributer
       - TODO: write powershell creation and deployment script to upload function and app settings
         - first login in to the cloud from az command line
         - az cloud set --name AzureUSGovernment
         - az login
-          - https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest
-          - https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
-    - Create and Azure Storage Account
+        - az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+        - az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
+            - Application Settings:
+              - ResourceGroup: xxresoursegroupname
+              - StorageAccountName: xxdatalake4powerpages
+              - Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
+              - Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
+              - Cloud: AzureUSGovernment
+              - connectionstring:  "xxxxxxxxget from storage account access keys"
+              - ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
+        - 
+        - https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest
+        - https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
+  - Create and Azure Storage Account
       - TODO: Write a powershell script to create and deploy Azure Storeage Account
           - in addition to the defaults, select the following options
             - Enaable hierarchical namespace
             - Enable SFTP
+            - Configure CORS
           - keep the remaining defaults and select create
           - once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
     - Event Grid and Subscription for new blob events in the newly created Storage Account for Datalake

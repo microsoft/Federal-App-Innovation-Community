@@ -84,7 +84,7 @@ The external user is logged on to the portal with the previoulsy granted login c
 ## Pre-Requisites
 1. Power Apps Enviornment with Dataverse. 
    - Power Apps System Adamin role
-   - 
+    
 2. Azure Subscription
    - permissions to create and configure azure datalake
    - permissions to create and deploy Azure Funtion App in App service
@@ -150,7 +150,7 @@ The external user is logged on to the portal with the previoulsy granted login c
               - Cloud: AzureUSGovernment
               - connectionstring:  "xxxxxxxxget from storage account access keys"
               - ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
-        - 
+         
         - https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest
         - https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
         - Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.

@@ -17,6 +17,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[CI/CD](./topics/ci-cd)*** | Scaling Containerized Azure DevOps Agents with AKS + KEDA [▶️](./topics/ci-cd/solutions/containerized-agents-keda/) | ✔️ | N/A | 07/11/2022 |
 | ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
 | ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |
+| ***[Bot](./topics/bot)*** | AI Based IVR Bot [▶️](./topics/bot/solutions/ai-based-irv-bot) | ✔️ | N/A | 02/09/2023 |
 | ***[Cognitive Search](./topics/cognitive-search)*** | Document and Audio Parsing and Classification  [▶️](./topics/cognitive-search/solutions/document-parser) | ✔️ |  ✔️ | 06/08/2022 |
 | ***[Modern Auth](./topics/modern-auth/React-MSAL-AAD)*** | React MSAL AAD Example  [▶️](./topics/modern-auth/React-MSAL-AAD) | ✔️ |  ✔️ | 01/24/2023 |
 | ***[OpenAI](./topics/openai/README.md)*** | OpenAI ChatGPT text generation in Python Example  [▶️](./topics/modern-auth/React-MSAL-AAD) | N/A |  N/A | 01/27/2023 |

@@ -129,8 +129,6 @@ The external user is logged on to the portal with the previoulsy granted login c
        2.  In the Power Apps Studio select your newly created environment
        3.  Select Soluions/Import Solution to import the downloaded solution    
       
-    
-
 1. **Azure**
    1. **Create a Resource Group**
    2. **Create a Azure Function App**
@@ -157,7 +155,7 @@ The external user is logged on to the portal with the previoulsy granted login c
                   2. see https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
                8. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.
                 
-   3.  Create and Azure Storage Account
+   3.  **Create Datalake / Azure Storage Account**
        1.  TODO: Write a powershell script to create and deploy Azure Storeage Account
        2.  addition to the defaults, select the following options
            1.  Enaable hierarchical namespace
@@ -166,10 +164,10 @@ The external user is logged on to the portal with the previoulsy granted login c
        3.  keep the remaining defaults and select create
        4.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
        5.  
-   4.  Creat Event Grid and Subscription for new blob events in the newly created Storage Account for Datalake
+   4.  **Creat Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake
        1.  TODO: Create PowerShell Script to create and deploy Event Grid and Subscription
          
-   5.  Configure Static SPA
+   5.  **Configure Static SPA**
      
    
 

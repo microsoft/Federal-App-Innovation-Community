@@ -87,47 +87,49 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
 
 ### AZURE
 #### _Storage Account v2 with Datalake,  Static Web App , SFTP Service ,  Function App_
- 1. **Create a Resource Group**
- 2. **Azure Storage Account v2 with Datalake, SFTP Service, Static Web App**
-      1.  Manual
-          1.  addition to the defaults, select the following options
-          2.  Enaable hierarchical namespace
-          3.  Enable SFTP
-          4.  Configure CORS
-          5.  keep the remaining defaults and select create
-          6.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
-      2.  Automated TODO
-          1.  todo
- 3.  **Create Azure Function App**
-     1.  Manual 
-         1.  Yype Powershell core. Give it a name such as PowerPortalFileManagement
-         2.  You can choose Consumption , Premium, or App Service Plan based on the use case
-         3.  Deploy the Function app in the solution  to the Function app you just created.
-         4.  Create system assigned managed identity and add role assignment  scope=storage resource= your storage account Role = contributer
-     2.  Automated  TODO
-         1.  write powershell creation and deployment script to upload function and app settings
-         2.  first login in to the cloud from az command line
-         3. az cloud set --name AzureUSGovernment 
- 4. **Deploy Function App**
-    1. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
- 5. **Configure App Configurations Settings**
-    1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
-         * ResourceGroup: xxresoursegroupname
-         * StorageAccountName: xxdatalake4powerpages
-         * Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
-         * Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
-         * Cloud: AzureUSGovernment
-         * connectionstring:  "xxxxxxxxget from storage account access keys"
-         * ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
-    2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
-    3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
+ 1. **Azure Portal**
+    1. **Create a Resource Group**
+    2. **Azure Storage Account v2 with Datalake, SFTP Service, Static Web App**
+       1.  addition to the defaults, select the following options
+       2.  Enaable hierarchical namespace
+       3.  Enable SFTP
+       4.  Configure CORS
+       5.  keep the remaining defaults and select create
+       6.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
+
+    3.  **Create Azure Function App** 
+        1.  Yype Powershell core. Give it a name such as PowerPortalFileManagement
+        2.  You can choose Consumption , Premium, or App Service Plan based on the use case
+        3.  Deploy the Function app in the solution  to the Function app you just created.
+        4.  Create system assigned managed identity and add role assignment  scope=storage resource= your storage account Role = contributer
+
+    4. **Deploy Function App**
+       1. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+    5. **Configure App Configurations Settings**
+       1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
+            * ResourceGroup: xxresoursegroupname
+            * StorageAccountName: xxdatalake4powerpages
+            * Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
+            * Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
+            * Cloud: AzureUSGovernment
+            * connectionstring:  "xxxxxxxxget from storage account access keys"
+            * ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
+       2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
+       3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
          
- 6.  **Creat Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake
-     1.  Manual 
-         1.  Steps to create and configure Event Grid and Subscription
-     2.  Automated TODO 
-         1.  Create PowerShell Script to create and deploy Event Grid and Subscription         
- 7.  **Configure Static SPA**
+    6.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
+        1.  Creat Event Grid
+        2.  Create Subscription
+        
+    7.  **Configure Static SPA**
+ 2. Create Automated Script TODO tbd
+    1. Create Resource Group
+    2. Create Storage account
+    3. Create Function App
+    4. Deploy Funtion App
+    5. Deploy Function App Settings
+    6. Create Event Grid
+    7. Create Event Grid Subscription  
 
 ### POWER PLATFORM
 ####  _Dataverse Environment, Power Pages,Import Solution, Security,  Principals, Connections, Tables, Workflows, Email, Search_
@@ -163,7 +165,9 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
    1.  Download the solution.zip file to your local hard drive.
    2.  In the Power Apps Studio select your newly created environment
    3.  Select Soluions/Import Solution to import the downloaded solution
-       1.  When promted enter the connecttion info from your environenment previously created        
+       1.  When promted enter the connecttion info from your environenment previously created 
+6.  Publish the Solution
+7.  Test the Solution       
 
    
 

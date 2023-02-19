@@ -89,41 +89,8 @@ The external user is logged on to the portal with the previoulsy granted login c
    - permissions to create and configure azure datalake
    - permissions to create and deploy Azure Funtion App in App service
 ## Deployment
-1. **Power Platform**
-     1. **Create a New Dataverse Environment**
-        1. Open Power Platform admin center with System Administrator role.Select Environments/ New to  Create Dataverse Environment with Dataverse. 
-        2. Choose Sandbox. Select the Create a database for this environment switch. 
-        3. No need to enable Dynamics 365 or sample apps. 
-        4. Select Save to provision the new environment     
-     2.  **Configure Dataverse Environment**
-         1.  Configure Business Units for Datavese in power platform admin settings
-         2.  Configure email for Dataverse in power platform admin setting
-         3.  Configure Search in power platform admin settings           
-     3.  **Create a Power Platform Admin Service Principal**
-         1.  In the AAD Admin Council Create an AAD user  called for exmple Power Platform Admin . this will be used by the connections and flow email from the flow. Assign power platform and power automate licence.
-         2.  Assign Power Platform Administer role in AAD and System Admin role in Dataverse
-         3.  Disable MFA for this principal       
-    4. **Create M365 Groups emailed enabled security groups for Organication Departments**
-       1. Go in AAD Admin.  Create an new M365 group. select and copy the email address of the group.  Add users to the respective group.
-       2. Copy the M365 group email, it will be used later when you configure Dataverse Business Units  
-    5. **Create Connections in the new environment.** These will be used when the solution is imported.  Use the previouly created service principal
-       1. Microsoft Teams
-       2. Approvals
-       3. Microsoft Dataverse
-       4. Office 365 OUtlook
-       5. Office 365 Groups
-       6. Azure Event Grid
-    6. **Create Portal**
-       1. From Power Apps Studio Select New App/website
-       2. Pick a name.  Do **not** chose the "Use data from existing website record".  
-       3. Select Create The portal could take 30 or more minutes to provision.        
-    7. **Import Portal Config**      
-    9. **Import Solution**
-       1.  Download the solution.zip file to your local hard drive.
-       2.  In the Power Apps Studio select your newly created environment
-       3.  Select Soluions/Import Solution to import the downloaded solution    
-       4.        
-2. **Azure**
+
+### Deploy Azure Resources First: _Storage Account v2 with Datalake, Static Web App ,SFTP Service , Function App_
    1. **Create a Resource Group**
    2. **Create a Azure Function App**
       1. Yype Powershell core. Give it a name such as PowerPortalFileManagement
@@ -160,7 +127,42 @@ The external user is logged on to the portal with the previoulsy granted login c
    4.  **Creat Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake
        1.  TODO: Create PowerShell Script to create and deploy Event Grid and Subscription         
    5.  **Configure Static SPA**
-     
+
+### Power Platform Resources
+     1. **Create a New Dataverse Environment**
+        1. Open Power Platform admin center with System Administrator role.Select Environments/ New to  Create Dataverse Environment with Dataverse. 
+        2. Choose Sandbox. Select the Create a database for this environment switch. 
+        3. No need to enable Dynamics 365 or sample apps. 
+        4. Select Save to provision the new environment     
+     2.  **Configure Dataverse Environment**
+         1.  Configure Business Units for Datavese in power platform admin settings
+         2.  Configure email for Dataverse in power platform admin setting
+         3.  Configure Search in power platform admin settings           
+     3.  **Create a Power Platform Admin Service Principal**
+         1.  In the AAD Admin Council Create an AAD user  called for exmple Power Platform Admin . this will be used by the connections and flow email from the flow. Assign power platform and power automate licence.
+         2.  Assign Power Platform Administer role in AAD and System Admin role in Dataverse
+         3.  Disable MFA for this principal       
+    4. **Create M365 Groups emailed enabled security groups for Organication Departments**
+       1. Go in AAD Admin.  Create an new M365 group. select and copy the email address of the group.  Add users to the respective group.
+       2. Copy the M365 group email, it will be used later when you configure Dataverse Business Units  
+    5. **Create Connections in the new environment.** These will be used when the solution is imported.  Use the previouly created service principal
+       1. Microsoft Teams
+       2. Approvals
+       3. Microsoft Dataverse
+       4. Office 365 OUtlook
+       5. Office 365 Groups
+       6. Azure Event Grid
+    6. **Create Portal**
+       1. From Power Apps Studio Select New App/website
+       2. Pick a name.  Do **not** chose the "Use data from existing website record".  
+       3. Select Create The portal could take 30 or more minutes to provision.        
+    7. **Import Portal Config**      
+    9. **Import Solution**
+       1.  Download the solution.zip file to your local hard drive.
+       2.  In the Power Apps Studio select your newly created environment
+       3.  Select Soluions/Import Solution to import the downloaded solution
+       4.  When promted enter the connecttion info from your environenment previously created        
+
    
 
 

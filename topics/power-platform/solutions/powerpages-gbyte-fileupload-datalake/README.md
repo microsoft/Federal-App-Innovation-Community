@@ -24,6 +24,8 @@
 * An audit and reporting system the records in Dataverse every portal access request, user login,file upload request, every file upload and every approval. The Files Table stores the metadata of every file uploaded and its properties, such as location, size, date uploaded, who uploaded, and who approved.
 * The ability to federal external user identities with Power Pages Portal.  Such as the external user organizational AAD , Azure AAD B2C, Social Identities, etc.
   
+## Deployment
+see Deployment Section below
 
 ## Solution Architecture
 ![Archiecture](Architecture.png)
@@ -57,22 +59,15 @@ Solution will be imported into the provisioned environment
 3. SPA  Single Page Application 
 * used for smaller file uploads up to 5 Gbyte.  hosted in Power Pages portal
 * 
-   
-   
-
-
 ## Workflow 1:   External User Requests Portal Access. Approval Workflow Triggered 
 A new user goes to the public portal site for the first time and has not been granted access and  yet given portal credentials. The user is seen as "Anonymous" and can thus only see a limited home page and a form to request access.  The new user submits the  Portal Access Form and an internal automated approval workflow is submitted for review by the internal managment team who receives an email. The approval is routed to a the correct team/department as configured by the combination of M365 Groups + Dataverse Business Unit. The request goes to only the correct team members in the corresponding M365 group. The reviewers are members of the M365 Group. The first one to respond completes the portal acess request approval and then workflow automatically creates a private registration code and emails the new user.  Permissions, web roles,email validation, and multi-factor authentication is automatically configures for the user. The user is sent an email and is redirected to the registraion site to one time create their registration and complete the credential grant process. The external user is now able to login to the portal.
-
-
 ![Request Portal Access Workflow](requestportalaccessworkflow.png)
 ## Workflow 2: External User Requests permission and credentials to upload a file.  Triggers Approval worflow and automatic datalake credential creation
 The external user is logged on to the portal with the previoulsy granted login credentials. They now request permission to upload a file.  The user submits a file upload request form which starts a similar approval process where by the approval request is sent to the corresponding internal department as configured by M365 Groups + Dataverse Business Units.  The first M365 Groups membrer to repond approves the request and then the Power Automate workflow calls a backend Azure Powershell Function that automaticall creates the corresponding Datalake file hierarchy and either a  SAS Token or SFTP credentials based on the user seleced option.  The credentials are emailed to the external user who procedes to upload the file(s).
-
 ![Request File Upload Workflow](requestfileuploadworkflow.png)
 
 ## Workflow 3:   New File Uploaded Notification to Department. New File metadata stored in the Files table
-
+Event Grid monitors for new blob events. When a new blob is uploaded the event is triggered and the New File Power Automate flow fires. The flow reads and parses the new blob meta data, updates the corresponding Files Table record, and send an email and/or Teams notification to the Approving Department M365 Groups team.
 ![New File Upload Notification Workflow](newfileuploadednotificationworkflow.png)
 
 ## Data Model
@@ -82,7 +77,7 @@ The external user is logged on to the portal with the previoulsy granted login c
 
 
 ## Pre-Requisites
-1. Power Apps Enviornment with Dataverse. 
+1. Power Apps Environment with Dataverse. 
    - Power Apps System Adamin role
     
 2. Azure Subscription
@@ -91,46 +86,51 @@ The external user is logged on to the portal with the previoulsy granted login c
 ## Deployment
 
 ### AZURE
-#### _Storage Account v2 with Datalake, Static Web App ,SFTP Service , Function App_
+#### _Storage Account v2 with Datalake,  Static Web App , SFTP Service ,  Function App_
  1. **Create a Resource Group**
- 2. **Create a Azure Function App**
-    1. Yype Powershell core. Give it a name such as PowerPortalFileManagement
-    2. You can choose Consumption , Premium, or App Service Plan based on the use case
-    3. Deploy the Function app in the solution  to the Function app you just created.
-    4. Create system assigned managed identity and add role assignment  scope=storage resource= your storage account Role = contributer
-    5. TODO: write powershell creation and deployment script to upload function and app settings
-       1. first login in to the cloud from az command line
-          1. az cloud set --name AzureUSGovernment
-          2. az login
-       2. Deploy Function App
-          1. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
-       3. Configure App Configureation Setting for your environment
-          1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
-             1. ResourceGroup: xxresoursegroupname
-             2. StorageAccountName: xxdatalake4powerpages
-             3. Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
-             4. Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
-             5. Cloud: AzureUSGovernment
-             6. connectionstring:  "xxxxxxxxget from storage account access keys"
-             7. ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
-                1. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest
-                2. see https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
-             8. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.                
- 3.  **Create Datalake / Azure Storage Account**
-     1.  TODO: Write a powershell script to create and deploy Azure Storeage Account
-     2.  addition to the defaults, select the following options
-         1.  Enaable hierarchical namespace
-         2.  Enable SFTP
-         3.  Configure CORS
-     3.  keep the remaining defaults and select create
-     4.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
-     5.  
- 4.  **Creat Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake
-     1.  TODO: Create PowerShell Script to create and deploy Event Grid and Subscription         
- 5.  **Configure Static SPA**
+ 2. **Azure Storage Account v2 with Datalake, SFTP Service, Static Web App**
+      1.  Manual
+          1.  addition to the defaults, select the following options
+          2.  Enaable hierarchical namespace
+          3.  Enable SFTP
+          4.  Configure CORS
+          5.  keep the remaining defaults and select create
+          6.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
+      2.  Automated TODO
+          1.  todo
+ 3.  **Create Azure Function App**
+     1.  Manual 
+         1.  Yype Powershell core. Give it a name such as PowerPortalFileManagement
+         2.  You can choose Consumption , Premium, or App Service Plan based on the use case
+         3.  Deploy the Function app in the solution  to the Function app you just created.
+         4.  Create system assigned managed identity and add role assignment  scope=storage resource= your storage account Role = contributer
+     2.  Automated  TODO
+         1.  write powershell creation and deployment script to upload function and app settings
+         2.  first login in to the cloud from az command line
+         3. az cloud set --name AzureUSGovernment 
+ 4. **Deploy Function App**
+    1. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+ 5. **Configure App Configurations Settings**
+    1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
+         * ResourceGroup: xxresoursegroupname
+         * StorageAccountName: xxdatalake4powerpages
+         * Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
+         * Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
+         * Cloud: AzureUSGovernment
+         * connectionstring:  "xxxxxxxxget from storage account access keys"
+         * ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
+    2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
+    3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
+         
+ 6.  **Creat Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake
+     1.  Manual 
+         1.  Steps to create and configure Event Grid and Subscription
+     2.  Automated TODO 
+         1.  Create PowerShell Script to create and deploy Event Grid and Subscription         
+ 7.  **Configure Static SPA**
 
 ### POWER PLATFORM
-####  _Dataverse Environment,Power Pages,Security, Principals,Connections,Tables,Workflows,Email, Search_
+####  _Dataverse Environment, Power Pages,Import Solution, Security,  Principals, Connections, Tables, Workflows, Email, Search_
  1. **Create a New Dataverse Environment**
     1. Open Power Platform admin center with System Administrator role.Select Environments/ New to  Create Dataverse Environment with Dataverse. 
     2. Choose Sandbox. Select the Create a database for this environment switch. 
@@ -148,12 +148,12 @@ The external user is logged on to the portal with the previoulsy granted login c
    1. Go in AAD Admin.  Create an new M365 group. select and copy the email address of the group.  Add users to the respective group.
    2. Copy the M365 group email, it will be used later when you configure Dataverse Business Units  
 2. **Create Connections in the new environment.** These will be used when the solution is imported.  Use the previouly created service principal
-   1. Microsoft Teams
-   2. Approvals
-   3. Microsoft Dataverse
-   4. Office 365 OUtlook
-   5. Office 365 Groups
-   6. Azure Event Grid
+   * Microsoft Teams
+   * Approvals
+   * Microsoft Dataverse
+   * Office 365 OUtlook
+   * Office 365 Groups
+   * Azure Event Grid
 3. **Create Portal**
    1. From Power Apps Studio Select New App/website
    2. Pick a name.  Do **not** chose the "Use data from existing website record".  

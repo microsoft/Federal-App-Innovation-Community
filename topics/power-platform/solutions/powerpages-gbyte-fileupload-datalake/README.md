@@ -98,14 +98,16 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
        6.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
 
     3.  **Create Azure Function App** 
-        1.  Yype Powershell core. Give it a name such as PowerPortalFileManagement
+        1.  Create a  Function App of type Powershell core. Give it a name such as PowerPortalFileManagement
         2.  You can choose Consumption , Premium, or App Service Plan based on the use case
-        3.  Deploy the Function app in the solution  to the Function app you just created.
-        4.  Create system assigned managed identity and add role assignment  scope=storage resource= your storage account Role = contributer
+    4.  Create system assigned managed identity
+        1.  Go to Identity and add System Assigned Managed Identity
+        2.   and add role assignment  to the storage account just created. scope=storage resource= your storage account Role = contributer
 
-    4. **Deploy Function App**
-       1. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
-    5. **Configure App Configurations Settings**
+    5. **Deploy Function App**
+       1. From the Cloud Shell upload the Zip Function all
+       2. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+    6. **Configure App Configurations Settings**
        1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
             * ResourceGroup: xxresoursegroupname
             * StorageAccountName: xxdatalake4powerpages
@@ -117,19 +119,25 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
        2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
        3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
          
-    6.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
+    7.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
         1.  Creat Event Grid
         2.  Create Subscription
         
-    7.  **Configure Static SPA**
+    8.  **Configure Static SPA**
+     
  2. Create Automated Script TODO tbd
-    1. Create Resource Group
-    2. Create Storage account
-    3. Create Function App
-    4. Deploy Funtion App
-    5. Deploy Function App Settings
-    6. Create Event Grid
-    7. Create Event Grid Subscription  
+    1. install az cli
+    2. login and set context
+       1. as set cloud
+       2. az login
+       3. az set subcription   3. 
+    3. Create Resource Group
+    4. Create Storage account
+    5. Create Function App
+    6. Deploy Funtion App
+    7.  Deploy Function App Settings
+    8.  Create Event Grid
+    9.  Create Event Grid Subscription  
 
 ### POWER PLATFORM
 ####  _Dataverse Environment, Power Pages,Import Solution, Security,  Principals, Connections, Tables, Workflows, Email, Search_

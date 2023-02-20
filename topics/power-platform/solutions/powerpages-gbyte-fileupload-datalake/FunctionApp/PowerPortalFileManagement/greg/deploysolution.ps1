@@ -8,6 +8,15 @@ $location = "westus3"
 $storageAccountName = "datalake"
 $indexdoc = "index.html"  #for static web app
 $errordoc = "404.html"    #for static web app
+$CorsRules = (
+    @{
+    AllowedOrigins=@("*"); 
+    ExposedHeaders=@("x-ms-meta-*"); 
+    AllowedHeaders=@("Authorization","x-ms-meta-ab","x-ms-meta-target*","x-ms-meta-data*");
+    MaxAgeInSeconds=0;
+    AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
+    }
+)
 
 <# 
 Connect-AzAccount
@@ -55,6 +64,7 @@ else  #create a new datalake Storage account
     Write-Host "$storageAccountName created"
     $ctx = New-AzStorageContext -StorageAccountName $storageAccountName
     Enable-AzStorageStaticWebsite -Context $ctx -IndexDocument $indexdoc -ErrorDocument404Path $errordoc
+    Set-AzStorageCORSRule -Context $ctx -ServiceType Blob -CorsRules $CorsRules
 }
 
  

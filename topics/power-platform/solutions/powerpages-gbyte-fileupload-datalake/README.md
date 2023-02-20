@@ -109,7 +109,12 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
            2.  Enable SFTP
        4.  keep the remaining defaults and select create
        5.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
-       6.  Configure CORS
+       6.  Configure CORS Rules
+           * AllowedOrigins=@("*"); 
+           * ExposedHeaders=@("x-ms-meta-*"); 
+           * AllowedHeaders=@("Authorization","x-ms-meta-ab","x-ms-meta-target*","x-ms-meta-data*");
+           * MaxAgeInSeconds=0;
+           * AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
 
     3.  **Create Azure Function App** 
         1.  Create a  Function App of type Powershell core. Give it a name such as PowerPortalFileManagement

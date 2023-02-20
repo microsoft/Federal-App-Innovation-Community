@@ -77,12 +77,20 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
 
 
 ## Pre-Requisites
-1. Power Apps Environment with Dataverse. 
-   - Power Apps System Adamin role
-    
+1. Power Apps Environment with Dataverse.
+   1. Power Apps System Adamin role
 2. Azure Subscription
-   - permissions to create and configure azure datalake
-   - permissions to create and deploy Azure Funtion App in App service
+   1. permissions to create and configure azure datalake
+   2. permissions to create and deploy Azure Funtion App in App service
+3. Optional
+   1. Azure CLI  https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+   2. Power Platform CLI https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction
+   3. PowerShell 7.2 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3
+   4. Visual Studio Code  https://code.visualstudio.com/
+   5. PowerShell Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell
+   6. Azure Account Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account
+   7. Azure Functions Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions
+   
 ## Deployment
 
 ### AZURE
@@ -125,7 +133,7 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
         
     8.  **Configure Static SPA**
      
- 2. Create Automated Script TODO tbd
+ 2. **Create Automated Script TODO tbd**
     1. install az cli
     2. login and set context
        1. as set cloud

@@ -90,6 +90,8 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
    5. PowerShell Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell
    6. Azure Account Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account
    7. Azure Functions Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions
+   8. Azure Storage Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestorage
+   
    
 ## Deployment
 
@@ -97,13 +99,17 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
 #### _Storage Account v2 with Datalake,  Static Web App , SFTP Service ,  Function App_
  1. **Azure Portal**
     1. **Create a Resource Group**
-    2. **Azure Storage Account v2 with Datalake, SFTP Service, Static Web App**
-       1.  addition to the defaults, select the following options
-       2.  Enaable hierarchical namespace
-       3.  Enable SFTP
-       4.  Configure CORS
-       5.  keep the remaining defaults and select create
-       6.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
+       1. Open Azure Portal.  Select Resource Groups
+       2. Select Create.  Choose your Resource Group Name and Region
+    2. **Create Azure Storage Account v2 with Datalake, SFTP Service, Static Web App**
+       1.  In the Azure Portal select Create a resource. choose Storage Account, Create
+       2.  Choose your newly created Resource Group, name, Region, Performance: Standard, Redundancy:GRS
+       3.  In Advanced Tab keep the defaults and also select:
+           1.  Enaable hierarchical namespace
+           2.  Enable SFTP
+       4.  keep the remaining defaults and select create
+       5.  once the storage account is created enable static website.  use $index and $error for document paths.copy the primary endpoint for later use
+       6.  Configure CORS
 
     3.  **Create Azure Function App** 
         1.  Create a  Function App of type Powershell core. Give it a name such as PowerPortalFileManagement

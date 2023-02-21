@@ -135,6 +135,8 @@ else
 
 #deploy the function app
 
+az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+
 # update the application Settings for the function app
 
 

@@ -117,32 +117,64 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
            * AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
 
     3.  **Create Azure Function App** 
-        1.  Create a  Function App of type Powershell core. Give it a name such as PowerPortalFileManagement
-        2.  You can choose Consumption , Premium, or App Service Plan based on the use case
-    4.  Create system assigned managed identity
-        1.  Go to Identity and add System Assigned Managed Identity
-        2.   and add role assignment  to the storage account just created. scope=storage resource= your storage account Role = contributer
+        1.  Create an App Service Plan
+            1.  Select Create a Resource / App Service Plan
+                1.  your subscription
+                2.  Resource Group previously created
+                3.  App Service Plan Name
+                4.  Operating System: Windows
+                5.  Region (closes to your locaion)
+                6.  Pricing plan:   pick one that suites your cost/performace needes such as Standard S1 (you can scale up/down later)        
+        2.  Create Application Insights and Log Analytics workspace for function monitoring
+            1.  Select Create A Resource / Log Analytics Workspace
+                1.  select your resource group  that you previoulsy created
+                2.  Name
+                3.  Region  = same as Resource group and app service plan region
+            2.  Select Create A Resource / Application Insights
+                1. select your resource group
+                2. name
+                3. region = the same region as your resource group and app service plan
+                4. Log Analytics Workspace = the one you just created               
+        3.  Create a Function App
+            1.  Select Create a Resource / Function App
+            2.  Resource Group = resource group you previously created
+            3.  Name
+            4.  Code
+            5.  Run Time Stack  = Powershell Core
+            6.  Version 7.2
+            7.  Region = the region you selected for your Previouly created App Service Plan
+            8.  Operating System Windows
+            9.  Plat Type = App Service Plan
+            10. Windows Plan = the previously created App Service plan you created
+            11. Hosting = Create new Storage Account
+            12. Networking Enable Public Access
+            13. Monitoring  = Select the App Insights resource you created in the previous steps
+        
+        4.  Create system assigned managed identity
+            1.  Go to Identity and add System Assigned Managed Identity
+            2.  and add role assignment  to the storage account just created. scope=storage resource/your datalake storage account previously created /Role = contributer
 
-    5. **Deploy Function App**
-       1. From the Cloud Shell upload the Zip Function all
-       2. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
-    6. **Configure App Configurations Settings**
-       1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
-            * ResourceGroup: xxresoursegroupname
-            * StorageAccountName: xxdatalake4powerpages
-            * Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
-            * Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
-            * Cloud: AzureUSGovernment
-            * connectionstring:  "xxxxxxxxget from storage account access keys"
-            * ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
-       2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
-       3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
+        5. Deploy Function App
+           1. From the Cloud Shell upload the Zip Function all
+           2. az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+
+        6. Configure App Configurations Settings
+           1. az functionapp config appsettings set --name MyFunctionApp --resource-group MyResourceGroup --settings "AzureWebJobsStorage=$storageConnectionString"
+                * ResourceGroup: xxresoursegroupname
+                * StorageAccountName: xxdatalake4powerpages
+                * Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
+                * Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
+                * Cloud: AzureUSGovernment
+                * connectionstring:  "xxxxxxxxget from storage account access keys"
+                * ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
+           2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
+           3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
          
-    7.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
+    4.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
         1.  Creat Event Grid
         2.  Create Subscription
         
-    8.  **Configure Static SPA**
+    5.  **Configure Static SPA**
      
  2. **Create Automated Script TODO tbd**
     1. install az cli

@@ -1,8 +1,12 @@
 Write-Host "Deployment Script Started"
 
-#GCC Cloud
-<# $tenantid="e0ac9796-aafb-4d47-898e-aa4fbc1b15bb"
-$subscriptionid="92e0e24b-4bef-4801-806e-6edbe5a72233" #>
+#App Configuration Settings
+$Tenant =(Get-AzTenant).Id                               
+$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
+$Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
+$ftp_endpoint = ""                                          # needed for App Conf Settings / need to get this below after creation
+$connectionstring = ""                                      # needed for App Conf Settings/need to get this below after createion
+
 $ResourceGroupName="powerpageslargefilesrg"
 $Location = "westus3"
 $DatalakeStorageAccountName = "DAtaLAKE"
@@ -41,8 +45,8 @@ else
 $DatalakeStorageAccountName = $DatalakeStorageAccountName.ToLower()
 if(Get-AzStorageAccount -ResourceGroupName $ResourceGroupName | Where-Object {$_.StorageAccountName.StartsWith($DatalakeStorageAccountName)} )    
 {
-    
-    Write-Host "Storage Account  already exists in the Resource Group"
+    $DatalakeStorageAccountName = (Get-AzStorageAccount -ResourceGroupName $ResourceGroupName | Where-Object {$_.StorageAccountName.StartsWith($DatalakeStorageAccountName)} ).StorageAccountName
+    Write-Host "Storage Account  already exists in the Resource Group: $DatalakeStorageAccountName" 
 }
 else  #create a new datalake Storage account
 {
@@ -90,6 +94,7 @@ else
 }
 
 #create the Function app
+
 Write-Host "Checking if the Function App exists, if not create it..."
 if(Get-AzFunctionApp -ResourceGroupName $ResourceGroupName | Where-Object {$_.Name.StartsWIth($FunctionAppName)} -ErrorAction SilentlyContinue)    
 {
@@ -130,16 +135,34 @@ else
     #Assign Contributor Permission Role Assignment to the Function App Managed Identity to be able to read and write to the Datalake Storage Account
     New-AzRoleAssignment -ObjectId $FuntionAppMI -RoleDefinitionName Contributor -Scope $DataLakeStorageAccountResourceID
     Write-Host "Permission Assigned"
+
+    Write-Host "......Function App Deployed: $FunctionAppName"
     
 }
-
-#deploy the function app
-
-az functionapp deployment source config-zip -g greg-powerportal-largefile -n PowerPortalFileManagement --src  PowerPortalFileManagement2.zip
+#Publish the Function App
+Write-Host "Publishing Function App ..............."
+$FunctionAppName = (Get-AzFunctionApp -ResourceGroupName $ResourceGroupName | Where-Object {$_.Name.StartsWIth($FunctionAppName)}).Name
+$FunctionAppDeployment = $FunctionAppName + ".zip"
+Compress-Archive -Path * -DestinationPath $FunctionAppDeployment -Force
+Publish-AzWebApp -ResourceGroupName $ResourceGroupName -Name $FunctionAppName -ArchivePath $FunctionAppDeployment -Force
+Write-Host ".....Function App Published: $FunctionAppDeployment"
 
 # update the application Settings for the function app
+Write-Host "Updating App Connfiguration Settings for Function App:  $FunctionAppName ......"
+
+#Get the Storage Account Connection String
+$connectionstring = (Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $DatalakeStorageAccountName).Context.ConnectionString
+
+#get the ftp endpoint
+$ftp_endpoint = ((Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $DatalakeStorageAccountName).PrimaryEndpoints).Blob
+$ftp_endpoint = $ftp_endpoint -replace "https://",""
+$ftp_endpoint = $ftp_endpoint -replace "/", ""
+
+Update-AzFunctionAppSetting -Name $FunctionAppName -ResourceGroupName $ResourceGroupName -AppSetting @{"Tenant" = $Tenant; "Subscription" = $Subscription; "ResourceGroup" = $ResourceGroupName;"StorageAccountName" = $DatalakeStorageAccountName;"ftp_endpoint" = $ftp_endpoint;"Cloud" = $Cloud;"connectionstring" = $connectionstring}
+Write-Host "App Configuration Settings updated for $FunctionAppName"
 
 
 
 
- 
+Write-Host " "
+Write-Host "All Done here. Have a Nice Day!"

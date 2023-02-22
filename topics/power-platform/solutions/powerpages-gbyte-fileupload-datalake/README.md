@@ -80,18 +80,18 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
 1. Power Apps Environment with Dataverse.
    1. Power Apps System Adamin role
 2. Azure Subscription
-   1. permissions to create and configure azure datalake
-   2. permissions to create and deploy Azure Funtion App in App service
-3. Optional
-   1. Azure CLI  https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
-   2. Power Platform CLI https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction
-   3. PowerShell 7.2 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3
-   4. Visual Studio Code  https://code.visualstudio.com/
-   5. PowerShell Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell
-   6. Azure Account Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account
-   7. Azure Functions Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions
-   8. Azure Storage Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestorage
+   1. GA Global Administrator
    
+3. For Automated Deployment and Test (Optional)
+   1. PowerShell 7.2 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3
+   2. Azure CLI  https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+   3. Power Platform CLI https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction
+   4. Visual Studio Code  https://code.visualstudio.com/
+      1. PowerShell Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell
+      2. Azure Account Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account
+      3. Azure Functions Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions
+      4. Azure Storage Extension for Visual Studio Code https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestorage
+      
    
 ## Deployment
 
@@ -164,11 +164,11 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
                 * StorageAccountName: xxdatalake4powerpages
                 * Subscription: 0035cc8c-1269-4fb4-8f16-xxxxxxxxxxx
                 * Tenant: ba1e9f6b-2cec-4c10-8616-xxxxxxxxxxx
-                * Cloud: AzureUSGovernment
+                * Cloud: AzureUSGovernment or AzureCloud
                 * connectionstring:  "xxxxxxxxget from storage account access keys"
                 * ftp_endpoint: "the base of the ftp endpoint e.g. datalake4powerpages.blob.core.usgovcloudapi.net  get from SFTP User setting"
-           2. see https://learn.microsoft.com/en-us/cli/azure/functionapp/config/appsettings?view=azure-cli-latest  and https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#cli
-           3. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app.        
+            2. Copy the Funtion URL. This will be used on the Env Variable when you import the solution. you can find the URL in the azure portal Overview main page for the deployed function app
+         
          
     4.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
         1.  Creat Event Grid

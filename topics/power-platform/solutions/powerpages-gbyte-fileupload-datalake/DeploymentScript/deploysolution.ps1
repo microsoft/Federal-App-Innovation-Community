@@ -155,9 +155,21 @@ else
 }
 #Publish the Function App
 Write-Host "Publishing Function App. First zip the current directory. Then Publish ..............."
+#set up the zip file name to funcationappname.zip  used in compress and publish steps
+Write-Host "creating zip file name based on the function app name + zip extension"
 $FunctionAppName = (Get-AzFunctionApp -ResourceGroupName $ResourceGroupName | Where-Object {$_.Name.StartsWIth($FunctionAppName)}).Name
 $FunctionAppDeployment = $FunctionAppName + ".zip"
+
+
+#Check if there are any previous zip files and delete if exist.  dont want to keep adding them all in the  latest zip
+Write-Host "deleting any previous zipped publish files so they aren't included in the latest zip. only want the functions"
+Remove-Item  *.zip
+
+#zip the current directory
+Write-Host "Compressing the function app into a zip file...."
 Compress-Archive -Path * -DestinationPath $FunctionAppDeployment -Force
+
+Write-Host "Publising the latest functions to the function app...."
 Publish-AzWebApp -ResourceGroupName $ResourceGroupName -Name $FunctionAppName -ArchivePath $FunctionAppDeployment -Force
 Write-Host ".....Function App Published: $FunctionAppDeployment"
 

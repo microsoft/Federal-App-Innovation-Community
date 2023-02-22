@@ -28,7 +28,7 @@ $CorsRules = (
 
 
 
-Write-Host "Deployment Script Started"
+Write-Host "Deployment Script Started....................."
 
 #App Configuration Settings
 $Tenant =(Get-AzTenant).Id                               
@@ -38,18 +38,21 @@ $Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to
 #Get-AzResourceGroup
 
 #create Resource Group
+Write-Host "Check if Resource Group $ResourceGroupName exists.  If not create it..........."
 if(Get-AzResourceGroup -Name $ResourceGroupName -Location $Location -ErrorAction SilentlyContinue)    
 {
-    Write-Host "Resource Group already exists"
+    Write-Host "Resource Group $ResourceGroupName already exists"
 }
 else  
 {
+    Write-Host "Creating Resource Group $ResourceGroupName ..... "
     New-AzResourceGroup -Name $ResourceGroupName -Location $Location
-    Write-Host "$ResourceGroupName created"
+    Write-Host "....Resource Group $ResourceGroupName created"
 }
 
 #create datalake
 #first check and check if the storage account exists in the resource groups
+Write-Host "Checking if Datalake storage Account $DatalakeStorageAccountName already exists.  If not create it with a unique name suffix appended......"
 $DatalakeStorageAccountName = $DatalakeStorageAccountName.ToLower()
 if(Get-AzStorageAccount -ResourceGroupName $ResourceGroupName | Where-Object {$_.StorageAccountName.StartsWith($DatalakeStorageAccountName)} )    
 {
@@ -58,21 +61,22 @@ if(Get-AzStorageAccount -ResourceGroupName $ResourceGroupName | Where-Object {$_
 }
 else  #create a new datalake Storage account
 {
+    Write-Host "Datalake Storage Account does not exist. Creating it........ "
     #create Storage Account with random number appended to make unique
     $DatalakeStorageAccountName = $DatalakeStorageAccountName + ([Random]::new()).Next(1,999999999)
     if ($DatalakeStorageAccountName.Length -gt 24) {$DatalakeStorageAccountName = $DatalakeStorageAccountName.Substring(0,[Math]::Min($DatalakeStorageAccountName.Length,23))}  # TEST THIS TEST THIS
     
-    Write-Host "Creating Storage Account for the Function App: $FunctionAppStorageAccountName "
-    Write-Host "Datalake Storage Account does not exist..."
-    Write-Host "...Creating New Datalake Storage Account: $DatalakeStorageAccountName in Resource Group: $ResourceGroupName"
     
+    Write-Host "Datalake Storage Account does not exist. Creating a new unique name suffix,validate lowercase, and less than 24 characters as required by storage account"
     New-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $DatalakeStorageAccountName -Location $Location -SkuName "Standard_GRS" -Kind StorageV2  -EnableHierarchicalNamespace $true -EnableSftp $true -EnableLocalUser $true
-    Write-Host "$DatalakeStorageAccountName created"
+    Write-Host ".......Datalake  created: $DatalakeStorageAccountName "
     
     #enable Static Web Site in the Storage Account created
+    Write-Host "Enabling Static Web Site service in Datalake Storage Account ..... "
     $ctx = New-AzStorageContext -StorageAccountName $DatalakeStorageAccountName
     Enable-AzStorageStaticWebsite -Context $ctx -IndexDocument $indexdoc -ErrorDocument404Path $errordoc
     Set-AzStorageCORSRule -Context $ctx -ServiceType Blob -CorsRules $CorsRules
+    Write-Host ".....Static Web Site Service Enabled "
 }
 
 
@@ -86,7 +90,7 @@ else
 {
     Write-Host "Creating App Service Plan $AppServicePlanName ......"
     New-AzFunctionAppPlan -ResourceGroupName $ResourceGroupName -Name $AppServicePlanName -Location $Location -Sku S1 -WorkerType Windows
-    Write-Host "$appserviceplanename created"
+    Write-Host "...... App Service Plan Created: $appserviceplanename "
 }
 
 #create Application Insights for the Function app
@@ -99,6 +103,7 @@ else
 {
     Write-host "App Insights instance not there so.. creating App Insights resource $AppInsightsName "
     New-AzApplicationInsights -Location "eastus" -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  #note i had to hard code eastus  westus3 did not work
+    Write-host "....App Insights Created: $AppInsightsName "
 }
 
 #create the Function app
@@ -120,18 +125,17 @@ else
     if ($FunctionAppName.Length -gt 24) {$FunctionAppName = $FunctionAppName.Substring(0,[Math]::Min($FunctionAppName.Length,24))}  # TEST THIS TEST THIS
    
     #create Functaion App Storage Account
-    Write-Host "Creating Storage Account:  $FunctionAppStorageAccountName "
+    Write-Host "Creating Storage Account  $FunctionAppStorageAccountName for function app $FunctionAppName ....  "
     New-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $FunctionAppStorageAccountName -Location $Location -SkuName "Standard_GRS" -Kind StorageV2 
+    Write-Host "Storage Account for function all created:  $FunctionAppStorageAccountName "
     
     #create the function app
-    Write-Host "Creating Function App:  $FunctionAppName"
+    Write-Host "Creating Function App:  $FunctionAppName ......"
     New-AzFunctionApp  -Name $FunctionAppName -ResourceGroupName $ResourceGroupName -PlanName $AppServicePlanName -Runtime "PowerShell" -RuntimeVersion 7.2 -FunctionsVersion 4 -OSType Windows -StorageAccountName $FunctionAppStorageAccountName -ApplicationInsightsName $AppInsightsName -IdentityType SystemAssigned
-
-    Write-Host "Function App Created $FunctionAppName"
+    Write-Host "........Function App Created: $FunctionAppName"
 
     #Assign Role Permission to the Function App System Assignem MI  contributor to the datalake Storage Account
-    Write-Host "Assigning contributor permissions for $FunctionAppName to access $DataLakeStorageAccountName"
-    
+       
     #Get the System Assigned Managed Identity of the new Function App 
     $FuntionAppMI = ( Get-AzADServicePrincipal -DisplayName $FunctionAppName).Id
     Write-Host  "$FunctionAppStorageAccountName managed identity: $FuntionAppMI"
@@ -140,15 +144,17 @@ else
     $DataLakeStorageAccountResourceID = (Get-AzStorageAccount -ResourceGroupName $ResourceGroupName | Where-Object {$_.StorageAccountName.StartsWith($DatalakeStorageAccountName)}).Id
     Write-Host "Datalake Storage Account ResourceID  $DataLakeStorageAccountResourceID"
 
+    Write-Host "Assigning contributor permissions for function app $FunctionAppName  with Managed Identity $FuncionAppMI to access Datalake  $DataLakeStorageAccountName  by way of the function app Managed Identity $FuncionAppMI"
+
     #Assign Contributor Permission Role Assignment to the Function App Managed Identity to be able to read and write to the Datalake Storage Account
     New-AzRoleAssignment -ObjectId $FuntionAppMI -RoleDefinitionName Contributor -Scope $DataLakeStorageAccountResourceID
-    Write-Host "Permission Assigned"
+    Write-Host "Permission Assigned.  Contributor Role Assigment to managed identy: $FunctionAppMI"
 
     Write-Host "......Function App Deployed: $FunctionAppName"
     
 }
 #Publish the Function App
-Write-Host "Publishing Function App ..............."
+Write-Host "Publishing Function App. First zip the current directory. Then Publish ..............."
 $FunctionAppName = (Get-AzFunctionApp -ResourceGroupName $ResourceGroupName | Where-Object {$_.Name.StartsWIth($FunctionAppName)}).Name
 $FunctionAppDeployment = $FunctionAppName + ".zip"
 Compress-Archive -Path * -DestinationPath $FunctionAppDeployment -Force
@@ -170,7 +176,9 @@ Update-AzFunctionAppSetting -Name $FunctionAppName -ResourceGroupName $ResourceG
 Write-Host "App Configuration Settings updated for $FunctionAppName"
 
 
-
-Write-Host "End Deployment Script"
+Write-Host " "
+Write-Host " "
+Write-Host ".....End of Deployment Script"
+Write-Host " "
 Write-Host " "
 Write-Host "All Done here. Have a Nice Day!!!!"

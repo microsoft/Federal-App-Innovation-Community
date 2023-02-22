@@ -163,6 +163,6 @@ Write-Host "App Configuration Settings updated for $FunctionAppName"
 
 
 
-
+Write-Host "End Deployment Script"
 Write-Host " "
-Write-Host "All Done here. Have a Nice Day!"
+Write-Host "All Done here. Have a Nice Day!!!!"

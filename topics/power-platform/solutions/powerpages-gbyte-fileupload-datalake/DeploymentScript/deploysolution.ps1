@@ -1,12 +1,12 @@
-Write-Host "Deployment Script Started"
+#Deployment Script for Backend Azure Function, Datalake and other Azure configuration used with the Power Pages Large File Transfer to datalake solution
 
-#App Configuration Settings
-$Tenant =(Get-AzTenant).Id                               
-$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
-$Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
-$ftp_endpoint = ""                                          # needed for App Conf Settings / need to get this below after creation
-$connectionstring = ""                                      # needed for App Conf Settings/need to get this below after createion
+#Instructions:
+#1 Install PowerShell 7.2 and Azure CLI  ( https://learn.microsoft.com/en-us/cli/azure/install-azure-cli and  https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3 )
+#2 Connect-AzAccount     (login to Azure with your GA account credentials from powershell command line)
+#3 Enter the Environment Variables below
+#4 run script  
 
+# ======Enter Environment Varialbles============
 $ResourceGroupName="powerpageslargefilesrg"
 $Location = "westus3"
 $DatalakeStorageAccountName = "DAtaLAKE"
@@ -14,9 +14,7 @@ $indexdoc = "index.html"  #for static web app
 $errordoc = "404.html"    #for static web app
 $AppServicePlanName = "myAppservicePlan"
 $FunctionAppName = "FuncDataLakeMgmt"
-#$loganalyticsworkspacename = "myLogAnalyticsWorkspace"
 $AppInsightsName = "myApplicationinsights"
-
 $CorsRules = (
     @{
     AllowedOrigins=@("*"); 
@@ -26,6 +24,16 @@ $CorsRules = (
     AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
     }
 )
+#=====End Environment Varialbes=================
+
+
+
+Write-Host "Deployment Script Started"
+
+#App Configuration Settings
+$Tenant =(Get-AzTenant).Id                               
+$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
+$Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
 
 #Get-AzResourceGroup
 

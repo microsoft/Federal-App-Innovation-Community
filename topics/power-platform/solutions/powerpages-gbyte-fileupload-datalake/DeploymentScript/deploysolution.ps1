@@ -188,6 +188,17 @@ Update-AzFunctionAppSetting -Name $FunctionAppName -ResourceGroupName $ResourceG
 Write-Host "App Configuration Settings updated for $FunctionAppName"
 
 
+#Upload the fileupload spa to the Datalake Storage Account Static Website that was created prior
+Write-Host "Uploading file upload static web app to the Datalake Storage Account Static web site index in" '$web'
+$ctx = New-AzStorageContext -StorageAccountName $DatalakeStorageAccountName
+set-AzStorageblobcontent -File "./spa/UploadFileStaticWebApp.html" -Container $web -Blob "index.html" -Context $ctx
+set-AzStorageblobcontent -File "./spa/UploadFileStaticWebApp.html" -Container '$web' -Blob "index.html" -Context $ctx
+Write-Host "...Static Web App uploaded"
+
+#Create Event Grid and Subscription
+    
+
+
 Write-Host " "
 Write-Host " "
 Write-Host ".....End of Deployment Script"

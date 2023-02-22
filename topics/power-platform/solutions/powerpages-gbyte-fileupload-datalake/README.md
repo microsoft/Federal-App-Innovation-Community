@@ -171,24 +171,22 @@ Event Grid monitors for new blob events. When a new blob is uploaded the event i
          
          
     4.  **Create Event Grid and Subscription** for new blob events in the newly created Storage Account for Datalake       
-        1.  Creat Event Grid
-        2.  Create Subscription
+        1.  
+        2.  Creat Event Grid
+        3.  Create Subscription
         
     5.  **Configure Static SPA**
      
- 2. **Create Automated Script TODO tbd**
-    1. install az cli
-    2. login and set context
-       1. as set cloud
-       2. az login
-       3. az set subcription   3. 
-    3. Create Resource Group
-    4. Create Storage account
-    5. Create Function App
-    6. Deploy Funtion App
-    7.  Deploy Function App Settings
-    8.  Create Event Grid
-    9.  Create Event Grid Subscription  
+ 2. **Create Automated Script TODO**
+    1. Connect-AzAccount -TenantId ba1e9f6b-2cec-4c10-8616-f951d3bb261d
+    2. Pre-Requisits
+       1. install az cli
+       2. PowerShell 7.2 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3
+       3. Azure CLI  https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+       4. Power Platform CLI https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction
+    3. Connect-AzAccount -TenantId $TenantID
+    4. edit deploysolution.ps1 (DeploymentScript folder). Fill in the environment varialbes at the top of the script. Run Script
+
 
 ### POWER PLATFORM
 ####  _Dataverse Environment, Power Pages,Import Solution, Security,  Principals, Connections, Tables, Workflows, Email, Search_

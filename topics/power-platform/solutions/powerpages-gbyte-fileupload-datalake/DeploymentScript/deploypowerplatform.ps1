@@ -1,5 +1,5 @@
 #log in to your tenan with GA credentials
-Connect-AzAccount
+#Connect-AzAccount
 #one time -  create and admin profile
 pac auth create --kind ADMIN
 #pac auth list 

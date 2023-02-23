@@ -38,7 +38,7 @@ Write-Host "Deployment Script Started....................."
 #App Configuration Settings
 #$Tenant =(Get-AzTenant).Id                               
 #$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
-$Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
+#$Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
 
 #Get-AzResourceGroup
 

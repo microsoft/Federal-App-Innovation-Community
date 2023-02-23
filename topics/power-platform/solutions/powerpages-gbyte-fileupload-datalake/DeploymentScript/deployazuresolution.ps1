@@ -6,19 +6,20 @@
 #3 Enter the Environment Variables below
 #4 run script  
 
-# ======Enter Environment Varialbles============
-$Tenant = "8b46d3b4-b4ac-4e33-8e31-1ee00f0d9aab"
-$Subscription = "08b808a3-b7be-41b0-81d0-9db588fd5ce3"
-$Cloud = "AzureCloud"     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
-$ResourceGroupName="rg-greg-testing123-again"
-$Location = " eastus"  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
-$DatalakeStorageAccountName = "DAtaLAKE"
-$indexdoc = "index.html"  #for static web app
-$errordoc = "404.html"    #for static web app
-$AppServicePlanName = "myAppservicePlan"
-$FunctionAppName = "FuncDataLakeMgmt"
-$AppInsightsName = "myApplicationinsights"
-$AppInsightsRegion = "eastus"
+# ======DEFAULT ENV VARIABLES============
+
+# $ResourceGroupName="rg-greg-testing123-again"
+# $DatalakeStorageAccountName = "DAtaLAKE"
+# $Location = " eastus"  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
+# $AppServicePlanName = "myAppservicePlan"
+# $FunctionAppName = "FuncDataLakeMgmt"
+# $AppInsightsName = "myApplicationinsights"
+# $AppInsightsRegion = "eastus"
+# $Tenant = "8b46d3b4-b4ac-4e33-8e31-1ee00f0d9aab"
+# $Subscription = "08b808a3-b7be-41b0-81d0-9db588fd5ce3"
+# $Cloud = "AzureCloud"     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
+
+
 $CorsRules = (
     @{
     AllowedOrigins=@("*"); 
@@ -28,6 +29,8 @@ $CorsRules = (
     AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
     }
 )
+$indexdoc = "index.html"  #for static web app
+$errordoc = "404.html"    #for static web app
 #=====End Environment Varialbes=================
 
 #Connect-AzAccount -Subscription $Subscription -Tenant $Tenant -Environment $Cloud
@@ -35,10 +38,42 @@ $CorsRules = (
 
 Write-Host "Deployment Script Started....................."
 
-#App Configuration Settings
-#$Tenant =(Get-AzTenant).Id                               
-#$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
-#$Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
+#List clouds then prompt for which cloud to use
+Clear
+Write-Host " "
+Write-Host " "
+(Get-AzEnvironment).Name 
+Write-Host " "
+$Cloud = Read-Host "Which Cloud are you signing into? "
+Write-Host "Signing in....."
+connect-AzAccount -Environment $Cloud
+
+
+$Tenant = (Get-AzContext).Tenant
+$Subscription = (Get-AzContext).Subscription
+# $User = (Get-AzContext).Name
+
+Write-Host " "
+Write-Host "Getting Available Deployment Locations....."
+Write-Host " "
+(Get-AzLocation).Location
+Write-Host " "
+$Location = Read-Host "Which Location (Region) would you like to deploy to? "
+Write-Host "Entered: $Location"
+
+$ResourceGroupName = Read-Host "Enter a Resource Group Name?"
+Write-Host $ResourceGroupName
+Write-Host "Entered $ResourceGroupName"
+
+$DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name:"
+Write-Host "Entered  $DatalakeStorageAccountName"
+
+$FunctionAppName = Read-Host "Enter a name for the Function App for Storage Management:"
+Write-Host "Entered  $FunctionAppName"
+$AppServicePlanName = $FunctionAppName + "_AppSvcPlan"
+$AppInsightsName = $FunctionAppName + "_AppInsights"
+
+
 
 #Get-AzResourceGroup
 
@@ -107,7 +142,7 @@ if(Get-AzApplicationInsights -ResourceGroupName $ResourceGroupName -Name $AppIns
 else
 {
     Write-host "App Insights instance not there so.. creating App Insights resource $AppInsightsName "
-    New-AzApplicationInsights -Location $AppInsightsRegion -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  #note i had to hard code eastus  westus3 did not work
+    New-AzApplicationInsights -Location $Location -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  #note i had to hard code eastus  westus3 did not work
     Write-host "....App Insights Created: $AppInsightsName "
 }
 

@@ -8,9 +8,9 @@
 
 # ======DEFAULT ENV VARIABLES============
 
-$defaultResourceGroupName="rg-greg-testing123-again"
-$defaultDatalakeStorageAccountName = "DAtaLAKE"
-$defaultLocation = " eastus"  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
+$defaultResourceGroupName='rg-greg-testing123-again'
+$defaultDatalakeStorageAccountName = 'DAtaLAKE'
+$defaultLocation = 'eastus'  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
 $defaultFunctionAppName = "FuncDataLakeMgmt"
 $defaultCloud = 'AzureCloud'     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
 
@@ -36,23 +36,19 @@ Write-Host "Signing in....."
 connect-AzAccount -Environment $Cloud
 
 
-
-
 Write-Host " "
 Write-Host "Getting Available Deployment Locations....."
 Write-Host " "
 (Get-AzLocation).Location
 Write-Host " "
 $Location = Read-Host "Which Location (Region) would you like to deploy to? (default $defaultLocation) "
-$Location = ($defaultCloud,$Location)[[bool]$Location]
+$Location = ($defaultLocation,$Location)[[bool]$Location]
 Write-Host "Entered: $Location"
 
 $ResourceGroupName = Read-Host "Enter a Resource Group Name? (default $defaultResourceGroupname) "
 $ResourceGroupName = ($defaultResourceGroupName,$ResourceGroupName)[[bool]$ResourceGroupName]
 Write-Host "Entered $ResourceGroupName"
 $ResourceGroupName = $ResourceGroupName -replace " ",""
-
-
 
 $DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name: (default $defaultDatalakeStorageAccountName)"
 $DatalakeStorageAccountName = ($defaultDatalakeStorageAccountName,$DatalakeStorageAccountName)[[bool]$DatalakeStorageAccountName]
@@ -218,7 +214,7 @@ Remove-Item  *.zip
 
 #zip the current directory
 Write-Host "Compressing the function app into a zip file...."
-Compress-Archive -Path * -DestinationPath $FunctionAppDeployment -Force
+Compress-Archive -Path .\FunctionApp\PowerPortalFileManagement\* -DestinationPath $FunctionAppDeployment -Force
 
 Write-Host "Publising the latest functions to the function app...."
 Publish-AzWebApp -ResourceGroupName $ResourceGroupName -Name $FunctionAppName -ArchivePath $FunctionAppDeployment -Force

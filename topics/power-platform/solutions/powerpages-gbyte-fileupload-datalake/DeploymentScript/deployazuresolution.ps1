@@ -64,12 +64,17 @@ Write-Host "Entered: $Location"
 $ResourceGroupName = Read-Host "Enter a Resource Group Name?"
 Write-Host $ResourceGroupName
 Write-Host "Entered $ResourceGroupName"
+$ResourceGroupName = $ResourceGroupName -replace " ",""
+
+
 
 $DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name:"
 Write-Host "Entered  $DatalakeStorageAccountName"
+$DatalakeStorageAccountName = $DatalakeStorageAccountName -replace " ",""
 
 $FunctionAppName = Read-Host "Enter a name for the Function App for Storage Management:"
 Write-Host "Entered  $FunctionAppName"
+$FunctionAppName = $FunctionAppName -replace " ",""
 $AppServicePlanName = $FunctionAppName + "_AppSvcPlan"
 $AppInsightsName = $FunctionAppName + "_AppInsights"
 

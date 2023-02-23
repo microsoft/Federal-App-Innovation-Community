@@ -8,29 +8,14 @@
 
 # ======DEFAULT ENV VARIABLES============
 
-# $ResourceGroupName="rg-greg-testing123-again"
-# $DatalakeStorageAccountName = "DAtaLAKE"
-# $Location = " eastus"  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
-# $AppServicePlanName = "myAppservicePlan"
-# $FunctionAppName = "FuncDataLakeMgmt"
-# $AppInsightsName = "myApplicationinsights"
-# $AppInsightsRegion = "eastus"
-# $Tenant = "8b46d3b4-b4ac-4e33-8e31-1ee00f0d9aab"
-# $Subscription = "08b808a3-b7be-41b0-81d0-9db588fd5ce3"
-# $Cloud = "AzureCloud"     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
+$defaultResourceGroupName="rg-greg-testing123-again"
+$defaultDatalakeStorageAccountName = "DAtaLAKE"
+$defaultLocation = " eastus"  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
+$defaultFunctionAppName = "FuncDataLakeMgmt"
+$defaultCloud = 'AzureCloud'     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
 
 
-$CorsRules = (
-    @{
-    AllowedOrigins=@("*"); 
-    ExposedHeaders=@("x-ms-meta-*"); 
-    AllowedHeaders=@("Authorization","x-ms-meta-ab","x-ms-meta-target*","x-ms-meta-data*");
-    MaxAgeInSeconds=0;
-    AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
-    }
-)
-$indexdoc = "index.html"  #for static web app
-$errordoc = "404.html"    #for static web app
+
 #=====End Environment Varialbes=================
 
 #Connect-AzAccount -Subscription $Subscription -Tenant $Tenant -Environment $Cloud
@@ -44,35 +29,38 @@ Write-Host " "
 Write-Host " "
 (Get-AzEnvironment).Name 
 Write-Host " "
-$Cloud = Read-Host "Which Cloud are you signing into? "
+$Cloud = Read-Host "Which Cloud are you signing into? (default $defaultCloud) "
+$Cloud = ($defaultCloud,$Cloud)[[bool]$Cloud]
+Write-Host "Selected: $Cloud"
 Write-Host "Signing in....."
 connect-AzAccount -Environment $Cloud
 
 
-$Tenant = (Get-AzContext).Tenant
-$Subscription = (Get-AzContext).Subscription
-# $User = (Get-AzContext).Name
+
 
 Write-Host " "
 Write-Host "Getting Available Deployment Locations....."
 Write-Host " "
 (Get-AzLocation).Location
 Write-Host " "
-$Location = Read-Host "Which Location (Region) would you like to deploy to? "
+$Location = Read-Host "Which Location (Region) would you like to deploy to? (default $defaultLocation) "
+$Location = ($defaultCloud,$Location)[[bool]$Location]
 Write-Host "Entered: $Location"
 
-$ResourceGroupName = Read-Host "Enter a Resource Group Name?"
-Write-Host $ResourceGroupName
+$ResourceGroupName = Read-Host "Enter a Resource Group Name? (default $defaultResourceGroupname) "
+$ResourceGroupName = ($defaultResourceGroupName,$ResourceGroupName)[[bool]$ResourceGroupName]
 Write-Host "Entered $ResourceGroupName"
 $ResourceGroupName = $ResourceGroupName -replace " ",""
 
 
 
-$DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name:"
+$DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name: (default $defaultDatalakeStorageAccountName)"
+$DatalakeStorageAccountName = ($defaultDatalakeStorageAccountName,$DatalakeStorageAccountName)[[bool]$DatalakeStorageAccountName]
 Write-Host "Entered  $DatalakeStorageAccountName"
 $DatalakeStorageAccountName = $DatalakeStorageAccountName -replace " ",""
 
-$FunctionAppName = Read-Host "Enter a name for the Function App for Storage Management:"
+$FunctionAppName = Read-Host "Enter a name for the Function App for Storage Management: (default $defaultFunctionAppName) "
+$FunctionAppName = ($defaultFunctionAppName,$FunctionAppName)[[bool]$FunctionAppName]
 Write-Host "Entered  $FunctionAppName"
 $FunctionAppName = $FunctionAppName -replace " ",""
 $AppServicePlanName = $FunctionAppName + "_AppSvcPlan"
@@ -80,9 +68,27 @@ $AppInsightsName = $FunctionAppName + "_AppInsights"
 
 
 
-#Get-AzResourceGroup
+#====== Some more defaults
+$Tenant = (Get-AzContext).Tenant
+$Subscription = (Get-AzContext).Subscription
 
-#create Resource Group
+#===CORS for the Function -- can be edited ---
+$CorsRules = (
+    @{
+    AllowedOrigins=@("*"); 
+    ExposedHeaders=@("x-ms-meta-*"); 
+    AllowedHeaders=@("Authorization","x-ms-meta-ab","x-ms-meta-target*","x-ms-meta-data*");
+    MaxAgeInSeconds=0;
+    AllowedMethods=@("PUT","GET","DELETE","HEAD","POST")
+    }
+)
+$indexdoc = "index.html"  #for static web app
+$errordoc = "404.html"    #for static web app
+
+
+
+
+#Check if resource gorup exists if not create it
 Write-Host "Check if Resource Group $ResourceGroupName exists.  If not create it..........."
 if(Get-AzResourceGroup -Name $ResourceGroupName -Location $Location -ErrorAction SilentlyContinue)    
 {

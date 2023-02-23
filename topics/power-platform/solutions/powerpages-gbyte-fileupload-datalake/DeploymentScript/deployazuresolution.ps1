@@ -7,14 +7,15 @@
 #4 run script  
 
 # ======Enter Environment Varialbles============
-$ResourceGroupName="powerpageslargefilesrg"
-$Location = "westus3"
+$ResourceGroupName="rg-patricktest"
+$Location = " usgovvirginia"  #  usgovvirginia, usgovtexas, usgovarizona
 $DatalakeStorageAccountName = "DAtaLAKE"
 $indexdoc = "index.html"  #for static web app
 $errordoc = "404.html"    #for static web app
 $AppServicePlanName = "myAppservicePlan"
 $FunctionAppName = "FuncDataLakeMgmt"
 $AppInsightsName = "myApplicationinsights"
+$AppInsightsRegion = "usgovvirginia"
 $CorsRules = (
     @{
     AllowedOrigins=@("*"); 
@@ -102,7 +103,7 @@ if(Get-AzApplicationInsights -ResourceGroupName $ResourceGroupName -Name $AppIns
 else
 {
     Write-host "App Insights instance not there so.. creating App Insights resource $AppInsightsName "
-    New-AzApplicationInsights -Location "eastus" -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  #note i had to hard code eastus  westus3 did not work
+    New-AzApplicationInsights -Location $AppInsightsRegion -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  #note i had to hard code eastus  westus3 did not work
     Write-host "....App Insights Created: $AppInsightsName "
 }
 
@@ -191,7 +192,6 @@ Write-Host "App Configuration Settings updated for $FunctionAppName"
 #Upload the fileupload spa to the Datalake Storage Account Static Website that was created prior
 Write-Host "Uploading file upload static web app to the Datalake Storage Account Static web site index in" '$web'
 $ctx = New-AzStorageContext -StorageAccountName $DatalakeStorageAccountName
-set-AzStorageblobcontent -File "./spa/UploadFileStaticWebApp.html" -Container $web -Blob "index.html" -Context $ctx
 set-AzStorageblobcontent -File "./spa/UploadFileStaticWebApp.html" -Container '$web' -Blob "index.html" -Context $ctx
 Write-Host "...Static Web App uploaded"
 

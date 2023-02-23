@@ -7,15 +7,18 @@
 #4 run script  
 
 # ======Enter Environment Varialbles============
-$ResourceGroupName="rg-patricktest"
-$Location = " usgovvirginia"  #  usgovvirginia, usgovtexas, usgovarizona
+$Tenant = "8b46d3b4-b4ac-4e33-8e31-1ee00f0d9aab"
+$Subscription = "08b808a3-b7be-41b0-81d0-9db588fd5ce3"
+$Cloud = "AzureCloud"     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
+$ResourceGroupName="rg-greg-testing123-again"
+$Location = " eastus"  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
 $DatalakeStorageAccountName = "DAtaLAKE"
 $indexdoc = "index.html"  #for static web app
 $errordoc = "404.html"    #for static web app
 $AppServicePlanName = "myAppservicePlan"
 $FunctionAppName = "FuncDataLakeMgmt"
 $AppInsightsName = "myApplicationinsights"
-$AppInsightsRegion = "usgovvirginia"
+$AppInsightsRegion = "eastus"
 $CorsRules = (
     @{
     AllowedOrigins=@("*"); 
@@ -27,13 +30,14 @@ $CorsRules = (
 )
 #=====End Environment Varialbes=================
 
-
+#Connect-AzAccount -Subscription $Subscription -Tenant $Tenant -Environment $Cloud
+#Set-AzContext -Tenant $Tenant -Subscription $Subcription
 
 Write-Host "Deployment Script Started....................."
 
 #App Configuration Settings
-$Tenant =(Get-AzTenant).Id                               
-$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
+#$Tenant =(Get-AzTenant).Id                               
+#$Subscription = (Get-AzSubscription -TenantId $Tenant).Id   # or enter manually
 $Cloud = ((az cloud show) | ConvertFrom-Json).name          # or manually Set to AzureUSGovernment for GCC and GCC-High ; AzureCloud for Azure Commercial
 
 #Get-AzResourceGroup

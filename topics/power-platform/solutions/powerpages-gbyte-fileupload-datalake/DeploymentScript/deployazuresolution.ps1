@@ -29,7 +29,7 @@ Write-Host " "
 Write-Host " "
 (Get-AzEnvironment).Name 
 Write-Host " "
-$Cloud = Read-Host "Which Cloud are you signing into? (default $defaultCloud) "
+$Cloud = Read-Host "Which Cloud are you signing into? (default:$defaultCloud) "
 $Cloud = ($defaultCloud,$Cloud)[[bool]$Cloud]
 Write-Host "Selected: $Cloud"
 Write-Host "Signing in....."
@@ -41,21 +41,21 @@ Write-Host "Getting Available Deployment Locations....."
 Write-Host " "
 (Get-AzLocation).Location
 Write-Host " "
-$Location = Read-Host "Which Location (Region) would you like to deploy to? (default $defaultLocation) "
+$Location = Read-Host "Which Location (Region) would you like to deploy to? (default:$defaultLocation) "
 $Location = ($defaultLocation,$Location)[[bool]$Location]
 Write-Host "Entered: $Location"
 
-$ResourceGroupName = Read-Host "Enter a Resource Group Name? (default $defaultResourceGroupname) "
+$ResourceGroupName = Read-Host "Enter a Resource Group Name? (default:$defaultResourceGroupname) "
 $ResourceGroupName = ($defaultResourceGroupName,$ResourceGroupName)[[bool]$ResourceGroupName]
 Write-Host "Entered $ResourceGroupName"
 $ResourceGroupName = $ResourceGroupName -replace " ",""
 
-$DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name: (default $defaultDatalakeStorageAccountName)"
+$DatalakeStorageAccountName = Read-Host "Enter a Storage Account Name: (default: $defaultDatalakeStorageAccountName)"
 $DatalakeStorageAccountName = ($defaultDatalakeStorageAccountName,$DatalakeStorageAccountName)[[bool]$DatalakeStorageAccountName]
 Write-Host "Entered  $DatalakeStorageAccountName"
 $DatalakeStorageAccountName = $DatalakeStorageAccountName -replace " ",""
 
-$FunctionAppName = Read-Host "Enter a name for the Function App for Storage Management: (default $defaultFunctionAppName) "
+$FunctionAppName = Read-Host "Enter a name for the Function App for Storage Management: (default:$defaultFunctionAppName) "
 $FunctionAppName = ($defaultFunctionAppName,$FunctionAppName)[[bool]$FunctionAppName]
 Write-Host "Entered  $FunctionAppName"
 $FunctionAppName = $FunctionAppName -replace " ",""

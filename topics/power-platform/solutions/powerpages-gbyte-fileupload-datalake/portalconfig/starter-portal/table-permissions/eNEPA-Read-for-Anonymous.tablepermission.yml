@@ -1,0 +1,12 @@
+adx_append: false
+adx_appendto: false
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: gregroe_project
+adx_entityname: eNEPA Read for Anonymous
+adx_entitypermission_webrole:
+- a60a3ce4-2db4-4c26-8ba7-1a3b36f3a0a7
+adx_entitypermissionid: 3320b346-97de-ec11-bb3d-000d3a5b4d73
+adx_read: true
+adx_scope: 756150000
+adx_write: false

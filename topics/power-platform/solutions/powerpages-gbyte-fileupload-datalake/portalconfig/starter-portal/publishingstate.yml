@@ -1,0 +1,10 @@
+- adx_displayorder: 1
+  adx_isdefault: false
+  adx_isvisible: false
+  adx_name: Draft
+  adx_publishingstateid: 262105ea-0de9-48ca-ab18-174ed4a6b7f9
+- adx_displayorder: 2
+  adx_isdefault: true
+  adx_isvisible: true
+  adx_name: Published
+  adx_publishingstateid: 38c7d71a-31fd-4c2a-b7b0-fa2cc7381654

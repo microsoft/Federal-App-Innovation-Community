@@ -1,0 +1,12 @@
+- adx_adddescription: false
+  adx_attributelogicalname: crb30_recordid
+  adx_fieldisrequired: false
+  adx_ignoredefaultvalue: false
+  adx_purchasecreateinvoiceonpayment: false
+  adx_purchasefulfillorderonpayment: false
+  adx_purchaserequiresshipping: false
+  adx_randomizeoptionsetvalues: false
+  adx_setvalueonsave: false
+  adx_useattributedescriptionproperty: false
+  adx_webformmetadataid: 370771e4-03ec-ec11-bb3d-000d3a318422
+  adx_webformstep: cd1548dc-fceb-ec11-bb3d-000d3a318422

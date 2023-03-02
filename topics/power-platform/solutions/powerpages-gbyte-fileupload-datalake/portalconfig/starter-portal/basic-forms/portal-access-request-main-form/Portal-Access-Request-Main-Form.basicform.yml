@@ -1,0 +1,445 @@
+adx_appendquerystring: false
+adx_associatecurrentportaluser: false
+adx_attachfile: false
+adx_attachfileallowmultiple: false
+adx_attachfilerequired: false
+adx_attachfilerestrictaccept: false
+adx_autogeneratesteps: false
+adx_captcharequired: false
+adx_entityformid: 0f332752-259d-40c9-bbeb-b591491954c7
+adx_entityname: new_portalaccessrequests
+adx_entitypermissionsenabled: true
+adx_forceallfieldsrequired: false
+adx_formname: Portal Access Request Main Form
+adx_geolocation_displaymap: false
+adx_geolocation_enabled: false
+adx_hideformonsuccess: true
+adx_name: Portal Access Request Main Form
+adx_populatereferenceentitylookupfield: false
+adx_portaluserlookupattributeisactivityparty: false
+adx_recommendedfieldsrequired: false
+adx_recordsourceallowcreateonnull: false
+adx_redirecturlappendentityidquerystring: false
+adx_referenceentityshowreadonlyform: false
+adx_referencequerystringisprimarykey: true
+adx_renderwebresourcesinline: false
+adx_setentityreference: false
+adx_settings: >-
+  {
+
+    "Type": "FormActionMetadata",
+
+    "Actions": [],
+
+    "DeleteDialog": {
+
+      "Type": "DeleteModal",
+
+      "Title": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "PrimaryButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "CloseButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "DismissButtonSrText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "Size": 0,
+
+      "CssClass": "",
+
+      "TitleCssClass": "",
+
+      "PrimaryButtonCssClass": "",
+
+      "CloseButtonCssClass": ""
+
+    },
+
+    "WorkflowDialog": {
+
+      "Type": "WorkflowModal",
+
+      "Title": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "PrimaryButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "CloseButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "DismissButtonSrText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "Size": 0,
+
+      "CssClass": "",
+
+      "TitleCssClass": "",
+
+      "PrimaryButtonCssClass": "",
+
+      "CloseButtonCssClass": ""
+
+    },
+
+    "ActionDropDownButtonLabel": [
+
+      {
+
+        "Type": "LanguageResources",
+
+        "LCID": 1033,
+
+        "Value": "new account"
+
+      }
+
+    ],
+
+    "TopContainerCssClass": "",
+
+    "BottomContainerCssClass": "",
+
+    "ShowSaveChangesWarningOnExit": false,
+
+    "SaveChangesWarningMessage": [
+
+      {
+
+        "Type": "LanguageResources",
+
+        "LCID": 1033,
+
+        "Value": ""
+
+      }
+
+    ],
+
+    "ActivateDialog": {
+
+      "Type": "ActivateModal",
+
+      "Title": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "PrimaryButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "CloseButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "DismissButtonSrText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "Size": 0,
+
+      "CssClass": "",
+
+      "TitleCssClass": "",
+
+      "PrimaryButtonCssClass": "",
+
+      "CloseButtonCssClass": ""
+
+    },
+
+    "DeactivateDialog": {
+
+      "Type": "DeactivateModal",
+
+      "Title": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "PrimaryButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "CloseButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "DismissButtonSrText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "Size": 0,
+
+      "CssClass": "",
+
+      "TitleCssClass": "",
+
+      "PrimaryButtonCssClass": "",
+
+      "CloseButtonCssClass": ""
+
+    },
+
+    "CreateRelatedRecordDialog": {
+
+      "Type": "CreateRelatedRecordModal",
+
+      "PrimaryButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "CloseButtonText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "PrimaryButtonCssClass": "",
+
+      "CloseButtonCssClass": "",
+
+      "Title": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "DismissButtonSrText": [
+
+        {
+
+          "Type": "LanguageResources",
+
+          "LCID": 1033,
+
+          "Value": ""
+
+        }
+
+      ],
+
+      "Size": 0,
+
+      "CssClass": "",
+
+      "TitleCssClass": ""
+
+    }
+
+  }
+adx_showcaptchaforauthenticatedusers: false
+adx_showownerfields: false
+adx_showunsupportedfields: false
+adx_successmessage: >-
+  [
+
+    {
+
+      "LCID": 1033,
+
+      "Value": "Your request has been received and will be processed. Someone will get back to you soon"
+
+    }
+
+  ]
+adx_tooltipenabled: false
+adx_validationsummarylinksenabled: true

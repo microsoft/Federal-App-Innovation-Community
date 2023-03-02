@@ -1,0 +1,37 @@
+adx_allowmultiplefiles: false
+adx_appendquerystring: false
+adx_associatecurrentportaluser: false
+adx_attachfile: false
+adx_attachfilerequired: false
+adx_attachfilerestrictaccept: false
+adx_autogeneratesteps: false
+adx_captcharequired: false
+adx_createautonumber: false
+adx_editexistingrecordpermitted: false
+adx_entitypermissionsenabled: false
+adx_forceallfieldsrequired: false
+adx_formname: File Uploads main form
+adx_geolocation_displaymap: false
+adx_geolocation_enabled: false
+adx_hideformonsuccess: true
+adx_loguser: false
+adx_movepreviouspermitted: true
+adx_multiplerecordsperuserpermitted: false
+adx_name: Step1 User register the file upload name
+adx_nextstep: 24ec9cfc-5222-ed11-b83e-000d3a3b1afb
+adx_populatereferenceentitylookupfield: false
+adx_portaluserlookupattributeisactivityparty: false
+adx_recommendedfieldsrequired: false
+adx_redirecturlappendentityidquerystring: false
+adx_referenceentityshowreadonlyform: false
+adx_referencequerystringisprimarykey: true
+adx_renderwebresourcesinline: false
+adx_setentityreference: false
+adx_showcaptchaforauthenticatedusers: false
+adx_showownerfields: false
+adx_showunsupportedfields: false
+adx_targetentitylogicalname: new_fileuploads
+adx_tooltipenabled: false
+adx_validationsummarylinksenabled: true
+adx_webform: b5a62918-5122-ed11-b83e-000d3a3b1afb
+adx_webformstepid: 0203156e-5122-ed11-b83e-000d3a3b1afb

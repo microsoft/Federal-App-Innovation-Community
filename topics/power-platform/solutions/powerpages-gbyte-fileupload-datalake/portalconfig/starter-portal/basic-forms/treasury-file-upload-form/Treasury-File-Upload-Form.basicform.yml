@@ -1,0 +1,43 @@
+adx_appendquerystring: false
+adx_associatecurrentportaluser: false
+adx_attachfile: false
+adx_attachfileallowmultiple: false
+adx_attachfilerequired: false
+adx_attachfilerestrictaccept: false
+adx_autogeneratesteps: false
+adx_captcharequired: false
+adx_entityformid: c07ce4cb-b5f7-ec11-bb3d-00224808adb5
+adx_entityname: new_fileuploads
+adx_entitypermissionsenabled: false
+adx_forceallfieldsrequired: false
+adx_formname: File Uploads main form
+adx_geolocation_displaymap: false
+adx_geolocation_enabled: false
+adx_hideformonsuccess: true
+adx_name: Treasury File Upload Form
+adx_populatereferenceentitylookupfield: false
+adx_portaluserlookupattributeisactivityparty: false
+adx_recommendedfieldsrequired: false
+adx_recordsourceallowcreateonnull: false
+adx_redirecturlappendentityidquerystring: false
+adx_referenceentityshowreadonlyform: false
+adx_referencequerystringisprimarykey: true
+adx_renderwebresourcesinline: false
+adx_setentityreference: false
+adx_showcaptchaforauthenticatedusers: false
+adx_showownerfields: false
+adx_showunsupportedfields: false
+adx_successmessage: >-
+  [
+
+    {
+
+      "LCID": 1033,
+
+      "Value": "Your Request was Submitted.  Please look for file upload instructions in your email"
+
+    }
+
+  ]
+adx_tooltipenabled: false
+adx_validationsummarylinksenabled: true

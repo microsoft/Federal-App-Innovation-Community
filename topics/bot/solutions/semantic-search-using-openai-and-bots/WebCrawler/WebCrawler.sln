@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33417.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Application", "WebCrawler.Application\WebCrawler.Application.csproj", "{0CFEF4A9-5BAD-4394-9525-5E224F2203A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{218324C8-35BF-46E9-841C-4E16EFFB42DB}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\README.md = ..\README.md
+		..\RefArch.png = ..\RefArch.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerAppSolution", "PowerAppSolution", "{45E0A322-2A3E-4242-A65C-D5274B61D86B}"
+	ProjectSection(SolutionItems) = preProject
+		..\PowerAppSolution\VAOpenAIChatBot_1_0_0_0.zip = ..\PowerAppSolution\VAOpenAIChatBot_1_0_0_0.zip
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CFEF4A9-5BAD-4394-9525-5E224F2203A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFEF4A9-5BAD-4394-9525-5E224F2203A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFEF4A9-5BAD-4394-9525-5E224F2203A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFEF4A9-5BAD-4394-9525-5E224F2203A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A87E082F-9058-4A55-8F26-FD71D77F2F9E}
+	EndGlobalSection
+EndGlobal

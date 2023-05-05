@@ -412,7 +412,9 @@
                 "tableNames": [
                     "Syslog"
                 ],
-                "enable": true
+                "enable": true,
+                "createdDate": "2023-05-04T12:50:22.3477524Z",
+                "lastModifiedDate": "2023-05-04T12:50:22.3477524Z"
             }
         },
         {

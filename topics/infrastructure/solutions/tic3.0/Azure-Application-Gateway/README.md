@@ -1,97 +1,41 @@
-# TIC 3.0 Compliant App Service using Azure Application Gateway
-## Problem Statement
+# TIC 3.0 Compliant Demo using Azure Application Gateway
 
-Federal organizations and government agencies are the most likely implementers of TIC 3.0 compliance solutions for their Azure-based web applications and API services. Version 3.0 of the Trusted Internet Connection (TIC) migrates TIC from on-premises data collection to a cloud-based approach that better supports modern cloud-based applications and services. TIC 3.0 telemetry collection is driven by a firewall. 
+This repo supports an article on the Azure Architecture Center (AAC) - [Trusted Internet Connection (TIC) 3.0 compliance - Azure Example Scenarios | Microsoft Docs](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/security/trusted-internet-connections), it contains lots of great information on using the content of this repo. Please visit the article in the AAC before proceeding.
 
-There are two types of firewalls in Azure; native Azure Firewall, layer 4, and Web Application Firewall, layer 7. Azure Application Gateway is a regional load balancer with support for a Web Application Firewall (WAF). Azure Application Gateway with WAF is a great solution for single-region applications and services. The Web Application Firewall will secure the application with built-in rules, custom rules, geo-filtering, and more. 
+The following solution integrates an Application Gateway with Web Application Firewall (WAF) to manage the traffic into your Azure application environment. The solution includes all resources to generate, collect, and deliver logs to the CLAW. It also includes an app service to highlight the types of telemetry collected by the firewall.
 
-## Demo Solution
-
-The following solution is a one-click, out-of-the-box deployment. All services needed to deploy, secure, and monitor a TIC 3.0 application with an Azure Application Gateway are included. The deploy application service is running the default template to showcase its external accessibility and security. You can replace the default app service solution with your own custom application for a quick, TIC 3.0 compliance web application to your users and agency. 
-
-###### TIC 3.0 Compliant App Service Architecture using Azure Application Gateway
-
-![Architecture](../images/Arch-AzureAppGateway.png)
+![TIC 3.0 compliance using Application Gateway with Web Application Firewall and Application Service Environment v3](https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Architecture/Images/trusted-internet-connections-architecture-AppGwWAF.png)
 
 ### Requirements
+
 The following must be performed before using this deployment scenario:
+
 - None, solution will deploy as an isolated resource from existing Azure resources.
 
 ### Deploys and Updates
-Deploy Virtual Network, App Service, AppGateway Subnet with Microsoft.Web service endpoint, App Gateway, Log Analytics workspace, Automation Account, Assign Automation Account's Managed Identity with Log Analytics Reader role to Log Analytics workspace, and Alert. The deployed App Service will become the backend to the App Gateway and restricted to only accept request from the App Gateway IP. This configures the app so it is only accessible using App Gateway public IP.
 
-This deployment scenario will deploy and update the following:
+- The solution includes:
 
-- Deploy Virtual Network with subnet for application and an Application Gateway
-- Deploy subnet for Application Gateway
-- Deploy Application Gateway
-- Deploy Web Application Firewall (WAF) policy
-- Associate WAF with Application Gateway
-- Deploy App service with default template
-- Configure App service with restricted access for the application gateway's subnet
-- Configure Application Gateway to route traffic to the application so that users must use the Application Gateway public IP to connect to the application. 
--- Custom FQDN must be manually configured and associated with the Application Gateway, post deployment.
-- Deploy Log Analytics workspace
-- Configure Application Gateways Diagnostic Settings to send logs and metrics to Log Analytics workspace
-- Deploy Automation Account
-- Assign Automation Account's Managed Identity with Log Analytics Reader role to Log Analytics workspace
-- Deploy Alert
+  - A virtual network with a subnet for the firewall and servers.
+  - A Log Analytics workspace.
+  - An Application Gateway v2 with Web Application Firewall with Bot and Microsoft managed policies.
+  - An Application Gateway v2 diagnostic settings that send logs to the Log Analytics workspace.
+  - A registered application
+  - An Event Hub
+  - An alert rule that sends an email if a job fails.
 
-## Deployment Methods
-### Azure Portal
-Use the following button to deploy to Azure Commercial or Azure Government using the Azure Portal.
+[![Deploy to Azure](https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Architecture/Images/trusted-internet-connection-deploy-to-azure.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Ftrusted-internet-connection%2Fmain%2FArchitecture%2FAzure-Application-Gateway%2FComplete%2Fazuredeploy.json)
 
-| [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Ftopics%2Finfrastructure%2Fsolutions%2Ftic3.0%2FAzure-Application-Gateway%2Fazuredeploy.json) | [![Deploy to Azure Government](https://raw.githubusercontent.com/paullizer/Federal-App-Innovation-Community-1/main/topics/infrastructure/solutions/tic3.0/images/deploytoazuregov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FFederal-App-Innovation-Community%2Fmain%2Ftopics%2Finfrastructure%2Fsolutions%2Ftic3.0%2FAzure-Application-Gateway%2Fazuredeploy.json) |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
+[![Deploy to Azure Gov](https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Architecture/Images/trusted-internet-connection-deploy-to-azure-gov.png)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Ftrusted-internet-connection%2Fmain%2FArchitecture%2FAzure-Application-Gateway%2FComplete%2Fazuredeploy.json)
 
-### Azure PowerShell
-The following PowerShell code can be executed from the Azure Cloud Shell or locally if you have [installed Az Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.3.2). 
+### Post-deployment tasks for all solutions
 
-You must update the *SubscriptionName* with your Azure Subscription that you want to deploy the solution
+Up to now your environment is performing the firewall capabilities and logging connections. To be TIC 3.0 compliant for Network Telemetry collection, those logs must make it to CISA CLAW. The post-deployment steps finish the tasks towards compliance. These steps require coordination with CISA because you will need a certificate from CISA to associate with your Service Principle. For step-by-step details see [Post Deployment Tasks](https://github.com/Azure/trusted-internet-connection/tree/main/Architecture/Post-Deployment-Tasks).
 
-```powershell
-$jsonUrl = "https://raw.githubusercontent.com/microsoft/Federal-App-Innovation-Community/main/solutions/infrastructure/tic3.0/Azure-Application-Gateway/azuredeploy.json"`
-$location = "East US"`
-$resourceGroupName = "RG-Example-Tic3_0-AppGateway"`
-$suffix = Get-Random -Maximum 1000`
+The following tasks must be performed after deployment is complete. They are manual tasks—an ARM template can't do them.
 
-Connect-AzAccount`
-Set-AzContext -SubscriptionName "SubscriptionName"`
-New-AzResourceGroup -Name ($resourceGroupName+"-"+$suffix) -Location $location` 
-New-AzResourceGroupDeployment -ResourceGroupName ($resourceGroupName+"-"+$suffix) -TemplateUri $jsonUrl`
-```
-
-## Post Deployment Tasks
-To finalize TIC 3.0 compliance the following tasks must be completed to actually deliver your logs to the CISA CLAW.
-- Coordinate with your CISA POC to receive your 
-  - CLAW S3 Access Key (aka Id)
-  - CLAW S3 Access Secret
-  - CLAW S3 Bucket Name
-  
-### Update Automation account variables
-The ARM template created variables that are used by the runbook to access the Log Analytics workspace using the application's service principle. Some variables will need to be updated over time. The CLAW secrets will expire. It is important to coordinate receipt of a new CLAW secret before it expires.
-
-The variables are encrypted. This means that you or anyone cannot view them from portal or consoles. They can only be decrypted from within a runbook. When you update a variable because a secret is expiring or you want to use a different Log Analytics workspace, you just edit the value which overwrite the existing when you save it.
-
-This example walks through updating the **AWSAccessKey**, repeat the steps for each Variable. 
-
-![Edit Variable](../images/UpdateAutoAcctVar-Edit.png)
-
-![Save Variable](../images/UpdateAutoAcctVar-Save.png)
-
-1. Go to the Automation account created during deployment
-2. Select **Variables** from the left hand menu, you will have to scroll down to view it
-3. Select **AWSAccessKey**,
-   1. You will start with this variable but you must update each variable
-4. Select **Edit value**
-5. Enter the AWS Access Key provided to you by CISA
-6. Select **Save**
-
-Repeat for **AWSSecretKey** and **S3BucketName**
-
-## Ready for uploading logs to CLAW
-Logs from your deployed scenario will be uploaded to the CLAW starting 1 hour after the deployed scenario and then every 15 minutes.
-
-## References
-
-[Trusted Internet Connection (TIC) 3.0 compliance - Azure Example Scenarios | Microsoft Docs](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/security/trusted-internet-connections)
+- Obtain a public key certificate from CISA. 
+- Create a Service Principle (App Registration).
+- Add the CISA-provided certificate to the App Registration.
+- Assign the application with the Azure Event Hubs Data Receiver role to the Event Hub Namespace.
+- Activate Feed by sharing Azure Tenant ID, Application (client) ID, Event Hub Namespace name, Event Hub name, and Consumer group name with your CISA POC

@@ -217,6 +217,7 @@ Write-Host "Compressing the function app into a zip file...."
 Compress-Archive -Path .\FunctionApp\PowerPortalFileManagement\* -DestinationPath $FunctionAppDeployment -Force
 
 Write-Host "Publising the latest functions to the function app...."
+#05232023 gjr next statement fails.  need to add security context or enable basic auth for  kudo webdeploy general settings on webapp/function app config
 Publish-AzWebApp -ResourceGroupName $ResourceGroupName -Name $FunctionAppName -ArchivePath $FunctionAppDeployment -Force
 Write-Host ".....Function App Published: $FunctionAppDeployment"
 
@@ -338,8 +339,36 @@ Write-Host " "
 $continue = Read-Host " Enter to continue....."
 
 
+###Environment Variables
+
+Write-Host " "
+Write-Host "Configuration Environment Variables in the newly created solution" -ForegroundColor Green
+Write-Host " "
+Write-Host " In Power App Studion open the Environment Varialbles section of the Solution and edit the following Environment Variables:" -ForegroundColor Green
+Write-Host " 1) azurefunction_base_url:    Copy the base url or the azure function into the Current value of the Environment Variable azurefunction_base_url. (URL on the overview page of the Azure Function)" -ForegroundColor Green
+Write-Host " 2) PPAdmin_email:    copy a value power admin email, the email that the flows will send to the customer. (must have valid license)" -ForegroundColor Green
+Write-Host " "
+$continue = Read-Host " Enter to continue....."
+
+###ETurn ON the Flows
+
+Write-Host " "
+Write-Host "Turn On all the 3 flows" -ForegroundColor Green
+Write-Host " "
+Write-Host " "
+$continue = Read-Host " Enter to continue....."
 
 
+###Configuration of WebHook in Datablob Trigger to Datalake Event
+
+Write-Host " "
+Write-Host "One last thing.. we need to copy the  of WebHook URL of the Datablob Trigger to Datalake new blob Event" -ForegroundColor Green
+Write-Host " "
+Write-Host " 1) In Power App Studion open the Datalake blob event Power Automate workflow (see imported solution)..  open of the flow, save it, copy the url of the When a HTTP request is received trigger. Publish all customizations in the solution." -ForegroundColor Green
+Write-Host "2)  Back in the  Azure Portal, open the datalake resource in the resource group. Click on Events. Click + Event Subscription. Add any name you choose. Give any name to the System Topic. Filer to Event Types: Blob Created.   Endpoint Type: Web Hook. Please Select an endpoint:COPY THE PA URL the the subscriber endpoint " -ForegroundColor Green
+Write-Host "Reference https://learn.microsoft.com/en-us/power-pages/admin/migrate-site-configuration?tabs=CLI#prepare-the-target-environment" -ForegroundColor DarkYellow
+Write-Host " "
+$continue = Read-Host " Enter to continue....."
 
 
 

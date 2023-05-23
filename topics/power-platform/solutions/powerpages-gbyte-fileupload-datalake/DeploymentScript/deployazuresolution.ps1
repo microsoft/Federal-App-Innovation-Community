@@ -8,7 +8,7 @@
 
 # ======DEFAULT ENV VARIABLES============
 
-$defaultResourceGroupName='rg-greg-testing123-again'
+$defaultResourceGroupName='powerportal'
 $defaultDatalakeStorageAccountName = 'DAtaLAKE'
 $defaultLocation = 'eastus'  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
 $defaultFunctionAppName = "FuncDataLakeMgmt"
@@ -204,7 +204,7 @@ else
 Write-Host "Publishing Function App. First zip the current directory. Then Publish ..............."
 #set up the zip file name to funcationappname.zip  used in compress and publish steps
 Write-Host "creating zip file name based on the function app name + zip extension"
-$FunctionAppName = (Get-AzFunctionApp -ResourceGroupName $ResourceGroupName | Where-Object {$_.Name.StartsWIth($FunctionAppName)}).Name
+$FunctionAppName = (Get-AzFunctionApp -ResourceGroupName $ResourceGroupName | Where-Object {$_.Name.StartsWIth($FunctionAppName)}).Name 
 $FunctionAppDeployment = $FunctionAppName + ".zip"
 
 
@@ -319,13 +319,14 @@ Write-Host "Approvals" -ForegroundColor Green
 Write-Host "Microsoft Dataverse" -ForegroundColor Green
 Write-Host "Office 365 Outlook" -ForegroundColor Green
 Write-Host "Office 365 Groups" -ForegroundColor Green
-Write-Host "Azure Event Grid" -ForegroundColor Green
+##Write-Host "Azure Event Grid" -ForegroundColor Green
+Write-Host "When an HTTP request is received" -ForegroundColor Green
 Write-Host ""
 $continue = Read-Host "IMPORTANT!!  Only When you've completed creating the above Connections ... Press Enter to continue....."
 
 Write-Host " "
 Write-Host " Connections created.  Now we'll import the Dataverse Solution...." -ForegroundColor Green
-pac solution import --path .\solution\PortalFileUpload.zip
+pac solution import --path .\solution\PortalFileUpload.zip  #idea-gjr 05232023 -- change pac solution import solution command to accomodate version in name
 
 Write-Host " "
 Write-Host "Provision a new Portal WebSite with the imported configuration" -ForegroundColor Green

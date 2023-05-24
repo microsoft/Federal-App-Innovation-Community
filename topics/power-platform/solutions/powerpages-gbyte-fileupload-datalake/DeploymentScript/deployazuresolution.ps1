@@ -13,6 +13,8 @@ $defaultDatalakeStorageAccountName = 'DAtaLAKE'
 $defaultLocation = 'eastus'  #  usgovvirginia, usgovtexas, usgovarizona(GCC-HIGH)   or usgovarizona,usgovtexas,USGov Iowa (GCC)  or westus3 eastus  eastus2 for Commercial
 $defaultFunctionAppName = "FuncDataLakeMgmt"
 $defaultCloud = 'AzureCloud'     #  AzCloud for Commercial   AzureUSGovernment for GCC or GCC-HIGH
+$Owner = 'greg'
+$ProjectName = 'PowerPages'
 
 
 
@@ -93,7 +95,7 @@ if(Get-AzResourceGroup -Name $ResourceGroupName -Location $Location -ErrorAction
 else  
 {
     Write-Host "Creating Resource Group $ResourceGroupName ..... "
-    New-AzResourceGroup -Name $ResourceGroupName -Location $Location
+    New-AzResourceGroup -Name $ResourceGroupName -Location $Location -Tag @{Owner=$Owner;ProjectName=$ProjectName}
     Write-Host "....Resource Group $ResourceGroupName created"
 }
 
@@ -115,7 +117,7 @@ else  #create a new datalake Storage account
     
     
     Write-Host "Datalake Storage Account does not exist. Creating a new unique name suffix,validate lowercase, and less than 24 characters as required by storage account"
-    New-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $DatalakeStorageAccountName -Location $Location -SkuName "Standard_GRS" -Kind StorageV2  -EnableHierarchicalNamespace $true -EnableSftp $true -EnableLocalUser $true
+    New-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $DatalakeStorageAccountName -Location $Location -SkuName "Standard_GRS" -Kind StorageV2  -EnableHierarchicalNamespace $true -EnableSftp $true -EnableLocalUser $true -Tag @{Owner=$Owner; ProjectName=$ProjectName}
     Write-Host ".......Datalake  created: $DatalakeStorageAccountName "
     
     #enable Static Web Site in the Storage Account created
@@ -136,7 +138,7 @@ if(Get-AzFunctionAppPlan -ResourceGroupName $ResourceGroupName -Name $AppService
 else  
 {
     Write-Host "Creating App Service Plan $AppServicePlanName ......"
-    New-AzFunctionAppPlan -ResourceGroupName $ResourceGroupName -Name $AppServicePlanName -Location $Location -Sku S1 -WorkerType Windows
+    New-AzFunctionAppPlan -ResourceGroupName $ResourceGroupName -Name $AppServicePlanName -Location $Location -Sku S1 -WorkerType Windows -Tag @{Owner=$Owner; ProjectName=$ProjectName}
     Write-Host "...... App Service Plan Created: $appserviceplanename "
 }
 
@@ -149,7 +151,7 @@ if(Get-AzApplicationInsights -ResourceGroupName $ResourceGroupName -Name $AppIns
 else
 {
     Write-host "App Insights instance not there so.. creating App Insights resource $AppInsightsName "
-    New-AzApplicationInsights -Location $Location -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  #note i had to hard code eastus  westus3 did not work
+    New-AzApplicationInsights -Location $Location -Kind "web" -Name $AppInsightsName -ResourceGroupName $ResourceGroupName  -Tag @{Owner=$Owner; ProjectName=$ProjectName}#note i had to hard code eastus  westus3 did not work
     Write-host "....App Insights Created: $AppInsightsName "
 }
 
@@ -173,12 +175,12 @@ else
    
     #create Functaion App Storage Account
     Write-Host "Creating Storage Account  $FunctionAppStorageAccountName for function app $FunctionAppName ....  "
-    New-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $FunctionAppStorageAccountName -Location $Location -SkuName "Standard_GRS" -Kind StorageV2 
+    New-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $FunctionAppStorageAccountName -Location $Location -SkuName "Standard_GRS" -Kind StorageV2 Tag @{Owner=$Owner; ProjectName=$ProjectName}
     Write-Host "Storage Account for function all created:  $FunctionAppStorageAccountName "
     
     #create the function app
     Write-Host "Creating Function App:  $FunctionAppName ......"
-    New-AzFunctionApp  -Name $FunctionAppName -ResourceGroupName $ResourceGroupName -PlanName $AppServicePlanName -Runtime "PowerShell" -RuntimeVersion 7.2 -FunctionsVersion 4 -OSType Windows -StorageAccountName $FunctionAppStorageAccountName -ApplicationInsightsName $AppInsightsName -IdentityType SystemAssigned
+    New-AzFunctionApp  -Name $FunctionAppName -ResourceGroupName $ResourceGroupName -PlanName $AppServicePlanName -Runtime "PowerShell" -RuntimeVersion 7.2 -FunctionsVersion 4 -OSType Windows -StorageAccountName $FunctionAppStorageAccountName -ApplicationInsightsName $AppInsightsName -IdentityType SystemAssigned Tag @{Owner=$Owner; ProjectName=$ProjectName}
     Write-Host "........Function App Created: $FunctionAppName"
 
     #Assign Role Permission to the Function App System Assignem MI  contributor to the datalake Storage Account

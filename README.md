@@ -19,6 +19,7 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |
 | ***[Bot](./topics/bot)*** | AI Based IVR Bot [▶️](./topics/bot/solutions/ai-based-ivr-bot) | ✔️ | N/A | 02/09/2023 |
 | ***[Bot](./topics/bot)*** | Semantic Search using OpenAI and Bot [▶️](./topics/bot/solutions/semantic-search-using-openai-and-bots) | ✔️ | N/A | 03/17/2023 |
+| ***[Bot](./topics/bot/solutions/pva-chatbot-search-using-openai/README.md)*** | PVA ChatBot with OpenAI GPT and Cognitive Search [▶️](./topics/bot/solutions/pva-chatbot-search-using-openai) | ✔️ | N/A | 06/07/2023 |
 | ***[Cognitive Search](./topics/cognitive-search)*** | Document and Audio Parsing and Classification  [▶️](./topics/cognitive-search/solutions/document-parser) | ✔️ |  ✔️ | 06/08/2022 |
 | ***[Modern Auth](./topics/modern-auth/React-MSAL-AAD)*** | React MSAL AAD Example  [▶️](./topics/modern-auth/React-MSAL-AAD) | ✔️ |  ✔️ | 01/24/2023 |
 | ***[OpenAI](./topics/openai/README.md)*** | OpenAI ChatGPT text generation in Python Example  [▶️](./topics/modern-auth/React-MSAL-AAD) | N/A |  N/A | 01/27/2023 |
@@ -29,7 +30,6 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[Serverless](./topics/serverless)*** | Cloud-Native Workshop with Functions + Cosmos [▶️](./topics/serverless/trainings/azure-functions-serverless-cloud-native-workshop) | N/A | N/A |
 | ***[Remote Debugging](./topics/remote-debug/)*** | Remote Debugging on App Services | N/A | N/A |
 
-
 ## Whitepapers
 
 | Topic | Whitepaper |
@@ -37,9 +37,6 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | ***[Kubernetes](./topics/kubernetes)*** | Container Adoption Journey [▶️](./topics/kubernetes/whitepapers/container-adoption-journey) |
 
 ## Contributing
-
-
-
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us

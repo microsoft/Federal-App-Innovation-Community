@@ -9,13 +9,13 @@ The goal is to address high-value problems, unique scenarios, while providing ac
 | Topic | Solution | Azure Global | Azure Government | Last Tested |
 | :--------- | :--- | :----: | :----: | :---: |
 | ***[Containers](./topics/containers)*** | ACR Tasks with Private Agents [▶️](./topics/containers/solutions/private-acr-tasks) | ✔️ | ✔️ | 03/31/2022 |
-| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 | 02/28/2022 |
+| ***[Kubernetes](./topics/kubernetes)*** | Deploy Azure RedHat OpenShfit [▶️](./topics/kubernetes/solutions/aro-kubernetes) | ✔️ | ✔️ | 03/31/2022 |
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang On Azure [▶️](./topics/devsecops/solutions/bigbang-on-azure/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[DevSecOps](/topics/devsecops)*** | Deploy BigBang On Azure Automated [▶️](./topics/devsecops/solutions/bigbang-on-azure-automated/) | ✔️ | ✔️ | 06/08/2022 |
 | ***[Configure BigBang to use a Custom Registry](/topics/devsecops/)*** | Custom Registry on BB [▶️](//topics/kubernetes/solutions/bigbang-custom-registry) |  | ✔️ | 06/20/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Manage APIM with Bicep + CI/CD [▶️](./topics/ci-cd/solutions/apim-bicep) | ✔️ | N/A | 02/28/2022 |
 | ***[CI/CD](./topics/ci-cd)*** | Scaling Containerized Azure DevOps Agents with AKS + KEDA [▶️](./topics/ci-cd/solutions/containerized-agents-keda/) | ✔️ | N/A | 07/11/2022 |
-| ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/04/2022 |
+| ***[Infrastructure](./topics/infrastructure)*** | TIC 3.0 Architectures [▶️](./topics/infrastructure/solutions/tic3.0) | ✔️ | ✔️ | 05/05/2023 |
 | ***[Bot](./topics/bot)*** | Mobile Virtual Assistant [▶️](./topics/bot/solutions/mobile-virtual-assistant) | ✔️ | N/A | 05/20/2022 |
 | ***[Bot](./topics/bot)*** | AI Based IVR Bot [▶️](./topics/bot/solutions/ai-based-ivr-bot) | ✔️ | N/A | 02/09/2023 |
 | ***[Bot](./topics/bot)*** | Semantic Search using OpenAI and Bot [▶️](./topics/bot/solutions/semantic-search-using-openai-and-bots) | ✔️ | N/A | 03/17/2023 |

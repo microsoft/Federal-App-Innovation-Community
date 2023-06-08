@@ -1,0 +1,32 @@
+adx_appendquerystring: false
+adx_associatecurrentportaluser: false
+adx_attachfile: false
+adx_attachfileallowmultiple: false
+adx_attachfilerequired: false
+adx_attachfilerestrictaccept: false
+adx_autogeneratesteps: false
+adx_captcharequired: false
+adx_entityformid: 19478c60-5f84-eb11-a812-00224806e2fa
+adx_entityname: contoso_newpermitrequest
+adx_entitypermissionsenabled: false
+adx_forceallfieldsrequired: false
+adx_formname: New Permit Form
+adx_geolocation_displaymap: false
+adx_geolocation_enabled: false
+adx_hideformonsuccess: true
+adx_name: New Permit Request
+adx_populatereferenceentitylookupfield: false
+adx_portaluserlookupattributeisactivityparty: false
+adx_recommendedfieldsrequired: false
+adx_recordsourceallowcreateonnull: false
+adx_redirecturlappendentityidquerystring: false
+adx_referenceentityshowreadonlyform: false
+adx_referencequerystringisprimarykey: true
+adx_renderwebresourcesinline: false
+adx_setentityreference: false
+adx_showcaptchaforauthenticatedusers: false
+adx_showownerfields: false
+adx_showunsupportedfields: false
+adx_successmessage: Your request has been successfully submitted. We'll review and get back to you soon.
+adx_tooltipenabled: false
+adx_validationsummarylinksenabled: true

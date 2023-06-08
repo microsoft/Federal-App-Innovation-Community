@@ -1,0 +1,14 @@
+adx_append: false
+adx_appendto: false
+adx_create: true
+adx_delete: true
+adx_entitylogicalname: crb30_nepatype
+adx_entityname: NEPA Type Read
+adx_entitypermission_webrole:
+- 6bcf8d45-9ff1-404a-827e-efc5c668f813
+- e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+adx_entitypermissionid: 5dc52c2b-32e1-ec11-bb3d-000d3a5b4d73
+adx_parententitypermission: 5d2b5ffb-2fe1-ec11-bb3d-000d3a5b4d73
+adx_read: true
+adx_scope: 756150000
+adx_write: true

@@ -1,0 +1,12 @@
+adx_authenticationrequired: true
+adx_editexistingrecordpermitted: true
+adx_multiplerecordsperuserpermitted: true
+adx_name: eNEPA Project new
+adx_progressindicatorenabled: true
+adx_progressindicatorignorelaststep: false
+adx_progressindicatorprependstepnum: false
+adx_progressindicatortype: 756150002
+adx_savechangeswarningonclose: false
+adx_startnewsessiononload: true
+adx_startstep: 01d68fa1-3be1-ec11-bb3d-000d3a5b4d73
+adx_webformid: c1624825-3ae1-ec11-bb3d-000d3a5b4d73

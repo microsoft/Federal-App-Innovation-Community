@@ -1,0 +1,12 @@
+adx_append: false
+adx_appendto: false
+adx_create: false
+adx_delete: false
+adx_entitylogicalname: businessunit
+adx_entityname: Business unit read
+adx_entitypermission_webrole:
+- 87d5c760-fca0-ed11-aad1-6045bd006076
+adx_entitypermissionid: 75f6b157-829a-ed11-aad1-6045bd006076
+adx_read: true
+adx_scope: 756150000
+adx_write: false

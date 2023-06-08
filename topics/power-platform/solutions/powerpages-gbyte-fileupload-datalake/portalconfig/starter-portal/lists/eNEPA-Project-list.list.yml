@@ -1,0 +1,53 @@
+adx_calendar_enabled: false
+adx_entitylistid: fc385936-9dde-ec11-bb3d-000d3a5b4d73
+adx_entityname: gregroe_project
+adx_entitypermissionsenabled: false
+adx_filter_enabled: false
+adx_idquerystringparametername: id
+adx_map_distancevalues: 5,10,25,50,100
+adx_map_enabled: false
+adx_map_infoboxoffsetx: 25
+adx_map_infoboxoffsety: 46
+adx_map_pushpinheight: 39
+adx_map_pushpinwidth: 32
+adx_map_resturl: https://dev.virtualearth.net/REST/v1/Locations
+adx_map_zoom: 12
+adx_name: eNEPA Project list
+adx_odata_enabled: false
+adx_pagesize: 100
+adx_searchenabled: false
+adx_view: 779e0b4b-18bd-470c-a401-cc73c6323989
+adx_views: >-
+  {
+
+    "Type": "ViewMetadata",
+
+    "Views": [
+
+      {
+
+        "Type": "View",
+
+        "ViewId": "779e0b4b-18bd-470c-a401-cc73c6323989",
+
+        "DisplayName": [
+
+          {
+
+            "Type": "LanguageResources",
+
+            "LCID": 1033,
+
+            "Value": ""
+
+          }
+
+        ]
+
+      }
+
+    ]
+
+  }
+adx_webpageforcreate: 14b27736-4794-428e-a048-878898e9bf1c
+adx_webpagefordetailsview: 14b27736-4794-428e-a048-878898e9bf1c

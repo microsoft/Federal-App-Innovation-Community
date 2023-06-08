@@ -1,0 +1,14 @@
+adx_append: true
+adx_appendto: true
+adx_contactrelationship: new_new_portalaccessrequests_PortalContact_co
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: new_portalaccessrequests
+adx_entityname: Portal Access Request Permission
+adx_entitypermission_webrole:
+- 87d5c760-fca0-ed11-aad1-6045bd006076
+- 8161b2fc-03de-ec11-a7b6-0022480a9be6
+adx_entitypermissionid: 81c76e99-fba0-ed11-aad1-6045bd006076
+adx_read: true
+adx_scope: 756150001
+adx_write: true

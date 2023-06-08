@@ -1,0 +1,11 @@
+adx_authenticationrequired: true
+adx_editexistingrecordpermitted: true
+adx_multiplerecordsperuserpermitted: true
+adx_name: File Upload Web Form
+adx_progressindicatorenabled: true
+adx_progressindicatorignorelaststep: false
+adx_progressindicatorprependstepnum: false
+adx_savechangeswarningonclose: false
+adx_startnewsessiononload: false
+adx_startstep: 76c84c4c-86f1-ec11-bb3d-6045bd00b6dd
+adx_webformid: 0009540e-86f1-ec11-bb3d-6045bd00b6dd

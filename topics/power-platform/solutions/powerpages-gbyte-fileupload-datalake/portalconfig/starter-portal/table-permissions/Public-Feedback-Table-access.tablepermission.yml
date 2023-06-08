@@ -1,0 +1,12 @@
+adx_append: false
+adx_appendto: false
+adx_create: true
+adx_delete: false
+adx_entitylogicalname: gregroe_publicfeedback
+adx_entityname: Public Feedback Table access
+adx_entitypermission_webrole:
+- 8161b2fc-03de-ec11-a7b6-0022480a9be6
+adx_entitypermissionid: 0994d304-f6e0-ec11-bb3d-000d3a5b4d73
+adx_read: true
+adx_scope: 756150000
+adx_write: true

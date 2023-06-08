@@ -1,0 +1,13 @@
+adx_append: true
+adx_appendto: true
+adx_create: true
+adx_delete: true
+adx_entitylogicalname: sharepointdata
+adx_entityname: Documents
+adx_entitypermission_webrole:
+- 6bcf8d45-9ff1-404a-827e-efc5c668f813
+- 5ad197b9-40e7-ec11-bb3c-000d3a33482f
+adx_entitypermissionid: 99646a69-41e7-ec11-bb3c-000d3a33482f
+adx_read: true
+adx_scope: 756150000
+adx_write: true

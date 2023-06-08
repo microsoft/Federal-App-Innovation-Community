@@ -1,0 +1,38 @@
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: true
+  adx_name: test-web-role greg
+  adx_webroleid: 4651f498-98e6-ec11-bb3c-000d3a33482f
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: true
+  adx_name: eNEPA
+  adx_webroleid: 5ad197b9-40e7-ec11-bb3c-000d3a33482f
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: false
+  adx_name: Administrators
+  adx_webroleid: 6bcf8d45-9ff1-404a-827e-efc5c668f813
+- adx_anonymoususersrole: true
+  adx_authenticatedusersrole: false
+  adx_name: Anonymous
+  adx_webroleid: 8161b2fc-03de-ec11-a7b6-0022480a9be6
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: true
+  adx_name: File Upload Request role
+  adx_webroleid: 85cccdec-7297-ed11-aad1-6045bd006076
+- adx_anonymoususersrole: true
+  adx_authenticatedusersrole: false
+  adx_name: Portal Access Request Web Role
+  adx_webroleid: 87d5c760-fca0-ed11-aad1-6045bd006076
+- adx_anonymoususersrole: true
+  adx_authenticatedusersrole: false
+  adx_name: Anonymous Users
+  adx_webroleid: a60a3ce4-2db4-4c26-8ba7-1a3b36f3a0a7
+  statecode: 1
+  statuscode: 2
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: true
+  adx_name: File Upload - Project
+  adx_webroleid: b197f226-6ce7-ec11-bb3c-000d3a33482f
+- adx_anonymoususersrole: false
+  adx_authenticatedusersrole: true
+  adx_name: Authenticated
+  adx_webroleid: e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73

@@ -1,0 +1,194 @@
+- adx_name: Restrict Read on New Project Test - Web Form
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - b197f226-6ce7-ec11-bb3c-000d3a33482f
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 067c2dfa-6be7-ec11-bb3c-000d3a33482f
+  adx_webpageid: 11df5905-9e2e-4af7-a590-318547ede779
+- adx_name: Restrict Read on New Permit Request
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: 21dc86fe-93de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: b79412fb-230b-4400-b773-ac2e54b9a451
+- adx_name: Grant Change to Content
+  adx_right: 1
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: 2981c30e-9d1a-49a3-916b-a0c403b24126
+- adx_name: Restrict Read on File Upload Request 2
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 2d36c1bb-b999-b45e-cb3f-2f53565f42fa
+  adx_webpageid: e9afa1b6-ac1a-f90e-4f86-5b8da74ecce7
+- adx_name: Restrict Read on Treasury File Upload
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 324b7741-b5f7-ec11-bb3d-00224808adb5
+  adx_webpageid: d710a02c-e0ce-4130-8050-b6444588fadc
+- adx_name: Restrict Read on New eNEPA Project - Web Form
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - 5ad197b9-40e7-ec11-bb3c-000d3a33482f
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 444d1664-3de7-ec11-bb3c-000d3a33482f
+  adx_webpageid: 9e9af89f-7475-44d1-ba00-a056db36c66c
+- adx_name: Restrict Read on IoT Power BI
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: 469826e7-93de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 20b9d644-bf48-4d70-9140-0699fcc6bb06
+- adx_name: Restrict Read on New eNEPA project
+  adx_right: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 4de8a07d-3de1-ec11-bb3d-000d3a5b4d73
+- adx_name: Grant Change to Administrators
+  adx_right: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 610f6634-dac8-4f6c-aac9-c86b94fb34b4
+  adx_webpageid: 87cdfb86-e3c8-48d7-8a99-c6fb2cbcb845
+- adx_name: Restrict Read on Adventureworks Bikes
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 64c98115-94de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: b1885845-a703-43a6-b92a-bcc6c092154d
+- adx_name: Restrict Read on New eNEPA Project - Web Form
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 68af2ce9-e8e1-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 2d721d05-9609-41d2-9cb3-1f9d4461c697
+- adx_name: Restrict Read on FileUloadGregTest
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 6ad5e1fa-86f1-ec11-bb3d-6045bd00b6dd
+  adx_webpageid: 642bff36-289d-45e0-b1ec-e80be446e591
+- adx_name: Restrict Read on Upload your file with the secret SAS URIL
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 6b95322c-c9fe-ec11-82e5-000d3a37fc12
+  adx_webpageid: 3e373c20-c1b2-4879-b32e-4b2113583e56
+- adx_name: Restrict Read on File Upload Request
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - 85cccdec-7297-ed11-aad1-6045bd006076
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 7cc6ecfe-9e82-5b83-96f6-0a93c6142017
+  adx_webpageid: 9c52439c-de10-9b7d-cabc-5afae3e8d318
+- adx_name: Restrict Read on New eNEPA Project
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  adx_webpageaccesscontrolruleid: 808003c8-32e1-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: f26be0b6-4977-482b-9559-572b3e1ea3bc
+- adx_name: Restrict Read on File Upload Blob
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: 8f6f5059-7bf1-ec11-bb3d-6045bd00b6dd
+  adx_webpageid: bc761455-b760-4a69-a5e0-75f47ec2e402
+- adx_name: Restrict Read on Upload File
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - b197f226-6ce7-ec11-bb3c-000d3a33482f
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  adx_webpageaccesscontrolruleid: a2070441-70e7-ec11-bb3c-000d3a33482f
+  adx_webpageid: 4b5d0732-5dcd-40e1-bc88-f8d1687bf563
+- adx_name: Restrict Read on File Upload Request old
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: ae4ecbb0-7e72-0732-c24b-97a8bf1cd343
+  adx_webpageid: c2fe9e4a-bb0c-6371-b186-e4cb635ed963
+- adx_name: Restrict Read on FTP-PAGE
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  adx_webpageaccesscontrolruleid: b53edb94-7ced-ec11-bb3d-000d3a318422
+  adx_webpageid: b6bf1531-b44a-4d60-9c2d-8bb9cefe3397
+- adx_name: Restrict Read on New eNEPA Project
+  adx_right: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  adx_webpageaccesscontrolruleid: b7463ab1-42e1-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 2d721d05-9609-41d2-9cb3-1f9d4461c697
+- adx_name: Restrict Read on File Upload Page
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  adx_webpageaccesscontrolruleid: c1b97b69-adf8-ec11-bb3d-00224808adb5
+  adx_webpageid: 41c9b2c0-6221-4055-a125-4c095a259348
+- adx_name: Restrict Read on New page (7)
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: cdd4db52-2ff6-ec11-bb3d-00224808adb5
+  adx_webpageid: d668a9b9-fe4b-4fe9-b53e-16249f9419ee
+- adx_name: Restrict Read on Employees - Azure SQL dB
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: d6f6a4ef-93de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 6f6cdf6c-9834-44c3-b486-8aef645feeb6
+- adx_name: Restrict Read on Public Feedback
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: d7b99a83-03de-ec11-a7b6-0022480a9be6
+  adx_webpageid: 14b27736-4794-428e-a048-878898e9bf1c
+  statecode: 1
+  statuscode: 2
+- adx_name: Restrict Read on New eNEPA Project Request
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: d7f6a4ef-93de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 5d76a03b-72ff-4bd6-a6d6-118f6fc2bb47
+- adx_name: Restrict Read on New page (7)
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: e6ada0b3-3322-ed11-b83e-000d3a3b1afb
+  adx_webpageid: 4625b8df-1597-4ce4-9a8b-58ec2e4516e6
+- adx_name: Restrict Read on IoT Sensor Data Power BI
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: ea334c05-94de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: e507ad21-8257-497a-9bd8-0a1806494b04
+- adx_name: enepa web form access
+  adx_right: 1
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: f10af237-42e1-ec11-bb3d-000d3a5b4d73
+- adx_name: Restrict Read on List Employee Data
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole:
+  - e7312ee2-f5e0-ec11-bb3d-000d3a5b4d73
+  - 6bcf8d45-9ff1-404a-827e-efc5c668f813
+  adx_webpageaccesscontrolruleid: f7073b0c-94de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 8f5cfe29-c386-4048-a2ae-3a5dde7becb5
+- adx_name: Restrict Read on Insert Employee Record into SQL
+  adx_right: 2
+  adx_webpageaccesscontrolrule_webrole: []
+  adx_webpageaccesscontrolruleid: f8073b0c-94de-ec11-bb3d-000d3a5b4d73
+  adx_webpageid: 01be2a13-1145-40e6-a8a9-1d4714ee57ef

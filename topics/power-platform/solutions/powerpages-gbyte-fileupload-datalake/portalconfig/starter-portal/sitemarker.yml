@@ -1,0 +1,23 @@
+- adx_name: Knowledge Base
+  adx_sitemarkerid: 03766b9e-95cf-4963-a9f8-4d939a4b982e
+- adx_name: Poll Archives
+  adx_sitemarkerid: 33a9e0a4-996a-4e00-982d-0b4f82766d86
+- adx_name: Search
+  adx_pageid: 3b026d90-72e9-4ae4-816d-75d6a87bd0a8
+  adx_sitemarkerid: 3fba9667-091c-4278-8ce2-3f7f63f3de08
+- adx_name: Profile
+  adx_pageid: a7cb9d65-61c1-4691-94d8-73507870bebc
+  adx_sitemarkerid: 44b411c4-5e5d-44b6-a3c3-07dd32aac0e7
+- adx_name: Knowledge Base Search Results
+  adx_sitemarkerid: 8b237caa-a06d-4fdc-8148-02b54e6978df
+- adx_name: Page Not Found
+  adx_pageid: 0f9f2f91-bd91-4cf1-b9a2-867b974f9e99
+  adx_sitemarkerid: 91b5c22a-013e-4f33-b4a7-97e547f163bc
+- adx_name: Access Denied
+  adx_pageid: 776576ee-ea9b-4f1c-8497-296e14030a3c
+  adx_sitemarkerid: a615149b-4af8-4d98-8c50-45cd12462a3a
+- adx_name: Home
+  adx_pageid: 87cdfb86-e3c8-48d7-8a99-c6fb2cbcb845
+  adx_sitemarkerid: a9d9a251-ae61-4ec2-8548-0684715d0691
+- adx_name: Event Feedback
+  adx_sitemarkerid: d1d8c099-fcf8-47e5-a443-787e45e49635

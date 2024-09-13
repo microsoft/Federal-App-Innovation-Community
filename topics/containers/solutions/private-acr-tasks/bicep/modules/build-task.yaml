@@ -1,6 +1,0 @@
-version: v1.1.0
-steps:
-  - build: -t $Registry/test:$ID -f Dockerfile .
-  - push:
-    - $Registry/test:$ID
-  - cmd: $Registry/test:$ID

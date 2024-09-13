@@ -1,0 +1,12 @@
+title: Federal App Innovation
+description: Content produced by Microsoft Federal App Innovation Team
+theme: just-the-docs
+baseurl: "/Federal-App-Innovation-Community"
+url: "https://microsoft.github.io"
+
+search_enabled: true
+
+aux_links:
+  "Federal App Innovation": "https://github.com/microsoft/Federal-App-Innovation-Community"
+
+aux_links_new_tab: true

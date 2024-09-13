@@ -1,0 +1,1252 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworkIPRange": {
+            "defaultValue": "192.168.0.0/16",
+            "type": "String",
+            "allowedValues": [
+                "192.168.0.0/16",
+                "10.0.0.0/16",
+                "10.10.0.0/16",
+                "10.100.0.0/16"
+            ],
+            "metadata": {
+                "description": "This is the IP Range for the VNET in which the Azure Firewall will reside."
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "defaultValue": "webAppExample",
+            "metadata": {
+                "description": "Name of the Web App Service farm"
+            }
+        },
+        "failedRunbookAlertEmail": {
+            "defaultValue": "first.last@mail.com",
+            "type": "string",
+            "metadata": {
+                "description": "This is the email that will receive the failure notification."
+            }
+        },
+        "baseTime": {
+            "type": "string",
+            "defaultValue": "[utcNow('u')]",
+            "metadata": {
+                "description": "Schedule will start one hour from this time."
+            }
+        }
+    },
+    "variables": {
+        "webAppDnsName": ".azurewebsites",
+        "networkLocation": "[resourceGroup().location]",
+        "webAppDnsExtension" : "[if(contains(variables('networkLocation'), 'usgov'), '.us', '.net')]",
+        "uniqueValue": "[substring(uniqueString(resourceGroup().id),0,4)]",
+        "skuTier": "PremiumV2",
+        "webAppUniqueName": "[format('{0}-{1}', parameters('webAppName'), uniqueString(resourceGroup().id))]",
+        "privateDnsZoneName": "[concat(variables('webAppUniqueName'),'.privatelink.azurewebsites.net')]",
+        "virtualNetworkName": "[concat('VNET-', variables('webAppUniqueName'))]",
+        "IPBase": "[split(parameters('virtualNetworkIPRange'),'.')]",
+        "subnetFirewallName": "AzureFirewallSubnet",
+        "subnetFirewallIPRange": "[format('{0}.{1}.{2}.{3}/{4}', variables('IPBase')[0], variables('IPBase')[1], '0', '0', '26')]",
+        "subnetInternalName": "InternalSubnet",
+        "subnetInternalIPRange": "[format('{0}.{1}.{2}.{3}/{4}', variables('IPBase')[0], variables('IPBase')[1], '10', '0', '26')]",
+        "azureFirewallName": "[concat('AzFW-', variables('webAppUniqueName'))]",
+        "azureFirewallPoliciesName": "[concat('AzFwP-', variables('webAppUniqueName'))]",
+        "azureFirewallPolicyCollectionName": "DNAT Rule Collection",
+        "azureFirewallPolicyRuleName": "[concat(variables('webAppUniqueName'),'-Inbound-NAT')]",
+        "azureFirewallPolicyRuleDestinationPort": "5443",
+        "publicIPAzureFirewallName": "[concat('PIP-AzFw-', variables('webAppUniqueName'))]",
+        "logAnalyticsWorkspaceName": "[concat('LAW-', variables('webAppUniqueName'))]",
+        "webAppServiceName": "[concat('AppService-', variables('webAppUniqueName'))]",
+        "webAppInternalName": "[concat(variables('webAppUniqueName'),'-Internal')]",
+        "webAppSkuName": "P1v2",
+        "webAppInternalPrivateEndpointName": "[concat('Priv-', variables('webAppUniqueName'))]",
+        "privateLinkConnectionName": "[concat('PrivLink-', variables('webAppUniqueName'))]",
+        "automationAccountName": "[concat('AA-', 'CLAW-Aggregator-', variables('uniqueValue'))]",
+        "UploadAzADLogs": "UploadAzADLogs",
+        "UploadAzAppGatewayLogs": "UploadAzAppGatewayLogs",
+        "UploadAzFirewallLogs": "UploadAzFirewallLogs",
+        "UploadAzFrontDoorLogs": "UploadAzFrontDoorLogs",
+        "UploadThirdPartyFirewallLogs": "UploadThirdPartyFirewallLogs",
+        "UploadNetFlowLogs": "UploadNetFlowLogs",
+        "scheduleCount": 4,
+        "jobName00": "00",
+        "jobName01": "01",
+        "jobName02": "02",
+        "jobName03": "03",
+        "startTime": "[dateTimeAdd(parameters('baseTime'), 'PT1H')]",
+        "runbookName": "[concat('Runbook-', 'CLAW-Aggregator', variables('uniqueValue'))]",
+        "runbookUri": "https://raw.githubusercontent.com/Azure/trusted-internet-connection/main/Runbook/CLAW-Aggregator.ps1",
+        "diagSettingsName": "[concat('SendtoWorkspace-', variables('webAppUniqueName'))]",
+        "actionGroupName": "FailureEmail",
+        "tenantIdObject": {
+            "value": "[subscription().tenantId]",
+            "type": "object"
+        },
+        "tenantId": "[variables('tenantIdObject').value]",
+        "logAnalyticsReaderRoleId": "73c42c96-874c-492b-b04d-ab87d138a893"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2021-04-01-preview",
+            "name": "[guid(variables('automationAccountName'))]",
+            "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('logAnalyticsReaderRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName')), '2021-06-22', 'Full').identity.principalId]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]",
+                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]",
+                "[resourceId('Microsoft.Network/azureFirewalls', variables('azureFirewallName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('virtualNetworkName')]",
+            "location": "[variables('networkLocation')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('virtualNetworkIPRange')]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('virtualNetworkName'), '/', variables('subnetInternalName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[variables('subnetInternalIPRange')]",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('virtualNetworkName'), '/', variables('subnetFirewallName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetInternalName'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[variables('subnetFirewallIPRange')]",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('publicIPAzureFirewallName')]",
+            "location": "[variables('networkLocation')]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('webAppInternalPrivateEndpointName')]",
+            "location": "[variables('networkLocation')]",
+            "properties": {
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetInternalName'))]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateLinkConnectionName')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]",
+                            "groupIds": [
+                                "sites"
+                            ]
+                        }
+                    }
+                ],
+                "customDnsConfigs": [
+                    {
+                        "fqdn": "[concat(variables('webAppInternalName'), variables('webAppDnsName'), variables('webAppDnsExtension'))]",
+                        "ipAddresses": [
+                            "[format('{0}.{1}.{2}.{3}', variables('IPBase')[0], variables('IPBase')[1], '10', '4')]"
+                        ]
+                    },
+                    {
+                        "fqdn": "[concat(variables('webAppInternalName'),'.scm', variables('webAppDnsName'), variables('webAppDnsExtension'))]",
+                        "ipAddresses": [
+                            "[format('{0}.{1}.{2}.{3}', variables('IPBase')[0], variables('IPBase')[1], '10', '4')]"
+                        ]
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetInternalName'))]",
+                "[resourceId('Microsoft.Web/sites', variables('webAppInternalName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('privateDnsZoneName')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('privateDnsZoneName'), format('{0}-link', variables('privateDnsZoneName')))]",
+            "location": "global",
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-03-01",
+            "name": "[format('{0}/{1}', variables('webAppInternalPrivateEndpointName'), 'dnsgroupname')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "config1",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]",
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('webAppInternalPrivateEndpointName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('azureFirewallPoliciesName')]",
+            "location": "[variables('networkLocation')]",
+            "properties": {
+                "sku": {
+                    "tier": "Premium"
+                },
+                "threatIntelMode": "Alert",
+                "intrusionDetection": {
+                    "mode": "Alert"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('azureFirewallPoliciesName'), '/DefaultNetworkRuleCollectionGroup')]",
+            "location": "[variables('networkLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', variables('azureFirewallPoliciesName'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAzureFirewallName'))]"
+            ],
+            "properties": {
+                "priority": 100,
+                "ruleCollections": [
+                    {
+                        "ruleCollectionType": "FirewallPolicyNatRuleCollection",
+                        "action": {
+                            "type": "Dnat"
+                        },
+                        "rules": [
+                            {
+                                "ruleType": "NatRule",
+                                "name": "[variables('azureFirewallPolicyRuleName')]",
+                                "translatedAddress": "[format('{0}.{1}.{2}.{3}', variables('IPBase')[0], variables('IPBase')[1], '10', '4')]",
+                                "translatedPort": "443",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAzureFirewallName'))).ipAddress]"
+                                ],
+                                "destinationPorts": [
+                                    "[variables('azureFirewallPolicyRuleDestinationPort')]"
+                                ]
+                            }
+                        ],
+                        "name": "[variables('azureFirewallPolicyCollectionName')]",
+                        "priority": 150
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/azureFirewalls",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('azureFirewallName')]",
+            "location": "[variables('networkLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAzureFirewallName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetFirewallName'))]",
+                "[resourceId('Microsoft.Network/firewallPolicies', variables('azureFirewallPoliciesName'))]",
+                "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', variables('azureFirewallPoliciesName'), 'DefaultNetworkRuleCollectionGroup')]"
+            ],
+            "properties": {
+                "sku": {
+                    "name": "AZFW_VNet",
+                    "tier": "Premium"
+                },
+                "threatIntelMode": "Alert",
+                "additionalProperties": {},
+                "ipConfigurations": [
+                    {
+                        "name": "[concat('PIP-', variables('azureFirewallName'))]",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAzureFirewallName'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetFirewallName'))]"
+                            }
+                        }
+                    }
+                ],
+                "networkRuleCollections": [],
+                "applicationRuleCollections": [],
+                "natRuleCollections": [],
+                "firewallPolicy": {
+                    "id": "[resourceId('Microsoft.Network/firewallPolicies', variables('azureFirewallPoliciesName'))]"
+                }
+            }
+        },
+        {
+            "type": "microsoft.operationalinsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "name": "[variables('logAnalyticsWorkspaceName')]",
+            "location": "[variables('networkLocation')]",
+            "properties": {
+                "sku": {
+                    "name": "PerGB2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                    "enableLogAccessUsingOnlyResourcePermissions": true
+                },
+                "workspaceCapping": {
+                    "dailyQuotaGb": -1
+                },
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('webAppServiceName')]",
+            "location": "[variables('networkLocation')]",
+            "sku": {
+                "name": "[variables('webAppSkuName')]",
+                "tier": "[variables('skuTier')]",
+                "size": "[variables('webAppSkuName')]",
+                "family": "[variables('webAppSkuName')]",
+                "capacity": 1
+            },
+            "kind": "app",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('webAppInternalName')]",
+            "location": "[variables('networkLocation')]",
+            "kind": "app",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('webAppServiceName'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('webAppServiceName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts",
+            "apiVersion": "2021-06-22",
+            "name": "[variables('automationAccountName')]",
+            "location": "[variables('networkLocation')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "disableLocalAuth": false,
+                "sku": {
+                    "name": "Basic"
+                },
+                "encryption": {
+                    "keySource": "Microsoft.Automation",
+                    "identity": {}
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/modules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/AWSPowerShell')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "contentLink": {
+                    "uri": "https://devopsgallerystorage.blob.core.windows.net:443/packages/awspowershell.4.1.16.nupkg"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/runbooks",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('automationAccountName'), '/' , variables('runbookName'))]",
+            "location": "[variables('networkLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "runbookType": "PowerShell",
+                "logVerbose": false,
+                "logProgress": false,
+                "logActivityTrace": 0,
+                "publishContentLink": {
+                    "uri": "[variables('runbookUri')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', variables('UploadAzADLogs'), '-', copyIndex())]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "description": "Upload Azure Active Directory Logs from the last 15 minutes to CISA CLAW.",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            },
+            "copy": {
+                "name": "scheduleCount",
+                "count": "[variables('scheduleCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', variables('UploadAzFirewallLogs'), '-', copyIndex())]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzADLogs'), '-3'))]"
+            ],
+            "properties": {
+                "description": "Upload Azure Firewall Logs from the last 15 minutes to CISA CLAW.",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            },
+            "copy": {
+                "name": "scheduleCount",
+                "count": "[variables('scheduleCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', variables('UploadAzFrontDoorLogs'), '-', copyIndex())]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFirewallLogs'), '-3'))]"
+            ],
+            "properties": {
+                "description": "Upload Azure Front Door Logs from the last 15 minutes to CISA CLAW.",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            },
+            "copy": {
+                "name": "scheduleCount",
+                "count": "[variables('scheduleCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', variables('UploadAzAppGatewayLogs'), '-', copyIndex())]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFrontDoorLogs'), '-3'))]"
+            ],
+            "properties": {
+                "description": "Upload Azure App Gateway Logs from the last 15 minutes to CISA CLAW.",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            },
+            "copy": {
+                "name": "scheduleCount",
+                "count": "[variables('scheduleCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', variables('UploadNetFlowLogs'), '-', copyIndex())]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzAppGatewayLogs'), '-3'))]"
+            ],
+            "properties": {
+                "description": "Upload Azure NetFlow Logs from the last 15 minutes to CISA CLAW.",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            },
+            "copy": {
+                "name": "scheduleCount",
+                "count": "[variables('scheduleCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/schedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', variables('UploadThirdPartyFirewallLogs'), '-', copyIndex())]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadNetFlowLogs'), '-3'))]"
+            ],
+            "properties": {
+                "description": "Upload Azure Third-party Firewall Logs from the last 15 minutes to CISA CLAW.",
+                "startTime": "[dateTimeAdd(variables('startTime'), concat('PT', mul(copyIndex(), 15) ,'M'))]",
+                "interval": 1,
+                "frequency": "Hour",
+                "timeZone": "America/New_York"
+            },
+            "copy": {
+                "name": "scheduleCount",
+                "count": "[variables('scheduleCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName00')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureADAuth": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzADLogs'), '-0')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzADLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName01')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureADAuth": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzADLogs'), '-1')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzADLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName02')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureADAuth": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzADLogs'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzADLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzADLogs'), variables('uniqueValue'), variables('jobName03')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureADAuth": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzADLogs'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzADLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName00')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFirewallLogs'), '-0')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName01')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFirewallLogs'), '-1')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName02')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFirewallLogs'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFirewallLogs'), variables('uniqueValue'), variables('jobName03')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFirewallLogs'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName00')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFrontDoor": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFrontDoorLogs'), '-0')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFrontDoorLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName01')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFrontDoor": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFrontDoorLogs'), '-1')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFrontDoorLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName02')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFrontDoor": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFrontDoorLogs'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFrontDoorLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzFrontDoorLogs'), variables('uniqueValue'), variables('jobName03')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureFrontDoor": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzFrontDoorLogs'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzFrontDoorLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName00')))]",
+            "properties": {
+                "parameters": {
+                    "logNetflow": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadNetFlowLogs'), '-0')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadNetFlowLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName01')))]",
+            "properties": {
+                "parameters": {
+                    "logNetflow": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadNetFlowLogs'), '-1')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadNetFlowLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName02')))]",
+            "properties": {
+                "parameters": {
+                    "logNetflow": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadNetFlowLogs'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadNetFlowLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadNetFlowLogs'), variables('uniqueValue'), variables('jobName03')))]",
+            "properties": {
+                "parameters": {
+                    "logNetflow": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadNetFlowLogs'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadNetFlowLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName00')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureAppGateway": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzAppGatewayLogs'), '-0')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzAppGatewayLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName01')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureAppGateway": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzAppGatewayLogs'), '-1')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzAppGatewayLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName02')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureAppGateway": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzAppGatewayLogs'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzAppGatewayLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadAzAppGatewayLogs'), variables('uniqueValue'), variables('jobName03')))]",
+            "properties": {
+                "parameters": {
+                    "logAzureAppGateway": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadAzAppGatewayLogs'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadAzAppGatewayLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName00')))]",
+            "properties": {
+                "parameters": {
+                    "logThirdpartyFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadThirdPartyFirewallLogs'), '-0')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadThirdPartyFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName01')))]",
+            "properties": {
+                "parameters": {
+                    "logThirdpartyFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadThirdPartyFirewallLogs'), '-1')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadThirdPartyFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName02')))]",
+            "properties": {
+                "parameters": {
+                    "logThirdpartyFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadThirdPartyFirewallLogs'), '-2')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadThirdPartyFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/', guid(variables('automationAccountName'), variables('UploadThirdPartyFirewallLogs'), variables('uniqueValue'), variables('jobName03')))]",
+            "properties": {
+                "parameters": {
+                    "logThirdpartyFirewall": "true"
+                },
+                "runbook": {
+                    "name": "[variables('runbookName')]"
+                },
+                "schedule": {
+                    "name": "[concat(variables('UploadThirdPartyFirewallLogs'), '-3')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/runbooks', variables('automationAccountName'), variables('runbookName'))]",
+                "[concat('Microsoft.Automation/automationAccounts/', variables('automationAccountName'), '/schedules/', concat(variables('UploadThirdPartyFirewallLogs'), '-0'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/variables",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/TenantId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "description": "This is the Tenant ID from Azure AD. Initially populated from Deployment ARM Template.",
+                "value": "[concat('\"',variables('tenantId'),'\"')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/variables",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/LogAnalyticWorkspaceID')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
+            ],
+            "properties": {
+                "description": "Log Analytics Workspace where the Azure Firewall sends its diagnostic logs. Initially populated from Deployment ARM Template.",
+                "value": "[concat('\"',reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))).customerId,'\"')]"
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/variables",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/AccessKey')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "isEncrypted": true,
+                "description": "Provided by CISA."
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/variables",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/SecretKey')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "isEncrypted": true,
+                "description": "Provided by CISA, this will expire. Please discuss with CISA to understand when it rotates. Please UPDATE this variable before it expires."
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/variables",
+            "apiVersion": "2020-01-13-preview",
+            "name": "[concat(variables('automationAccountName'), '/BucketName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "isEncrypted": true,
+                "description": "Provided by CISA."
+            }
+        },
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2021-09-01",
+            "name": "[variables('actionGroupName')]",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "[variables('actionGroupName')]",
+                "enabled": true,
+                "emailReceivers": [
+                    {
+                        "name": "Email_-EmailAction-",
+                        "emailAddress": "[parameters('failedRunbookAlertEmail')]",
+                        "useCommonAlertSchema": true
+                    }
+                ],
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "eventhubReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": [],
+                "armRoleReceivers": []
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "Failed Runbook Job",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('microsoft.insights/actionGroups', variables('actionGroupName'))]"
+            ],
+            "properties": {
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT5M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 0,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.Automation/automationAccounts",
+                            "metricName": "TotalJob",
+                            "dimensions": [
+                                {
+                                    "name": "Status",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Failed"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThan",
+                            "timeAggregation": "Count",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": false,
+                "targetResourceType": "Microsoft.Automation/automationAccounts",
+                "targetResourceRegion": "[variables('networkLocation')]",
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', variables('actionGroupName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/azureFirewalls/providers/diagnosticSettings",
+            "name": "[concat(variables('azureFirewallName'),'/microsoft.insights/', variables('diagSettingsName'))]",
+            "apiVersion": "2021-05-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]",
+                "[resourceId('Microsoft.Network/azureFirewalls', variables('azureFirewallName'))]"
+            ],
+            "properties": {
+                "name": "DiagService",
+                "storageAccountId": null,
+                "eventHubAuthorizationRuleId": null,
+                "eventHubName": null,
+                "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]",
+                "logs": [
+                    {
+                        "category": "AzureFirewallApplicationRule",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 10,
+                            "enabled": false
+                        }
+                    },
+                    {
+                        "category": "AzureFirewallNetworkRule",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 10,
+                            "enabled": false
+                        }
+                    }
+                ],
+                "metrics": [
+                    {
+                        "category": "AllMetrics",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

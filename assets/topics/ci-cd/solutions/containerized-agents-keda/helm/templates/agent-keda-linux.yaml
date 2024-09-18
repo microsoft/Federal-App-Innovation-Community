@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: devops-auth-linux
+  namespace: {{ .Values.namespace }}
+stringData:
+  azp_token: {{ .Values.linux.secret.azpToken}}
+  azp_url: {{ .Values.linux.secret.azpUrl }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: pipeline-trigger-auth-linux
+  namespace: {{ .Values.namespace }}
+spec:
+  secretTargetRef:
+    - parameter: organizationURL
+      name: devops-auth-linux
+      key: azp_url
+    - parameter: personalAccessToken
+      name: devops-auth-linux
+      key: azp_token
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: agent-scaledjob-linux
+  namespace: {{ .Values.namespace }}
+spec:
+  jobTargetRef:
+    parallelism: 5
+    completions: 1
+    template:
+      spec:
+        containers:
+        - name: agent-linux
+          image: {{ .Values.linux.image.acrLoginServer }}/{{ .Values.linux.image.name }}:{{ .Values.linux.image.tag }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AZP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: devops-auth-linux
+                  key: azp_url
+            - name: AZP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: devops-auth-linux
+                  key: azp_token
+            - name: AZP_POOL
+              value: "{{ .Values.linux.job.poolName }}"
+            - name: RUN_ONCE
+              value: "{{ .Values.linux.job.runOnce }}"
+        tolerations:
+          - key: os
+            operator: Equal
+            value: linux
+            effect: NoSchedule
+        nodeSelector:
+          kubernetes.io/os: linux
+  pollingInterval: 1
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  triggers:
+  - type: azure-pipelines
+    metadata:
+      poolID: "{{ .Values.linux.trigger.poolId }}"
+      targetPipelinesQueueLength: "{{ .Values.linux.trigger.targetPipelinesQueueLength }}" #scale an agent per job queued in pipeline
+    authenticationRef:
+     name: pipeline-trigger-auth-linux

@@ -7,6 +7,7 @@ We recommend using these solutions to accelerate your own outcomes, you can fork
 # Contributing
 
 You can contribute new solutions to the `/solutions` folder in the repo.
+You can contribute new templates (bicep, terraform, etc) to the `/templates/` folder in the repo. 
 
 A few guidelines as you design your solution:
 

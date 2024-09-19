@@ -1,3 +1,5 @@
+<!-- This module should be replaced by an APIOps Module -->
+
 # APIM DevOps Workflow
 
 ## Deployment via CLI/Terminal

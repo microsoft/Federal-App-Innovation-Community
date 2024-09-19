@@ -1,10 +1,8 @@
 # Bicep Templates
 
-## Bicep Conversion to ARM Template
+Many of these templates start from the [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) (AVM). Federal customers require differences in their templates that AVM does not deliver on, such as no telemetry and seperation of duties on roles.
 
-#TODO
-
-## Understanding Parameters
+## Understanding the Parameters
 
 Parameters are broken into 3 distinct sections:  
 
@@ -41,13 +39,7 @@ A comment in the bicep file should be added to explain the deviation.
 
 ## Contributing Guidelines
 
-If you want to contribute code to the SOE-C (features, updated API version, modules, etc) and help the Department of State secure baseline grow please perform the following:  
-
-1. Submit a ticket to DT/EI/IM/CVS via SNow for permissions to the project to create a fork.
-1. Fork the repo
-1. Make your changes
-1. Submit a pull request
-1. Submit a ticket to DT/EI/IM/CVS via SNow to review the pull request
+If you want to contribute code to these templates (features, updated API version, modules, etc) and help the build this repository, please follow the contribution guidelines in [here](../../README.md#contributing)
 
 ### Parameter Guidelines
 
@@ -87,6 +79,7 @@ If you want to contribute code to the SOE-C (features, updated API version, modu
 - Converting ARM to Bicep (compile)
 - Converting Bicep to ARM (decompile)
 - Bicep Build - Preparing to deploy to Azure (build)
+- Bicep Decompliation to ARM Templates
 
 
 [BicepOverview]:https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/

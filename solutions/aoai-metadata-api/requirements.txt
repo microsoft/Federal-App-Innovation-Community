@@ -1,0 +1,18 @@
+openai
+tiktoken 
+python-dotenv
+langchain==0.2.11
+langchain-community==0.2.10
+langchain-experimental==0.0.63
+langchain-openai== 0.1.20
+mysql-connector-python
+python-docx  
+docx2txt
+azure-search-documents==11.5.1
+azure-identity==1.17.1
+unstructured
+fastapi 
+uvicorn
+azure-cosmos
+pyngrok
+sseclient

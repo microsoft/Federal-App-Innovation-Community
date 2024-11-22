@@ -1,0 +1,76 @@
+<policies>
+    <inbound>
+        <base />
+        <set-variable name="requestBody" value="@(context.Request.Body.As<string>(preserveContent: true))" />
+        <set-backend-service backend-id="<Your AOAI APIM Backend>" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <!-- Set a variable to capture the response body -->
+        <set-variable name="responseBody" value="@(context.Response.Body.As<string>())" />
+        <!-- Combine requestBody and responseBody into a single JSON object -->
+        <set-variable name="combinedBody" value="@{  
+            var requestBody = context.Variables.GetValueOrDefault<string>("requestBody");  
+            var responseBody = context.Variables.GetValueOrDefault<string>("responseBody");  
+            return Newtonsoft.Json.JsonConvert.SerializeObject(new {  
+                requestBody = requestBody,  
+                responseBody = responseBody  
+            });  
+        }" />
+        <!-- Send the combined body and extra headers to the external URL -->
+        <send-request mode="new" response-variable-name="externalResponse" timeout="60">
+            <set-url>"<Your API URL whether deployed in Azure or running Ngrok.>"/apim_api</set-url>
+            <set-method>POST</set-method>
+            <set-header name="Content-Type" exists-action="override">
+                <value>application/json</value>
+            </set-header>
+            <!-- Set additional headers from the original request -->
+            <set-header name="system_prompt" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("system_prompt", "default-value"))</value>
+            </set-header>
+            <set-header name="user_prompt" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("user_prompt", "default-value"))</value>
+            </set-header>
+            <set-header name="time_asked" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("time_asked", "default-value"))</value>
+            </set-header>
+            <set-header name="deployment_model" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("deployment_model", "default-value"))</value>
+            </set-header>
+            <set-header name="name_model" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("name_model", "default-value"))</value>
+            </set-header>
+            <set-header name="version_model" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("version_model", "default-value"))</value>
+            </set-header>
+            <set-header name="region" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("region", "default-value"))</value>
+            </set-header>
+            <set-header name="project" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("project", "default-value"))</value>
+            </set-header>
+            <set-header name="database" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("database", "default-value"))</value>
+            </set-header>
+            <set-header name="retrieve" exists-action="override">
+                <value>@(context.Request.Headers.GetValueOrDefault("retrieve", "default-value"))</value>
+            </set-header>
+            <!-- Use the combined JSON body in the outbound request -->
+            <set-body>@(context.Variables.GetValueOrDefault<string>("combinedBody"))</set-body>
+        </send-request>
+        <!-- Return the original response body to the client -->
+        <return-response>
+            <set-status code="200" reason="OK" />
+            <set-header name="Content-Type" exists-action="override">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@(context.Variables.GetValueOrDefault<string>("responseBody"))</set-body>
+        </return-response>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

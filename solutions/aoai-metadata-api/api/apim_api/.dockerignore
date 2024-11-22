@@ -1,0 +1,8 @@
+.venv
+.env
+__pychache__/
+api's/MySQL_API/__pychache__
+APIM/
+apim_api_v2.py 
+run_with_ngrok.py
+api_testers/

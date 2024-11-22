@@ -6,7 +6,8 @@ We recommend using these solutions to accelerate your own outcomes, you can fork
 
 # Contributing
 
-You can contribute new solutions to the `/solutions` folder in the repo.
+You can contribute new solutions to the `/solutions` folder in the repo.  
+You can contribute new templates (bicep, terraform, etc) to the `/templates/` folder in the repo. 
 
 A few guidelines as you design your solution:
 
@@ -14,7 +15,7 @@ A few guidelines as you design your solution:
 
 2. Provide deployment instructions
 
-3. Try to make the solution 'generic' meaning others can provide parameters/inputs for customization for their own environments and scenarios.
+3. Try to make the solution 'generic' meaning others can provide parameters/inputs for customization for their own environments and scenarios. If you need assistance with parameterizing your work, please create a pull request and specify you need assistance with it.
 
 ## Step 1: Fork the repository to have your own instance of the repo
 

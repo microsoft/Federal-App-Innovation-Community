@@ -1,3 +1,7 @@
+# Notes on #TODO
+
+1. move remote-debug to trainings
+
 # Remote Debugging
 
 These tutorials show remote debugging using common Microsoft tools. Each tutorial will create an associated app service, deployment, and debugging instructions. 

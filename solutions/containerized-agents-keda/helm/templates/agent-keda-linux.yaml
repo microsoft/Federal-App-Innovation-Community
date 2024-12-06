@@ -4,8 +4,63 @@ metadata:
   name: devops-auth-linux
   namespace: {{ .Values.namespace }}
 stringData:
-  azp_token: {{ .Values.linux.secret.azpToken}}
+  #azp_token: {{ .Values.linux.secret.azpToken}}
   azp_url: {{ .Values.linux.secret.azpUrl }}
+  #clientSecret: {{ .Values.linux.secret.clientSecret }}
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: "{{ .Values.linux.keyVault.name }}-lnx"
+  namespace: {{ .Values.namespace }}
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"
+    userAssignedIdentityID: {{ .Values.linux.keyVault.clientId }}
+    keyvaultName: {{ .Values.linux.keyVault.name }}
+    cloudName: "{{ .Values.linux.keyVault.cloud }}"
+    objects: |
+      array: 
+        - |
+          objectName: linux-pat
+          objectType: secret
+          objectVersion: ""
+    tenantID: {{ .Values.linux.keyVault.tenantId }} #"${TENANT_ID}"
+  secretObjects:
+    - data:
+        - objectName: linux-pat
+          key: linux-pat
+      secretName: akv-secrets-lnx
+      type: Opaque
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: "{{ .Values.linux.keyVault.name }}-lnx-cs"
+  namespace: {{ .Values.namespace }}
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"
+    userAssignedIdentityID: {{ .Values.linux.keyVault.clientId }}
+    keyvaultName: {{ .Values.linux.keyVault.name }}
+    cloudName: "{{ .Values.linux.keyVault.cloud }}"
+    objects: |
+      array: 
+        - |
+          objectName: clientSecret
+          objectType: secret
+          objectVersion: ""
+    tenantID: {{ .Values.linux.keyVault.tenantId }} #"${TENANT_ID}"
+  secretObjects:
+    - data:
+        - objectName: clientSecret
+          key: clientSecret
+      secretName: akv-secrets-lnx-cs
+      type: Opaque
 ---
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
@@ -17,16 +72,30 @@ spec:
     - parameter: organizationURL
       name: devops-auth-linux
       key: azp_url
+  azureKeyVault:
+    vaultUri: "https://{{ .Values.linux.keyVault.name }}.{{ ternary "vault.azure.net" "vault.usgovcloudapi.net" (eq .Values.linux.keyVault.cloud "Azure") }}"
+    credentials:
+      clientId: {{ .Values.linux.keyVault.kedaClientId }}
+      clientSecret:
+        valueFrom:
+          secretKeyRef:
+            name: akv-secrets-lnx-cs
+            key: clientSecret
+      tenantId: {{ .Values.linux.keyVault.tenantId }}
+    cloud:
+      type: "{{ .Values.linux.keyVault.cloud }}Cloud"
+    secrets:
     - parameter: personalAccessToken
-      name: devops-auth-linux
-      key: azp_token
+      name: linux-pat
 ---
 apiVersion: keda.sh/v1alpha1
-kind: ScaledJob
+kind: ScaledJob #https://keda.sh/docs/2.15/reference/scaledjob-spec/
 metadata:
   name: agent-scaledjob-linux
   namespace: {{ .Values.namespace }}
 spec:
+  minReplicaCount: 0
+  maxReplicaCount: 5
   jobTargetRef:
     parallelism: 5
     completions: 1
@@ -35,7 +104,13 @@ spec:
         containers:
         - name: agent-linux
           image: {{ .Values.linux.image.acrLoginServer }}/{{ .Values.linux.image.name }}:{{ .Values.linux.image.tag }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: true
           env:
             - name: AZP_URL
               valueFrom:
@@ -45,12 +120,23 @@ spec:
             - name: AZP_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: devops-auth-linux
-                  key: azp_token
+                  name: akv-secrets-lnx
+                  key: linux-pat
             - name: AZP_POOL
               value: "{{ .Values.linux.job.poolName }}"
             - name: RUN_ONCE
               value: "{{ .Values.linux.job.runOnce }}"
+        #  volumeMounts:
+        #    - name: akv-secrets-lnx
+        #      mountPath: "/mnt/akv-secrets-lnx"
+        #      readOnly: true
+        #volumes:
+        #  - name: akv-secrets-lnx
+        #    csi:
+        #      driver: secrets-store.csi.k8s.io
+        #      readOnly: true
+        #      volumeAttributes:
+        #        secretProviderClass: "{{ .Values.linux.keyVault.name }}-lnx"
         tolerations:
           - key: os
             operator: Equal
@@ -59,12 +145,12 @@ spec:
         nodeSelector:
           kubernetes.io/os: linux
   pollingInterval: 1
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
   triggers:
-  - type: azure-pipelines
+  - type: azure-pipelines # https://keda.sh/docs/2.15/scalers/azure-pipelines/#trigger-specification
     metadata:
-      poolID: "{{ .Values.linux.trigger.poolId }}"
-      targetPipelinesQueueLength: "{{ .Values.linux.trigger.targetPipelinesQueueLength }}" #scale an agent per job queued in pipeline
+      poolID: "{{ .Values.linux.trigger.poolId }}" #https://keda.sh/docs/2.15/scalers/azure-pipelines/#how-to-determine-your-pool-id
+      targetPipelinesQueueLength: "{{ .Values.linux.trigger.targetPipelinesQueueLength }}"
     authenticationRef:
      name: pipeline-trigger-auth-linux

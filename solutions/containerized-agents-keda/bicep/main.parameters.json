@@ -1,15 +1,103 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "rgName": {
-      "value": "rg-aks-keda-devops"
-    },
-    "location": {
-      "value": "eastus"
-    },
-    "aksName": {
-      "value": "aks-cluster"
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Location": {
+            "value": "usgovvirginia"
+        },
+        "AksName": {
+            "value": "eba-keda"
+        },
+        "KeyVault": {
+            "value": {
+                "name": "eba"
+            }
+        },
+        "Tags": {
+            "value": {
+                "CostCenter": "12345",
+                "AppName": "EBA",
+                "Environment": "dev",
+                "Customer": "Me",
+                "Requestor": "Me"
+            }
+        },
+        "Subnet": {
+            "value": {
+                "vNetName": "eba",
+                "subnetName": "default"
+            }
+        },
+        "AgentSize": {
+            "value": "Standard_D2S_v5"
+        },
+        "SyslogLevels": {
+            "value": [
+                "Debug",
+                "Info",
+                "Notice",
+                "Warning",
+                "Error",
+                "Critical",
+                "Alert",
+                "Emergency"
+            ]
+        },
+        "SyslogFacilities": {
+            "value": [
+                "auth",
+                "authpriv",
+                "cron",
+                "daemon",
+                "mark",
+                "kern",
+                "local0",
+                "local1",
+                "local2",
+                "local3",
+                "local4",
+                "local5",
+                "local6",
+                "local7",
+                "lpr",
+                "mail",
+                "news",
+                "syslog",
+                "user",
+                "uucp"
+            ]
+        },
+        "DataCollectionInterval": {
+            "value": "1m"
+        },
+        "NamespaceFilteringModeForDataCollection": {
+            "value": "Off"
+        },
+        "NamespacesForDataCollection": {
+            "value": [
+                "kube-system",
+                "gatekeeper-system",
+                "devops"
+            ]
+        },
+        "EnableContainerLogV2": {
+            "value": true
+        },
+        "Streams": {
+            "value": [
+                "Microsoft-ContainerLog",
+                "Microsoft-ContainerLogV2",
+                "Microsoft-KubeEvents",
+                "Microsoft-KubePodInventory",
+                "Microsoft-KubeNodeInventory",
+                "Microsoft-KubePVInventory",
+                "Microsoft-KubeServices",
+                "Microsoft-KubeMonAgentEvents",
+                "Microsoft-InsightsMetrics",
+                "Microsoft-ContainerInventory",
+                "Microsoft-ContainerNodeInventory",
+                "Microsoft-Perf"
+            ]
+        }
     }
-  }
 }

@@ -1,0 +1,19 @@
+.venv
+.env
+__pychache__/
+api/MySQL_API/__pychache__
+test_data/peach_fly_usecase.docx
+call_rag_api.py
+p3.py
+api/MySQL_API/__pycache__/mysql_api.cpython-311.pyc
+MySQL API Capture Approach Ideas.txt
+api/code_api/__pycache__/code_api.cpython-311.pyc
+api/code_api/__pycache__/mysql_api.cpython-311.pyc
+api/apim_api/apim_api_v2.py
+api/apim_api/__pycache__/apim_api_v2.cpython-311.pyc
+api/apim_api/__pycache__/apim_api.cpython-311.pyc
+api/code_api/backend_diagrams/flow_chart_codeapi.drawio
+api/apim_api/backend_diagrams/flow_chart_apimapi.drawio
+aoai_metadata_pres.pptx
+api/apim_api/api_testers/dev_norag.py
+api/apim_api/my_apim_api.py

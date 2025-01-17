@@ -1,5 +1,5 @@
 param location string
-var acrName  = 'acr${uniqueString(resourceGroup().id)}' //to keep it unique
+var acrName  = 'ebaacr${uniqueString(resourceGroup().id)}' //to keep it unique
 
 @allowed([
   'Basic'
@@ -24,6 +24,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' = {
 }
 
 var acrPullRoleAssignmentName = guid(kubeletPrincipalId, resourceGroup().id, 'acr')
+
 resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: acrPullRoleAssignmentName
   scope: acr

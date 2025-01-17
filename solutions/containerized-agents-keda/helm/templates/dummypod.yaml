@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-dummy-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: busybox-dummy
+spec:
+  replicas: 1  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: busybox-dummy
+  template:
+    metadata:
+      labels:
+        app: busybox-dummy
+    spec:
+      containers:
+        - name: busybox
+          image: registry.k8s.io/e2e-test-images/busybox:1.29-1
+          command:
+            - "/bin/sleep"
+            - "100000000"
+          volumeMounts:
+          - name: akv-secrets-lnx-vol
+            mountPath: "/mnt/akv-secrets-lnx"
+            readOnly: true
+          - name: akv-secrets-lnx-vol-cs
+            mountPath: "/mnt/akv-secrets-lnx-cs"
+            readOnly: true
+          - name: akv-secrets-win-vol
+            mountPath: "/mnt/akv-secrets-win"
+            readOnly: true
+          - name: akv-secrets-win-vol-cs
+            mountPath: "/mnt/akv-secrets-win-cs"
+            readOnly: true
+          env:
+          - name: LINUX_PAT
+            valueFrom:
+              secretKeyRef:
+                name: akv-secrets-lnx
+                key: linux-pat
+          - name: WINDOWS_PAT
+            valueFrom:
+              secretKeyRef:
+                name: akv-secrets-win
+                key: windows-pat
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: akv-secrets-lnx-cs
+                key: clientSecret
+          - name: CLIENT_SECRET_2
+            valueFrom:
+              secretKeyRef:
+                name: akv-secrets-win-cs
+                key: clientSecret
+      volumes:
+        - name: akv-secrets-lnx-vol
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "{{ .Values.linux.keyVault.name }}-lnx"
+        - name: akv-secrets-lnx-vol-cs
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "{{ .Values.linux.keyVault.name }}-lnx-cs"
+        - name: akv-secrets-win-vol
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "{{ .Values.windows.keyVault.name }}-win"
+        - name: akv-secrets-win-vol-cs
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "{{ .Values.windows.keyVault.name }}-win-cs"

@@ -8,43 +8,58 @@ namespace: devops #namespace that you want to run the agents within
 
 linux:
   image:
-    acrLoginServer: ACR-LOGIN-SERVER #should see this in the portal for your ACR instance
+    acrLoginServer: .azurecr.us #should see this in the portal for your ACR instance
     name: linux-agent #should be the name seen in ACR
-    tag: latest #should be the image's tag
+    tag: latest #should be the image's tag - latest works in test scenarios but should not be used in production
 
   # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops#environment-variables
   secret:
     # THIS IS A CREDENTIAL - BE SURE NOT TO COMMIT TO REPO
     azpToken: #Azure DevOps PAT - https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#authenticate-with-a-personal-access-token-pat
-    azpUrl: #Azure DevOps Organization URL
+    azpUrl: https://UrlToDevOpsServer
 
   job:
-    poolName: linux-agent-pool #name of pool for Azure DevOps Agents
-    runOnce: "True" #make this true to run the agents as jobs instead of long-lived processes
-
-  trigger:
-    # https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
-    poolId: #agent pool ID - https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
-    targetPipelinesQueueLength: 1
-
-windows:
-  image:
-    acrLoginServer: ACR-LOGIN-SERVER #should see this in the portal for your ACR instance
-    name: windows-agent #should be the name seen in ACR
-    tag: latest #should be the image's tag
-
-  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops#environment-variables
-  secret:
-    # THIS IS A CREDENTIAL - BE SURE NOT TO COMMIT TO REPO
-    azpToken: #Azure DevOps PAT - https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#authenticate-with-a-personal-access-token-pat
-    azpUrl: #Azure DevOps Organization URL
-
-  job:
-    poolName: windows-agent-pool #name of pool for Azure DevOps Agents
+    poolName: eba-lnx #name of pool for Azure DevOps Agents
     runOnce: "True" #make this true to run the agents as jobs instead of long-lived processes
 
   trigger:
     # https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
     # az pipelines pool list --pool-name {agentPoolName} --organization {organizationURL} --query [0].id
-    poolId: #agent pool ID - https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
+    poolId: 190 #agent pool ID
     targetPipelinesQueueLength: 1
+
+  keyVault:
+    clientId:  #Pulled and passed in using --set. This managed identity is used by the Secrets CSI driver 
+    kedaClientId:  #This service principal client id is used by the KEDA scaler to access AKV
+    name: eba
+    cloud: AzureUsGovernment #Azure for Commercial
+    tenantId: 00000000-0000-0000-0000-000000000000
+
+windows:
+  image:
+    acrLoginServer: .azurecr.us #should see this in the portal for your ACR instance
+    name: windows-agent #should be the name seen in ACR
+    tag: latest #should be the image's tag - latest works in test scenarios but should not be used in production
+
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops#environment-variables
+  secret:
+    # THIS IS A CREDENTIAL - BE SURE NOT TO COMMIT TO REPO
+    azpToken: #Azure DevOps PAT - https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#authenticate-with-a-personal-access-token-pat
+    azpUrl: https://UrlToDevOpsServer #Azure DevOps Organization URL
+
+  job:
+    poolName: eba-win #name of pool for Azure DevOps Agents
+    runOnce: "True" #make this true to run the agents as jobs instead of long-lived processes
+
+  trigger:
+    # https://keda.sh/docs/2.3/scalers/azure-pipelines/#how-to-determine-your-pool-id
+    # az pipelines pool list --pool-name {agentPoolName} --organization {organizationURL} --query [0].id
+    poolId: 207 #agent pool ID
+    targetPipelinesQueueLength: 1
+
+  keyVault:
+    clientId:  #Pulled and passed in using --set. This managed identity is used by the Secrets CSI driver 
+    kedaClientId:  #This service principal client id is used by the KEDA scaler to access AKV
+    name: eba
+    cloud: AzureUsGovernment #Azure for Commercial
+    tenantId: 00000000-0000-0000-0000-000000000000

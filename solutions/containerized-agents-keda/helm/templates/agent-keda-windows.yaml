@@ -4,8 +4,62 @@ metadata:
   name: devops-auth-windows
   namespace: {{ .Values.namespace }}
 stringData:
-  azp_token: {{ .Values.windows.secret.azpToken}}
+  #azp_token: {{ .Values.windows.secret.azpToken}}
   azp_url: {{ .Values.windows.secret.azpUrl }}
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: "{{ .Values.windows.keyVault.name }}-win"
+  namespace: {{ .Values.namespace }}
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"
+    userAssignedIdentityID: {{ .Values.windows.keyVault.clientId }}
+    keyvaultName: {{ .Values.windows.keyVault.name }}
+    cloudName: "{{ .Values.windows.keyVault.cloud }}"
+    objects: |
+      array: 
+        - |
+          objectName: windows-pat
+          objectType: secret
+          objectVersion: ""
+    tenantID: {{ .Values.windows.keyVault.tenantId }} #"${TENANT_ID}"
+  secretObjects:
+    - data:
+        - key: windows-pat
+          objectName: windows-pat
+      secretName: akv-secrets-win
+      type: Opaque
+---
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: "{{ .Values.windows.keyVault.name }}-win-cs"
+  namespace: {{ .Values.namespace }}
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "false"
+    useVMManagedIdentity: "true"
+    userAssignedIdentityID: {{ .Values.windows.keyVault.clientId }}
+    keyvaultName: {{ .Values.windows.keyVault.name }}
+    cloudName: "{{ .Values.windows.keyVault.cloud }}"
+    objects: |
+      array:
+        - |
+          objectName: clientSecret
+          objectType: secret
+          objectVersion: ""
+    tenantID: {{ .Values.windows.keyVault.tenantId }} #"${TENANT_ID}"
+  secretObjects:
+    - data:
+        - key: clientSecret
+          objectName: clientSecret
+      secretName: akv-secrets-win-cs
+      type: Opaque
 ---
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
@@ -17,9 +71,21 @@ spec:
     - parameter: organizationURL
       name: devops-auth-windows
       key: azp_url
+  azureKeyVault:
+    vaultUri: "https://{{ .Values.windows.keyVault.name }}.{{ ternary "vault.azure.net" "vault.usgovcloudapi.net" (eq .Values.windows.keyVault.cloud "Azure") }}"
+    credentials:
+      clientId: {{ .Values.windows.keyVault.kedaClientId }}
+      clientSecret:
+        valueFrom:
+          secretKeyRef:
+            name: akv-secrets-win-cs
+            key: clientSecret
+      tenantId: {{ .Values.windows.keyVault.tenantId }}
+    cloud:
+      type: "{{ .Values.windows.keyVault.cloud }}Cloud"
+    secrets:
     - parameter: personalAccessToken
-      name: devops-auth-windows
-      key: azp_token
+      name: windows-pat
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledJob
@@ -35,7 +101,13 @@ spec:
         containers:
         - name: agent-windows
           image: {{ .Values.windows.image.acrLoginServer }}/{{ .Values.windows.image.name }}:{{ .Values.windows.image.tag }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: true
           env:
             - name: AZP_URL
               valueFrom:
@@ -45,12 +117,23 @@ spec:
             - name: AZP_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: devops-auth-windows
-                  key: azp_token
+                  name: akv-secrets-win
+                  key: windows-pat
             - name: AZP_POOL
               value: "{{ .Values.windows.job.poolName }}"
             - name: RUN_ONCE
               value: "{{ .Values.windows.job.runOnce }}"
+        #  volumeMounts:
+        #    - name: akv-secrets-win
+        #      mountPath: "/mnt/akv-secrets-win"
+        #      readOnly: true
+        #volumes:
+        #- name: akv-secrets-win
+        #  csi:
+        #    driver: secrets-store.csi.k8s.io
+        #    readOnly: true
+        #    volumeAttributes:
+        #      secretProviderClass: "{{ .Values.windows.keyVault.name }}-win"
         tolerations:
           - key: os
             operator: Equal

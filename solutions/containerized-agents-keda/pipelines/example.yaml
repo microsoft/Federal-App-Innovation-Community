@@ -1,0 +1,40 @@
+name: Deploy-$(Build.SourceBranchName)-KeyVault-$(Date:yyyyMMdd)$(Rev:.r)
+
+parameters:
+  - name: Debug
+    type: boolean
+    default: true
+  - name: keyVaultName
+    type: string
+    default: eba
+  - name: environments
+    type: object
+    default:
+      - name: eba-lnx
+      - name: eba-win
+
+trigger: none
+
+variables:
+  - name: System.Debug
+    value: ${{ parameters.Debug }}
+
+stages: 
+  - stage: RunSleep
+    displayName: RunSleep
+    jobs:
+      - ${{ each env in parameters.environments }}:
+        - job: SimpleSleep${{ replace(env.name, '-', '') }}
+          displayName: Sleep ${{ env.name }}
+          workspace:
+            clean: all
+          pool:
+            name: eba-${{ env.name}}
+          steps:
+            - checkout: self
+
+            - pwsh:  |
+                Write-Host "Sleeping for 3 minutes"
+                Start-Sleep -Seconds  180
+                Write-Host "Done Sleeping"
+              displayName: 'Simple Sleep'

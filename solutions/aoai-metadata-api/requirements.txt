@@ -2,7 +2,7 @@ openai
 tiktoken 
 python-dotenv
 langchain==0.2.11
-langchain-community==0.2.10
+langchain-community==0.2.19
 langchain-experimental==0.0.63
 langchain-openai== 0.1.20
 mysql-connector-python

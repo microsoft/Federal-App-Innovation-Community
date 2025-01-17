@@ -1,0 +1,164 @@
+name: Deploy-$(Build.SourceBranchName)-KeyVault-$(Date:yyyyMMdd)$(Rev:.r)
+
+parameters:
+  - name: Debug
+    type: boolean
+    default: true
+  - name: environments
+    type: object
+    default:
+      - name: <ENV_NAME>
+        resourceGroupName: <RG_NAME>
+        location: westus
+        serviceConnection: eba_deployment
+        keyVaultName: eba
+        paramFile: bicep/main.parameters.json
+        images: 
+          - name: linux
+          - name: windows
+        helmValues: values.yaml
+        poolName: eba-lnx
+
+trigger:
+  branches:
+    include:
+      - main
+      - dev
+
+variables:
+  - name: System.Debug
+    value: ${{ parameters.Debug }}
+  - name: templateFile
+    value: bicep/main.bicep
+
+stages: 
+  - stage: DeployAKS_ACR
+    displayName: Deploy AKS and ACR
+    jobs:
+      - ${{ each env in parameters.environments }}:
+        - job: Deploy_EBA_${{ env.name }}
+          displayName: Deploy EBA to ${{ env.name }}
+          workspace:
+            clean: all
+          pool:
+            name: ${{ env.poolName}}
+          steps:
+            - checkout: self
+
+            - pwsh: |
+                Write-Host "Retrieving current timestamp"
+                $Date = get-date ([datetime]::UtcNow) -Format 'yyyyMMdd-HHmmss'
+                Write-Host "##vso[task.setvariable variable=TimeStamp]$Date"
+              displayName: 'Retrieve TimeStamp'
+
+            - task: AzureResourceManagerTemplateDeployment@3
+              inputs:
+                deploymentScope: 'Resource Group'
+                azureResourceManagerConnection: ${{ env.serviceConnection }}
+                action: 'Create Or Update Resource Group'
+                resourceGroupName: ${{ env.resourceGroupName }}
+                location: ${{ env.location }}
+                templateLocation: 'Linked artifact'
+                csmFile: $(templateFile)
+                csmParametersFile: ${{ env.paramFile }}
+                deploymentName: EBA-KEDA-$(TimeStamp)
+                deploymentMode: Incremental
+                deploymentOutputs: AksDeploymentOutputs
+              displayName: 'Deploy EBA to ${{ env.name }}'
+
+            - task: azurecli@2
+              inputs:
+                azureSubscription: ${{ env.serviceConnection }}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  $acrname = az acr list --resource-group ${{ env.resourceGroupName }} --query [].name --output tsv
+                  Write-Host "##vso[task.setvariable variable=ACR_NAME]$acrname"
+                addSpnToEnvironment: true
+                useGlobalConfig: true
+                failOnStandardError: true
+                enabled: true
+              displayName: Get ACR Name
+
+            - ${{ each img in env.images }}:
+              - task: azurecli@2
+                inputs:
+                  azureSubscription: ${{ env.serviceConnection }}
+                  scriptType: 'pscore'
+                  scriptLocation: 'scriptPath'
+                  scriptPath: pipelines/scripts/build-images.ps1
+                  arguments: >
+                    -ACR_NAME $(ACR_NAME)
+                    -RG_NAME ${{ env.resourceGroupName }}
+                    -RepoRoot $(System.DefaultWorkingDirectory)
+                    -AgentImage ${{ img.name }}
+                  addSpnToEnvironment: true
+                  useGlobalConfig: true
+                  failOnStandardError: true
+                  enabled: true
+                displayName: Build and Push ${{ img.name }} image to ${{ env.name }}
+
+            - task: PowerShell@2
+              displayName: 'Download Tooling'
+              inputs:
+                pwsh: true
+                targetType: filePath
+                filePath: $(System.DefaultWorkingDirectory)/pipelines/scripts/downloadtools.ps1
+                arguments: >
+                  -ToolsBasePath "$(System.DefaultWorkingDirectory)"
+              enabled: true
+              continueOnError: false
+              timeoutInMinutes: 15
+
+            - task: AzureCLI@2
+              displayName: 'Deploy and Apply Helm'
+              inputs:
+                azureSubscription: ${{ env.serviceConnection }}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  $outputs = '$(AksDeploymentOutputs)' | ConvertFrom-Json -Depth 10
+                  Write-Host "AksName is: $($outputs.AksName.value)"
+                  $clientId = az aks show -n "$($outputs.AksName.value)" -g "${{ env.resourceGroupName }}" --query addonProfiles.azureKeyvaultSecretsProvider.identity.clientId -o tsv
+                  $acrLoginServer = az acr show -n $(ACR_NAME) -g "${{ env.resourceGroupName }}" --query loginServer -o tsv
+                  az aks get-credentials -g "${{ env.resourceGroupName }}" -n "$($outputs.AksName.value)" --overwrite-existing
+                  if ($IsWindows)
+                  {
+                  cd $(ToolPath)
+                  Get-Location
+                  ls
+                  .\helm.exe template devops $(System.DefaultWorkingDirectory)\helm\. `
+                    -f $(System.DefaultWorkingDirectory)\helm\${{ env.helmValues }} `
+                    --set linux.keyVault.clientId=$clientId `
+                    --set windows.keyVault.clientId=$clientId `
+                    --set windows.image.acrLoginServer=$acrLoginServer `
+                    --set linux.image.acrLoginServer=$acrLoginServer `
+                    | .\kubectl.exe apply -f -
+                  } else {
+                  cd $(ToolPath)
+                  Get-Location
+                  ls
+                  chmod +x ./helm
+                  chmod +x ./kubectl
+                  & ./helm template devops $(System.DefaultWorkingDirectory)/helm/. `
+                    -f $(System.DefaultWorkingDirectory)/helm/${{ env.helmValues }} `
+                    --set linux.keyVault.clientId=$clientId `
+                    --set windows.keyVault.clientId=$clientId `
+                    --set windows.image.acrLoginServer=$acrLoginServer `
+                    --set linux.image.acrLoginServer=$acrLoginServer `
+                    | & ./kubectl apply -f -
+                  }
+                azurePowerShellVersion: LatestVersion
+              continueOnError: false
+
+            - task: DeleteFiles@1
+              condition: always()
+              displayName: 'CleanUp file system from last run'
+              inputs:
+                SourceFolder: "$(Agent.BuildDirectory)"
+                Contents: |
+                  **/a/*
+                  **/b/*
+                  **/s/*
+                RemoveSourceFolder: False
+              enabled: true

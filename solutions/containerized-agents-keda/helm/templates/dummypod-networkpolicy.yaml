@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-network
+  namespace: {{ .Values.namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: busybox-dummy
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []  # Deny all ingress traffic
+  egress: []   # Deny all egress traffic

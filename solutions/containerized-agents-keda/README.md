@@ -2,6 +2,39 @@
 
 For those using Azure DevOps Server or Services (Cloud-Hosted), a great way to optimize resource utilization and make your agents dynamic/ephemeral is to [containerize your pipeline agents](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops) as opposed to running them as long-lived VMs. [VM Scale Set Agents](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/scale-set-agents?view=azure-devops) also are not supported on Server, so we wanted to bring an approach that brings that scalability and dynamic scaling for parallel/queued jobs even to those running Azure DevOps Server.
 
+This deployment assumes that a Virtual Network, Subnet, and Virtual NAT Gateway are created in Azure. If you do not have one, you can create one using the following command:
+
+```bash
+export RESOURCE_GROUP=<RESOURCE GROUP NAME>
+export SUBNET=<SUBNET NAME>
+export NAT_GATEWAY=<NAT GATEWAY NAME>
+export PUBLIC_IP=<PUBLIC IP NAME>
+export VNET=<VNET NAME>
+
+az network public-ip create \
+    --name $PUBLIC_IP \
+    --resource-group $RESOURCE_GROUP \
+
+az network nat gateway create \
+    --name $NAT_GATEWAY \
+    --resource-group $RESOURCE_GROUP \
+    --public-ip-addresses $PUBLIC_IP
+
+az network vnet create \
+    --name $VNET \
+    --resource-group $RESOURCE_GROUP \
+    --address-prefix 10.0.0.0/16 \
+    --subnet-name $SUBNET \
+    --subnet-prefixes 10.0.0.0/24
+
+az network vnet subnet update \
+    --name $SUBNET \
+    --vnet-name $VNET \
+    --resource-group $RESOURCE_GROUP \
+    --nat-gateway $NAT_GATEWAY
+
+```
+
 View the following video to see the demo live and to understand what this solution provides. The following instructions will allow you to deploy both Windows and Linux Agents on an AKS Cluster that has both Linux and Windows node pools.
 
 > The video shows the concept for Linux Agents. This works the same way for Windows Agents and the following solution will deploy both. You can choose to deploy just one or the other if desired.
@@ -25,12 +58,11 @@ az deployment sub create \
 
 This cluster is created with 3 node pools - a system node pool which will run system components (coredns, metric server, etc.), a linux node pool to be scheduled for linux agents, and a windows node pool for windows agents.
 
-We want to be sure that we schedule linux agents only to the linux node pool and windows agents to the windows node pool. To do this, the Bicep deployment creates the two node pools with [node taints](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) so that a windows node can repel a set of pods not explicitely tolerating a windows node. Furthermore, to ensure that a pod itself is scheduled on the right nodes, the node label of `kubernetes.io/os` is used, which is automatically populated by the kubelet.
-
+We want to be sure that we schedule linux agents only to the linux node pool and windows agents to the windows node pool. To do this, the Bicep deployment creates the two node pools with [node taints](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) so that a windows node can repel a set of pods not explicitly tolerating a windows node. Furthermore, to ensure that a pod itself is scheduled on the right node, the node label of `kubernetes.io/os` is used, which is automatically populated by the kubelet.
 
 ## 2. Build the Agent Images using ACR Tasks
 
-Find the ACR Name by running `az acr list -g <RESOURCE-GROUP-NAME-o table`
+Find the ACR Name by running `az acr list -g <RESOURCE-GROUP-NAME> -o table`
 
 ```bash
 export RG_NAME=<RESOURCE-GROUP-NAME>
@@ -61,6 +93,11 @@ Next [create PAT tokens](https://docs.microsoft.com/en-us/azure/devops/organizat
 ![linux agent pat](./images/linux-agent-pat.png)
 
 ![windows agent pat](./images/windows-agent-pat.png)
+
+The PAT should have the following settings/permissions:
+
+Organization: All accessible organizations (required to remove the agent from the pool)
+Agent Pools: Read & manage
 
 Finally, in order to enable KEDA to scale all the way down to zero for agents, it will be necessary to create a "placeholder" agent that is disabled/non-running.
 
@@ -113,7 +150,12 @@ First you should go to `helm/values.yaml` and make a copy of the file named `val
 cp helm/values.yaml helm/values-local.yaml
 ```
 
+See this [blog](https://medium.com/@shivam77kushwah/secure-secrets-using-azure-key-vault-with-helm-chart-a048525e4027) for how to pull directly from key vault for helm secrets. For this example, we will use a local values file.
+
 From there, fill in the values per the comments in values-local.yaml. Here's an example of what a finished `values-local.yaml` should look like (the values provided here are representative of what might be your own once you customize):
+
+Retrieve the pool id from the API similar to this where SIO-DEV is the collection where your pool exists:  
+[https://devops.dosdev.us/SIO-DEV/_apis/distributedtask/pools?api-version=6.0](https://devops.dosdev.us/SIO-DEV/_apis/distributedtask/pools?api-version=6.0)
 
 ```yaml
 # Default values for linuxAgentChart.
@@ -176,7 +218,11 @@ az aks get-credentials -g $RG_NAME -n $AKS_NAME
 kubectl get nodes
 
 # Apply templates
+#lnx
 helm template devops helm/. -f helm/values-local.yaml | kubectl apply -f -
+
+#windows no path
+<PATH_TO_HELM>\helm.exe template devops <PATH_TO_HELM_REPO_FOLDER>helm\. -f <PATH_TO_HELM_VALUES>\helm\values-local-dosdev.yaml | <PATH_TO_KUBECTL>\kubectl.exe apply -f -
 ```
 
 ## 5. Run Pipelines and See the Agents Scale
@@ -205,7 +251,27 @@ steps:
   displayName: 'Run a multi-line script'
 ```
 
+See the agents scale with the following:
+
+```bash
+kubectl get jobs -n devops
+kubectl get pods -n devops
+```
+
 Once you run the pipelines, you should see the jobs start as the queue builds. View the recording included to see how this works and how you can view that action taking place.
+
+## Troubleshooting
+
+### **Error**: The container operating system does not match the host operating system
+
+Does the container OS match the node pools OS?
+
+```dotnetcli
+kubectl get nodes -o wide
+```
+
+This command is used to view information about your nodes, including the OS type and the taints applied to the nodes.
+
 
 ## References
 

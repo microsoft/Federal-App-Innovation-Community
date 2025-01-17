@@ -4,4 +4,4 @@ metadata:
   name: {{ .Values.namespace }}
 spec:
   finalizers:
-  - kubernetes
+   - kubernetes

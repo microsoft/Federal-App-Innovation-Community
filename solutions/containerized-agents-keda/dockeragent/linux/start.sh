@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+if [ -d "/mnt/azp" ]; then
+  chown -R root:root /mnt/azp
+  chmod -R 775 /mnt/azp
+  cd /mnt/azp
+fi
+
 if [ -z "$AZP_URL" ]; then
   echo 1>&2 "error: missing AZP_URL environment variable"
   exit 1
@@ -12,7 +18,7 @@ if [ -z "$AZP_TOKEN_FILE" ]; then
     exit 1
   fi
 
-  AZP_TOKEN_FILE=/azp/.token
+  AZP_TOKEN_FILE=/mnt/azp/.token
   echo -n $AZP_TOKEN > "$AZP_TOKEN_FILE"
 fi
 
@@ -25,13 +31,13 @@ fi
 export AGENT_ALLOW_RUNASROOT="1"
 
 cleanup() {
-  if [ -e config.sh ]; then
+  if [ -e /mnt/azp/config.sh ]; then
     print_header "Cleanup. Removing Azure Pipelines agent..."
 
     # If the agent has some running jobs, the configuration removal process will fail.
     # So, give it some time to finish the job.
     while true; do
-      ./config.sh remove --unattended --auth PAT --token $(cat "$AZP_TOKEN_FILE") && break
+      /mnt/azp/config.sh remove --unattended --auth PAT --token $(cat "$AZP_TOKEN_FILE") && break
 
       echo "Retrying in 30 seconds..."
       sleep 30
@@ -63,15 +69,15 @@ if [ -z "$AZP_AGENT_PACKAGE_LATEST_URL" -o "$AZP_AGENT_PACKAGE_LATEST_URL" == "n
   exit 1
 fi
 
-print_header "2. Downloading and extracting Azure Pipelines agent..."
+print_header "2. Downloading and extracting Azure Pipelines agent from $AZP_AGENT_PACKAGE_LATEST_URL..."
 
-curl -LsS $AZP_AGENT_PACKAGE_LATEST_URL | tar -xz & wait $!
+curl -LsS $AZP_AGENT_PACKAGE_LATEST_URL | tar -xz --no-same-owner --no-same-permissions -C /mnt/azp & wait $!
 
-source ./env.sh
+source /mnt/azp/env.sh
 
 print_header "3. Configuring Azure Pipelines agent..."
 
-./config.sh --unattended \
+/mnt/azp/config.sh --unattended \
   --agent "${AZP_AGENT_NAME:-$(hostname)}" \
   --url "$AZP_URL" \
   --auth PAT \
@@ -87,7 +93,7 @@ trap 'cleanup; exit 0' EXIT
 trap 'cleanup; exit 130' INT
 trap 'cleanup; exit 143' TERM
 
-chmod +x ./run-docker.sh
+chmod +x /mnt/azp/run-docker.sh
 
 # # To be aware of TERM and INT signals call run.sh
 # # Running it with the --once flag at the end will shut down the agent after the build is executed
@@ -97,9 +103,9 @@ chmod +x ./run-docker.sh
 # AgentService.js understands how to handle agent self-update and restart
 #exec ./externals/node/bin/node ./bin/AgentService.js interactive
 if [ -z "$RUN_ONCE" ]; then
-  print_header "Running Azure Pipelines agent..." && ./run-docker.sh &
+  print_header "Running Azure Pipelines agent..." && /mnt/azp/run-docker.sh &
 else
-  print_header "Running Azure Pipelines agent once..." && ./run-docker.sh --once &
+  print_header "Running Azure Pipelines agent once..." && /mnt/azp/run-docker.sh --once &
 fi
 wait $!
 cleanup

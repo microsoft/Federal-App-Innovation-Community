@@ -32,10 +32,12 @@ RUN pwsh -Command "Install-Module -Name Az -AllowClobber -Force -Scope AllUsers"
 
 # Can be 'linux-x64', 'linux-arm64', 'linux-arm', 'rhel.6-x64'.
 ENV TARGETARCH=linux-x64
+# Disable diagnostics to resolve 'Failed to create CoreCLR, HRESULT: 0x80004005' error
+ENV COMPlus_EnableDiagnostics=0
 
 WORKDIR /azp
 
-COPY ./start.sh .
+COPY ./start.sh /azp
 RUN chmod +x start.sh
 
-ENTRYPOINT [ "./start.sh" ]
+ENTRYPOINT [ "/azp/start.sh" ]

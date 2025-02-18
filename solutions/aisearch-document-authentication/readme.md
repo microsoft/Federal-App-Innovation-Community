@@ -248,6 +248,3 @@ python embeddings_retrieve.py
 ```
 
 The script will prompt you to enter a query and then process the request, filtering documents based on the user's access level and retrieving relevant information using Azure OpenAI.
-
-##### Conclusion
-`embeddings_retrieve.py` demonstrates how to use Entra object IDs to authenticate users for specific documents in an Azure AI Search index and how to leverage the Azure OpenAI "Chat Over Your Data" feature for secure and personalized document retrieval. By following the instructions in this README, you can set up and run the embeddings_retrieve.py script to manage document access levels effectively.
